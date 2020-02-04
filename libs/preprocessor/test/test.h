@@ -14,7 +14,24 @@
 # ifndef BOOST_LIBS_PREPROCESSOR_REGRESSION_TEST_H
 # define BOOST_LIBS_PREPROCESSOR_REGRESSION_TEST_H
 #
-# include <libs/preprocessor/test/test_macro.h>
-# include <libs/preprocessor/test/test_main.h>
+# include <boost/preprocessor/cat.hpp>
 #
+# define BEGIN typedef int BOOST_PP_CAT(test_, __LINE__)[((
+# define END )==1) ? 1 : -1];
+
+#if defined(__cplusplus)
+#include <cstdio>
+#if !defined(_STLP_MSVC) || _STLP_MSVC >= 1300
+namespace std { }
+using namespace std;
+#endif
+#else
+#include <stdio.h>
+#endif
+
+int main(void) {
+    printf("pass " __TIME__);
+    return 0;
+}
+
 # endif

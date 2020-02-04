@@ -72,6 +72,24 @@ inline void debug_traverse(Turn const& , Operation, const char*, bool = true)
 }
 #endif
 
+
+//! Metafunction to define side_order (clockwise, ccw) by operation_type
+template <operation_type OpType>
+struct side_compare {};
+
+template <>
+struct side_compare<operation_union>
+{
+    typedef std::greater<int> type;
+};
+
+template <>
+struct side_compare<operation_intersection>
+{
+    typedef std::less<int> type;
+};
+
+
 template
 <
     bool Reverse1,
@@ -106,7 +124,7 @@ private :
 
     static const operation_type target_operation = operation_from_overlay<OverlayType>::value;
 
-    typedef typename sort_by_side::side_compare<target_operation>::type side_compare_type;
+    typedef typename side_compare<target_operation>::type side_compare_type;
     typedef typename boost::range_value<Turns>::type turn_type;
     typedef typename turn_type::turn_operation_type turn_operation_type;
 

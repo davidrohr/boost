@@ -8,10 +8,7 @@
 #
 
 cmake_minimum_required (VERSION 3.5.1)
-
-if (POLICY CMP0074)
-    cmake_policy (SET CMP0074 NEW)
-endif()
+cmake_policy (SET CMP0074 NEW)
 
 #-------------------------------------------------------------------------------
 
@@ -40,7 +37,7 @@ endfunction()
 #
 #-------------------------------------------------------------------------------
 
-project (Beast VERSION 277)
+project (Beast VERSION 266)
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 option (Beast_BUILD_EXAMPLES "Build examples" ON)

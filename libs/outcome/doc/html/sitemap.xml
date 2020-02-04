@@ -224,7 +224,7 @@
   
   <url>
     <loc>/faq.html</loc>
-    <lastmod>2019-11-15T15:43:29+00:00</lastmod>
+    <lastmod>2019-06-25T17:14:43+01:00</lastmod>
   </url>
   
   <url>
@@ -414,7 +414,7 @@
   
   <url>
     <loc>/changelog.html</loc>
-    <lastmod>2019-11-15T15:43:29+00:00</lastmod>
+    <lastmod>2019-06-25T17:01:21+01:00</lastmod>
   </url>
   
   <url>
@@ -648,26 +648,6 @@
   </url>
   
   <url>
-    <loc>/reference/types/basic_result/explicit_make_error_code_copy_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/explicit_make_error_code_move_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/explicit_make_exception_ptr_copy_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/explicit_make_exception_ptr_move_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/reference/types/basic_outcome/explicit_result_copy_converting_constructor.html</loc>
     <lastmod>2019-03-03T00:11:47+00:00</lastmod>
   </url>
@@ -685,16 +665,6 @@
   <url>
     <loc>/reference/policies/base/set_has_error_is_errno.html</loc>
     <lastmod>2019-01-22T01:11:40+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_outcome/explicit_result_make_error_code_copy_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_outcome/explicit_result_make_error_code_move_converting_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
   </url>
   
   <url>
@@ -813,38 +783,8 @@
   </url>
   
   <url>
-    <loc>/reference/types/basic_outcome/implicit_failure_error_make_error_code_copy_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/implicit_failure_make_error_code_copy_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_outcome/implicit_failure_error_make_error_code_move_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/implicit_failure_make_error_code_move_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/implicit_failure_make_exception_ptr_copy_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/reference/types/basic_outcome/implicit_failure_exception_copy_constructor.html</loc>
     <lastmod>2019-01-31T01:07:35+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/types/basic_result/implicit_failure_make_exception_ptr_move_constructor.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
   </url>
   
   <url>
@@ -1312,7 +1252,7 @@
   
   <url>
     <loc>/categories/converting-constructors.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
+    <lastmod>2019-03-03T00:11:47+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1548,36 +1488,6 @@
   </url>
   
   <url>
-    <loc>/reference/macros/co_try.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/co_tryv.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/co_tryv_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/co_tryx.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/co_tryx_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/co_try_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/reference/macros/disable_execinfo.html</loc>
     <lastmod>2018-12-12T22:01:42+00:00</lastmod>
   </url>
@@ -1609,32 +1519,17 @@
   
   <url>
     <loc>/reference/macros/try.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
+    <lastmod>2019-06-21T21:45:08+01:00</lastmod>
   </url>
   
   <url>
     <loc>/reference/macros/tryv.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/tryv_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
+    <lastmod>2019-06-21T21:45:08+01:00</lastmod>
   </url>
   
   <url>
     <loc>/reference/macros/tryx.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/tryx_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/macros/try_failure_likely.html</loc>
-    <lastmod>2019-10-16T10:26:35+01:00</lastmod>
+    <lastmod>2019-06-21T21:45:08+01:00</lastmod>
   </url>
   
   <url>
@@ -1699,12 +1594,12 @@
   
   <url>
     <loc>/reference/types/basic_outcome.html</loc>
-    <lastmod>2019-10-11T17:03:05+01:00</lastmod>
+    <lastmod>2019-02-01T23:42:52+00:00</lastmod>
   </url>
   
   <url>
     <loc>/reference/types/basic_result.html</loc>
-    <lastmod>2019-10-11T17:03:05+01:00</lastmod>
+    <lastmod>2019-01-31T01:07:35+00:00</lastmod>
   </url>
   
   <url>
@@ -1763,11 +1658,6 @@
   </url>
   
   <url>
-    <loc>/reference/aliases/eager.html</loc>
-    <lastmod>2019-10-04T15:58:37+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/reference/policies/error_code_throw_as_system_error_outcome.html</loc>
     <lastmod>2019-02-01T23:42:52+00:00</lastmod>
   </url>
@@ -1814,12 +1704,12 @@
   
   <url>
     <loc>/reference/traits/is_error_code_available.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
+    <lastmod>2019-02-05T21:41:47+00:00</lastmod>
   </url>
   
   <url>
     <loc>/reference/traits/is_error_type.html</loc>
-    <lastmod>2019-10-11T17:03:05+01:00</lastmod>
+    <lastmod>2018-12-13T17:36:11+00:00</lastmod>
   </url>
   
   <url>
@@ -1829,7 +1719,7 @@
   
   <url>
     <loc>/reference/traits/is_exception_ptr_available.html</loc>
-    <lastmod>2019-10-10T18:14:56+01:00</lastmod>
+    <lastmod>2019-02-05T21:41:47+00:00</lastmod>
   </url>
   
   <url>
@@ -1840,11 +1730,6 @@
   <url>
     <loc>/reference/traits/is_success_type.html</loc>
     <lastmod>2019-01-21T18:00:41+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/reference/aliases/lazy.html</loc>
-    <lastmod>2019-10-04T15:58:37+01:00</lastmod>
   </url>
   
   <url>
@@ -2004,7 +1889,7 @@
   
   <url>
     <loc>/reference/functions/policy/outcome_throw_as_system_error_with_payload_boost_enum.html</loc>
-    <lastmod>2019-08-13T13:55:04-04:00</lastmod>
+    <lastmod>2019-02-01T15:52:57+00:00</lastmod>
   </url>
   
   <url>

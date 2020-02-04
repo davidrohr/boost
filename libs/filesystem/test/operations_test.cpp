@@ -18,9 +18,6 @@
 #endif
 
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/file_status.hpp>
 
 #include <boost/config.hpp>
 # if defined( BOOST_NO_STD_WSTRING )
@@ -275,7 +272,7 @@ namespace
   //void dump_tree(const fs::path & root)
   //{
   //  cout << "dumping tree rooted at " << root << endl;
-  //  for (fs::recursive_directory_iterator it (root, fs::directory_options::follow_directory_symlink);
+  //  for (fs::recursive_directory_iterator it (root, fs::symlink_option::recurse);
   //       it != fs::recursive_directory_iterator();
   //       ++it)
   //  {
@@ -645,19 +642,18 @@ namespace
 
   int walk_tree(bool recursive)
   {
-    //cout << "    walk_tree" << endl;
+//    cout << "    walk_tree" << endl;
     error_code ec;
     int d1f1_count = 0;
     for (fs::recursive_directory_iterator it (dir,
-      recursive ? (fs::directory_options::follow_directory_symlink | fs::directory_options::skip_dangling_symlinks) : fs::directory_options::none);
+      recursive ? fs::symlink_option::recurse : fs::symlink_option::no_recurse);
          it != fs::recursive_directory_iterator();
          it.increment(ec))
     {
-      //cout << "      " << it->path() << " : " << ec << endl;
+//      cout << "      " << it->path() << endl;
       if (it->path().filename() == "d1f1")
         ++d1f1_count;
     }
-    //cout << "      last error : " << ec << endl;
     return d1f1_count;
   }
 
@@ -672,7 +668,7 @@ namespace
     cout << "  with error_code argument" << endl;
     boost::system::error_code ec;
     int d1f1_count = 0;
-    fs::recursive_directory_iterator it(dir, fs::directory_options::none);
+    fs::recursive_directory_iterator it(dir, fs::symlink_option::no_recurse);
     fs::recursive_directory_iterator it2(it);  // test single pass shallow copy semantics
     for (;
          it != fs::recursive_directory_iterator();

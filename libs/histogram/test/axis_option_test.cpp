@@ -34,7 +34,6 @@ int main() {
 
   BOOST_TEST(underflow.test(underflow));
   BOOST_TEST_NOT(underflow.test(overflow));
-  BOOST_TEST_NOT(underflow.test(underflow | overflow));
   BOOST_TEST(uoflow::test(underflow));
   BOOST_TEST(uoflow::test(overflow));
   BOOST_TEST_NOT(uoflow::test(circular));

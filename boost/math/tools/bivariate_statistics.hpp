@@ -9,9 +9,8 @@
 #include <iterator>
 #include <tuple>
 #include <boost/assert.hpp>
-#include <boost/config/header_deprecated.hpp>
+#include <boost/multiprecision/detail/number_base.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/bivariate_statistics.hpp>");
 
 namespace boost{ namespace math{ namespace tools {
 

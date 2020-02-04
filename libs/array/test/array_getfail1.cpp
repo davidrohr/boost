@@ -16,7 +16,8 @@
 #include <array>
 #endif
 
-#include <boost/core/lightweight_test_trait.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 namespace {
 
@@ -29,13 +30,13 @@ namespace {
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
         T &aRef = std::get<5> ( test_case );    // should fail to compile
-        BOOST_TEST ( &*test_case.begin () == &aRef );
+        BOOST_CHECK ( &*test_case.begin () == &aRef );
     }
     #endif
 
 }
 
-int main()
+BOOST_AUTO_TEST_CASE( test_main )
 {
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
     RunStdTests< bool >();
@@ -45,6 +46,4 @@ int main()
 #else
     BOOST_STATIC_ASSERT ( false );  // fail on C++03 systems.
 #endif
-
-    return boost::report_errors();
 }

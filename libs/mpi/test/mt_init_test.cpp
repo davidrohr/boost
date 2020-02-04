@@ -22,8 +22,9 @@ test_mt_init(std::string s)
   std::istringstream in(s);
   in >> required;
   BOOST_CHECK(!in.bad());
-  BOOST_CHECK(mpi::environment::thread_level() >= mpi::threading::single);
-  BOOST_CHECK(mpi::environment::thread_level() <= mpi::threading::multiple);
+  mpi::environment env;
+  BOOST_CHECK(env.thread_level() >= mpi::threading::single);
+  BOOST_CHECK(env.thread_level() <= mpi::threading::multiple);
 }
 
 BOOST_AUTO_TEST_CASE(mt_init)

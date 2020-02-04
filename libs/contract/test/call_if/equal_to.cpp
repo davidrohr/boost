@@ -6,9 +6,6 @@
 
 // Test STL equal_to with call_if.
 
-// C++17 warning from Boost.Bind.
-#define _SILENCE_CXX17_ADAPTOR_TYPEDEFS_DEPRECATION_WARNING
-
 #include "../detail/oteststream.hpp"
 #include <boost/contract/call_if.hpp>
 #include <boost/bind.hpp>
@@ -16,7 +13,6 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <functional>
 #include <sstream>
-#include <ios>
 
 boost::contract::test::detail::oteststream out;
 
@@ -33,8 +29,6 @@ struct x {}; // Doest not have operator==.
 
 int main() {
     std::ostringstream ok;
-    ok << std::boolalpha;
-    out << std::boolalpha;
     x x1, x2;;
 
     out.str("");

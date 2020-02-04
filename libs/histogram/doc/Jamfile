@@ -30,7 +30,7 @@ doxygen reference
   <doxygen:param>JAVADOC_AUTOBRIEF=YES
   <doxygen:param>EXCLUDE_SYMBOLS=detail
   <doxygen:param>"PREDEFINED=\"BOOST_HISTOGRAM_DOXYGEN_INVOKED\" \\
-                             \"BOOST_ATTRIBUTE_NODISCARD\""
+                             \"BOOST_HISTOGRAM_NODISCARD\""
 ;
 
 make reference_pp.xml : reference.xml : @doxygen_postprocessing ;

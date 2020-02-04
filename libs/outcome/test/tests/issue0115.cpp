@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
-BOOST_OUTCOME_AUTO_TEST_CASE(issues_0115_outcome, "Initialization from `failure_type` drops default-constructed values")
+BOOST_OUTCOME_AUTO_TEST_CASE(issues_115_outcome, "Initialization from `failure_type` drops default-constructed values")
 {
   namespace out = BOOST_OUTCOME_V2_NAMESPACE;
 

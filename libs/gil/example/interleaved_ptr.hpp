@@ -8,11 +8,7 @@
 #ifndef BOOST_GIL_EXAMPLE_INTERLEAVED_PTR_HPP
 #define BOOST_GIL_EXAMPLE_INTERLEAVED_PTR_HPP
 
-#include <boost/gil.hpp>
-#include <boost/mp11.hpp>
-
-#include <type_traits>
-
+#include <boost/gil/pixel_iterator.hpp>
 #include "interleaved_ref.hpp"
 
 // Example on how to create a pixel iterator
@@ -33,16 +29,13 @@ namespace boost { namespace gil {
 
 template <typename ChannelPtr,  // Models Channel Iterator (examples: unsigned char* or const unsigned char*)
           typename Layout>      // A layout (includes the color space and channel ordering)
-struct interleaved_ptr : boost::iterator_facade
-    <
-        interleaved_ptr<ChannelPtr, Layout>,
-        pixel<typename std::iterator_traits<ChannelPtr>::value_type, Layout>,
-        boost::random_access_traversal_tag,
-        interleaved_ref<typename std::iterator_traits<ChannelPtr>::reference, Layout> const
-    >
+struct interleaved_ptr : public  boost::iterator_facade<interleaved_ptr<ChannelPtr,Layout>,
+                                   pixel<typename std::iterator_traits<ChannelPtr>::value_type,Layout>,
+                                   boost::random_access_traversal_tag,
+                                   const interleaved_ref<typename std::iterator_traits<ChannelPtr>::reference,Layout>>
 {
 private:
-    using parent_t = boost::iterator_facade
+    using parent_t boost::iterator_facade
         <
             interleaved_ptr<ChannelPtr, Layout>,
             pixel<typename std::iterator_traits<ChannelPtr>::value_type, Layout>,
@@ -82,7 +75,7 @@ public:
           ChannelPtr& channels()                  { return _channels; }
 
     // Not required by concepts but useful
-    static const std::size_t num_channels = mp11::mp_size<typename Layout::color_space_t>::value;
+    static const std::size_t num_channels = mpl::size<typename Layout::color_space_t>::value;
 private:
     ChannelPtr _channels;
     friend class boost::iterator_core_access;
@@ -117,12 +110,12 @@ public:
 };
 
 template <typename ChannelPtr, typename Layout>
-struct iterator_is_mutable<interleaved_ptr<ChannelPtr,Layout>> : std::true_type {};
+struct iterator_is_mutable<interleaved_ptr<ChannelPtr,Layout>> : public boost::mpl::true_ {};
 template <typename Channel, typename Layout>
-struct iterator_is_mutable<interleaved_ptr<const Channel*,Layout>> : std::false_type {};
+struct iterator_is_mutable<interleaved_ptr<const Channel*,Layout>> : public boost::mpl::false_ {};
 
 template <typename ChannelPtr, typename Layout>
-struct is_iterator_adaptor<interleaved_ptr<ChannelPtr,Layout>> : std::false_type {};
+struct is_iterator_adaptor<interleaved_ptr<ChannelPtr,Layout>> : public boost::mpl::false_ {};
 
 /////////////////////////////
 //  PixelBasedConcept
@@ -141,7 +134,7 @@ struct channel_mapping_type<interleaved_ptr<ChannelPtr,Layout>>
 };
 
 template <typename ChannelPtr, typename Layout>
-struct is_planar<interleaved_ptr<ChannelPtr,Layout>> : std::false_type {};
+struct is_planar<interleaved_ptr<ChannelPtr,Layout>> : public mpl::false_ {};
 
 /////////////////////////////
 //  HomogeneousPixelBasedConcept

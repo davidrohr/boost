@@ -7,27 +7,25 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/histogram/axis/ostream.hpp>
 #include <boost/histogram/axis/variable.hpp>
+#include <boost/histogram/detail/cat.hpp>
 #include <limits>
-#include <sstream>
 #include <type_traits>
 #include <vector>
 #include "is_close.hpp"
 #include "std_ostream.hpp"
 #include "throw_exception.hpp"
 #include "utility_axis.hpp"
-#include "utility_str.hpp"
 
 using namespace boost::histogram;
 
 int main() {
   BOOST_TEST(std::is_nothrow_move_assignable<axis::variable<>>::value);
-  BOOST_TEST(std::is_nothrow_move_constructible<axis::variable<>>::value);
 
   // bad_ctors
   {
-    BOOST_TEST_THROWS(axis::variable<>(std::vector<double>{}), std::invalid_argument);
+    auto empty = std::vector<double>(0);
+    BOOST_TEST_THROWS((axis::variable<>(empty)), std::invalid_argument);
     BOOST_TEST_THROWS(axis::variable<>({1.0}), std::invalid_argument);
-    BOOST_TEST_THROWS(axis::variable<>({1.0, 1.0}), std::invalid_argument);
     BOOST_TEST_THROWS(axis::variable<>({1.0, -1.0}), std::invalid_argument);
   }
 
@@ -55,7 +53,7 @@ int main() {
     BOOST_TEST_EQ(a.index(std::numeric_limits<double>::infinity()), 2);
     BOOST_TEST_EQ(a.index(std::numeric_limits<double>::quiet_NaN()), 2);
 
-    BOOST_TEST_EQ(str(a),
+    BOOST_TEST_EQ(detail::cat(a),
                   "variable(-1, 0, 1, metadata=\"bar\", options=underflow | overflow)");
 
     axis::variable<> b;

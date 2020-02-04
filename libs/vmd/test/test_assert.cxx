@@ -80,7 +80,7 @@ int main()
   
 #else
 
-  BOOST_VMD_ASSERT(0)
+BOOST_ERROR("No variadic macro support");
   
 #endif
 

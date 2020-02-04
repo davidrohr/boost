@@ -114,13 +114,13 @@ installed.
 @subsection tutorial-installation-requirements Compiler requirements
 
 The library relies on a C++14 compiler and standard library, but nothing else
-is required. However, we only guarantee support for the compilers listed
-below, which are tested on an ongoing basis:
+is required. Here is a table of the current C++14 compilers/toolchains with
+comments regarding support for Hana:
 
 Compiler/Toolchain | Status
 ------------------ | ------
-Clang >= 3.9.1     | Fully working; tested on each push to GitHub
-Xcode >= 9.1       | Fully working; tested on each push to GitHub
+Clang >= 3.5.0     | Fully working; tested on each push to GitHub
+Xcode >= 8.3       | Fully working; tested on each push to GitHub
 GCC >= 6.0.0       | Fully working; tested on each push to GitHub
 VS2017 >= Update 7 | Fully working; tested on each push to GitHub
 
@@ -132,9 +132,7 @@ following C++14 features (non-exhaustively):
 - Automatically deduced return type
 - All the C++14 type traits from the `<type_traits>` header
 
-Using a compiler not listed above may work, but support for such compilers is
-not guaranteed. More information for specific platforms is available on
-[the wiki][Hana.wiki].
+More information for specific platforms is available on [the wiki][Hana.wiki].
 
 
 

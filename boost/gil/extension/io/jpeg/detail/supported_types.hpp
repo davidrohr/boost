@@ -13,7 +13,8 @@
 #include <boost/gil/channel.hpp>
 #include <boost/gil/color_base.hpp>
 
-#include <type_traits>
+#include <boost/mpl/bool_fwd.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace gil { namespace detail {
 
@@ -77,17 +78,14 @@ struct jpeg_write_support<uint8_t
 
 } // namespace detail
 
-template<typename Pixel>
-struct is_read_supported<Pixel, jpeg_tag>
-    : std::integral_constant
-    <
-        bool,
-        detail::jpeg_read_support
-        <
-            typename channel_type<Pixel>::type,
-            typename color_space_type<Pixel>::type
-        >::is_supported
-    >
+template< typename Pixel >
+struct is_read_supported< Pixel
+                        , jpeg_tag
+                        >
+    : mpl::bool_< detail::jpeg_read_support< typename channel_type< Pixel >::type
+                                           , typename color_space_type< Pixel >::type
+                                           >::is_supported
+                >
 {
     using parent_t = detail::jpeg_read_support
         <
@@ -98,17 +96,14 @@ struct is_read_supported<Pixel, jpeg_tag>
     static const typename jpeg_color_space::type _color_space = parent_t::_color_space;
 };
 
-template<typename Pixel>
-struct is_write_supported<Pixel, jpeg_tag>
-    : std::integral_constant
-    <
-        bool,
-        detail::jpeg_write_support
-        <
-            typename channel_type<Pixel>::type,
-            typename color_space_type<Pixel>::type
-        >::is_supported
-    >
+template< typename Pixel >
+struct is_write_supported< Pixel
+                         , jpeg_tag
+                         >
+    : mpl::bool_< detail::jpeg_write_support< typename channel_type< Pixel >::type
+                                            , typename color_space_type< Pixel >::type
+                                            >::is_supported
+                >
 {};
 
 } // namespace gil

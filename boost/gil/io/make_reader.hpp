@@ -8,8 +8,9 @@
 #ifndef BOOST_GIL_IO_MAKE_READER_HPP
 #define BOOST_GIL_IO_MAKE_READER_HPP
 
-#include <boost/gil/detail/mp11.hpp>
 #include <boost/gil/io/get_reader.hpp>
+
+#include <boost/mpl/and.hpp>
 
 #include <type_traits>
 
@@ -23,7 +24,7 @@ auto make_reader(
     ConversionPolicy const&,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_supported_path_spec<String>,
             is_format_tag<FormatTag>
@@ -99,7 +100,7 @@ auto make_reader(
     ConversionPolicy const&,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_adaptable_input_device<FormatTag, Device>,
             is_format_tag<FormatTag>
@@ -123,7 +124,7 @@ auto make_reader(
     ConversionPolicy const& cc,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_supported_path_spec<String>,
             is_format_tag<FormatTag>
@@ -182,7 +183,7 @@ auto make_reader(
     ConversionPolicy const& cc,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_adaptable_input_device<FormatTag, Device>,
             is_format_tag<FormatTag>

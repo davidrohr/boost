@@ -8,10 +8,10 @@
 #ifndef BOOST_GIL_EXAMPLE_INTERLEAVED_REF_HPP
 #define BOOST_GIL_EXAMPLE_INTERLEAVED_REF_HPP
 
-#include <boost/gil.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
-#include <type_traits>
+#include <boost/mpl/range_c.hpp>
+#include <boost/mpl/vector_c.hpp>
 
 // Example on how to create a new model of a pixel reference
 
@@ -125,7 +125,7 @@ void swap(const interleaved_ref<ChannelReference,Layout>& x, const interleaved_r
 
 // Required by PixelConcept
 template <typename ChannelReference, typename Layout>
-struct is_pixel<interleaved_ref<ChannelReference,Layout>> : public std::true_type {};
+struct is_pixel<interleaved_ref<ChannelReference,Layout>> : public boost::mpl::true_ {};
 
 
 // Required by PixelBasedConcept
@@ -144,7 +144,7 @@ struct channel_mapping_type<interleaved_ref<ChannelReference, Layout>>
 
 // Required by PixelBasedConcept
 template <typename ChannelReference, typename Layout>
-struct is_planar<interleaved_ref<ChannelReference,Layout>> : std::false_type {};
+struct is_planar<interleaved_ref<ChannelReference,Layout>> : mpl::false_ {};
 
 // Required by HomogeneousPixelBasedConcept
 template <typename ChannelReference, typename Layout>

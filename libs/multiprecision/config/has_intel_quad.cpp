@@ -8,7 +8,9 @@ extern "C" _Quad __fabs(_Quad);
 int main()
 {
    _Quad f = -2.0Q;
-   f       = __fabsq(f);
+   f = __fabsq(f);
 
    return 0;
 }
+
+

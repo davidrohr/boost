@@ -128,7 +128,7 @@ class BOOST_MPI_DECL request
 
   class handler {
   public:
-    virtual BOOST_MPI_DECL ~handler() = 0;
+    virtual ~handler() = 0;
     virtual status wait() = 0;
     virtual optional<status> test() = 0;
     virtual void cancel() = 0;

@@ -20,7 +20,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <type_traits>
 
 namespace boost { namespace gil {
 
@@ -212,27 +211,20 @@ struct default_color_converter_impl<cmyk_t,gray_t> {
 };
 
 namespace detail {
-
 template <typename Pixel>
-auto alpha_or_max_impl(Pixel const& p, std::true_type) -> typename channel_type<Pixel>::type
-{
+typename channel_type<Pixel>::type alpha_or_max_impl(const Pixel& p, mpl::true_) {
     return get_color(p,alpha_t());
 }
 template <typename Pixel>
-auto alpha_or_max_impl(Pixel const&, std::false_type) -> typename channel_type<Pixel>::type
-{
+typename channel_type<Pixel>::type alpha_or_max_impl(const Pixel&  , mpl::false_) {
     return channel_traits<typename channel_type<Pixel>::type>::max_value();
 }
-
 } // namespace detail
 
 // Returns max_value if the pixel has no alpha channel. Otherwise returns the alpha.
 template <typename Pixel>
-auto alpha_or_max(Pixel const& p) -> typename channel_type<Pixel>::type
-{
-    return detail::alpha_or_max_impl(
-        p,
-        mp11::mp_contains<typename color_space_type<Pixel>::type, alpha_t>());
+typename channel_type<Pixel>::type alpha_or_max(const Pixel& p) {
+    return detail::alpha_or_max_impl(p, mpl::contains<typename color_space_type<Pixel>::type,alpha_t>());
 }
 
 

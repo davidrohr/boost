@@ -22,8 +22,9 @@ achieves a specific value.
 
 int main()
 {
-    // The lithium potential is given in Kohn's paper, Table I.
-    // (We could equally easily use an unordered_map, a list of tuples or pairs, or a 2-dimentional array).
+    // The lithium potential is given in Kohn's paper, Table I,
+    // we could equally use an unordered_map, a list of tuples or pairs,
+    // or a 2-dimentional array equally easily:
     std::map<double, double> r;
 
     r[0.02] = 5.727;

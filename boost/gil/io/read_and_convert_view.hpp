@@ -13,7 +13,9 @@
 #include <boost/gil/io/device.hpp>
 #include <boost/gil/io/get_reader.hpp>
 #include <boost/gil/io/path_spec.hpp>
-#include <boost/gil/detail/mp11.hpp>
+
+#include <boost/mpl/and.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <type_traits>
 
@@ -32,7 +34,7 @@ inline
 void read_and_convert_view(Reader& reader, View const& view,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_reader<Reader>,
             is_format_tag<typename Reader::format_tag_t>
@@ -59,7 +61,7 @@ void read_and_convert_view(
     ColorConverter const& cc,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_read_device<FormatTag, Device>,
             is_format_tag<FormatTag>
@@ -88,7 +90,7 @@ void read_and_convert_view(
     ColorConverter const& cc,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             is_format_tag<FormatTag>,
             detail::is_supported_path_spec<String>
@@ -117,7 +119,7 @@ void read_and_convert_view(
     FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             is_format_tag<FormatTag>,
             detail::is_supported_path_spec<String>
@@ -146,7 +148,7 @@ void read_and_convert_view(
     FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_read_device<FormatTag, Device>,
             is_format_tag<FormatTag>
@@ -173,7 +175,7 @@ void read_and_convert_view(
     image_read_settings<FormatTag> const& settings,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             is_format_tag<FormatTag>,
             detail::is_supported_path_spec<String>
@@ -200,7 +202,7 @@ void read_and_convert_view(
     image_read_settings<FormatTag> const& settings,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_read_device<FormatTag, Device>,
             is_format_tag<FormatTag>
@@ -227,7 +229,7 @@ void read_and_convert_view(
     FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             is_format_tag<FormatTag>,
             detail::is_supported_path_spec<String>
@@ -254,7 +256,7 @@ void read_and_convert_view(
     FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_read_device<FormatTag, Device>,
             is_format_tag<FormatTag>

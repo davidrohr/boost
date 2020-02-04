@@ -1,3 +1,4 @@
+
 [section:pol_tutorial Policy Tutorial]
 
 [section:what_is_a_policy So Just What is a Policy Anyway?]
@@ -232,7 +233,7 @@ Which outputs:
 
 [pre quantile is: 40]
 
-[endsect] [/section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
+[endsect][/section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
 
 [section:ad_hoc_sf_policies Changing the Policy on an Ad Hoc Basis for the Special Functions]
 
@@ -520,7 +521,7 @@ to know that other rounding options are available:
 
 [policy_eg_10]
 
-[endsect] [/section:understand_dis_quant Understanding Quantiles of Discrete Distributions]
+[endsect]
 
 [endsect] [/section:pol_Tutorial Policy Tutorial]
 

@@ -1,85 +1,9 @@
-Version 276:
-
-* https_get example sends the Host header
-* Fix async_close error code when async_read times out
-* Refactor zlib tests and fix enum typo
-
---------------------------------------------------------------------------------
-
-Version 275:
-
-* Async init-fns use the executor's default token
-* Add basic_stream::rebind_executor
-* Use automatically deduced return types for all async operations
-* Support Concepts for completion token params
-
---------------------------------------------------------------------------------
-
-Version 274:
-
-* Fix leftovers in basic_parser corner case
-
---------------------------------------------------------------------------------
-
-Version 273:
-
-* Squelch spurious websocket timer assert
-* Use the executor type in basic_stream timer
-
---------------------------------------------------------------------------------
-
-Version 272:
-
-* Add BEAST_THROWS
-* Add zlib tests and fixes
-
---------------------------------------------------------------------------------
-
-Version 271:
-
-* Add HTTP async client with system_executor example
-* Add WebSocket async client with system_executor example
-* Fix data race in HTTP server examples
-* Fix data race in WebSocket examples
-
---------------------------------------------------------------------------------
-
-Version 270:
-
-* Silence unused variables
-* Fix typo
-
---------------------------------------------------------------------------------
-
-Version 269:
-
-* Fix /permissive- missing include
-* Add test
-
---------------------------------------------------------------------------------
-
-Version 268:
-
-* root_certificates.hpp is not for production
-
---------------------------------------------------------------------------------
-
-Version 267:
-
-* Add package for Travis config
-* Fix signed/unsigned mismatch in file_stdio::seek
-* basic_stream dtor cannot throw
-* cmake: check policy first
-* Add default dtors to satisfy -Wnon-virtual-dtor
-* Multiple I/O of the same type is not supported
-
---------------------------------------------------------------------------------
-
 Version 266:
 
 * Fix some missing deduced return types in the docs
 
 --------------------------------------------------------------------------------
+
 
 Version 265:
 

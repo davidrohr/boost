@@ -4,7 +4,7 @@
 <title>Hyperexponential Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="geometric_dist.html" title="Geometric Distribution">
 <link rel="next" href="hypergeometric_dist.html" title="Hypergeometric Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">hyperexponential_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">hyperexponential</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -110,10 +110,9 @@
           density function</a> for random variate <span class="emphasis"><em>x</em></span> in a
           hyperexponential distribution is given by:
         </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_pdf.svg"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_pdf.svg"></span>
+        </p>
 <p>
           The following graph illustrates the PDF of the hyperexponential distribution
           with five different parameters, namely:
@@ -140,10 +139,9 @@
               and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.0, 1.5)</em></span>.
             </li>
 </ol></div>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf.svg" align="middle"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf.svg" align="middle"></span>
+        </p>
 <p>
           Also, the following graph illustrates the PDF of the hyperexponential distribution
           (solid lines) where only the <span class="emphasis"><em>phase probability vector</em></span>
@@ -181,10 +179,9 @@
           approaches to <span class="emphasis"><em>0</em></span>), the resulting hyperexponential distribution
           nears the exponential distribution with parameter <span class="emphasis"><em>&#955;=1.5</em></span>.
         </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf_samerate.svg" align="middle"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf_samerate.svg" align="middle"></span>
+        </p>
 <p>
           Finally, the following graph compares the PDF of the hyperexponential distribution
           with different number of phases but with the same mean value equal to
@@ -204,10 +201,9 @@
               and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.2, 1.5, 3.0)</em></span>,
             </li>
 </ol></div>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf_samemean.svg" align="middle"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf_samemean.svg" align="middle"></span>
+        </p>
 <p>
           As can be noted, even if the three distributions have the same mean value,
           the two hyperexponential distributions have a <span class="emphasis"><em>longer</em></span>
@@ -970,7 +966,7 @@
 
 <span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">rates</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">rates</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
 
-<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h19"></a>
@@ -1014,7 +1010,7 @@
 
 <span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">rates</span><span class="special">);</span>
 
-<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h23"></a>
@@ -1085,7 +1081,7 @@
         </h6>
 <pre class="programlisting"><span class="identifier">hyperexponential</span> <span class="identifier">he</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">10</span><span class="special">,</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">12</span> <span class="special">};</span>
 
-<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h29"></a>
@@ -1267,10 +1263,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_pdf.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_pdf.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1280,10 +1275,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_cdf.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_cdf.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1293,10 +1287,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_ccdf.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_ccdf.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1330,10 +1323,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_mean.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_mean.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1343,10 +1335,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_variance.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_variance.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1368,10 +1359,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_skewness.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_skewness.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>
@@ -1381,10 +1371,9 @@
                   </p>
                 </td>
 <td>
-                  <div class="blockquote"><blockquote class="blockquote"><p>
-                      <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_kurtosis.svg"></span>
-
-                    </p></blockquote></div>
+                  <p>
+                    <span class="inlinemediaobject"><img src="../../../../equations/hyperexponential_kurtosis.svg"></span>
+                  </p>
                 </td>
 </tr>
 <tr>

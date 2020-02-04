@@ -253,13 +253,11 @@ public:
     */
     template<
         class MutableBufferSequence,
-        BOOST_BEAST_ASYNC_TPARAM2 ReadHandler =
-            net::default_completion_token_t<executor_type>>
+        class ReadHandler>
     BOOST_BEAST_ASYNC_RESULT2(ReadHandler)
     async_read_some(
         MutableBufferSequence const& buffers,
-        ReadHandler&& handler =
-            net::default_completion_token_t<executor_type>{});
+        ReadHandler&& handler);
 
     /** Write some data to the stream.
     
@@ -334,13 +332,11 @@ public:
     */
     template<
         class ConstBufferSequence,
-        BOOST_BEAST_ASYNC_TPARAM2 WriteHandler =
-            net::default_completion_token_t<executor_type>>
+        class WriteHandler>
     BOOST_BEAST_ASYNC_RESULT2(WriteHandler)
     async_write_some(
         ConstBufferSequence const& buffers,
-        WriteHandler&& handler =
-            net::default_completion_token_t<executor_type>{});
+        WriteHandler&& handler);
 };
 
 } // beast

@@ -12,7 +12,7 @@ int main()
   
 #if BOOST_PP_VARIADICS
 
-#if !BOOST_VMD_MSVC && !(defined(__cplusplus) && __cplusplus > 201703L)
+#if !BOOST_VMD_MSVC
 
   #define VMACRO(x,...) x __VA_ARGS__
   

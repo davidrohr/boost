@@ -1,7 +1,7 @@
 // Boost.Geometry
 
-// This file was modified by Oracle on 2018, 2019.
-// Modifications copyright (c) 2018, 2019, Oracle and/or its affiliates.
+// This file was modified by Oracle on 2018.
+// Modifications copyright (c) 2018, Oracle and/or its affiliates.
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 
 // Use, modification and distribution is subject to the Boost Software License,
@@ -20,14 +20,37 @@
 namespace boost { namespace geometry
 {
 
+namespace srs
+{
 
+// Forward declarations for functions declarations below
+class grids;
+
+template <typename GridsStorage>
+class projection_grids;
+
+} // namespace srs
 namespace projections { namespace detail
 {
 
+// Forward declaratios of grids friends
+template <typename StreamPolicy>
+inline bool pj_gridlist_merge_gridfile(std::string const& gridname,
+                                       StreamPolicy const& stream_policy,
+                                       srs::grids & grids,
+                                       std::vector<std::size_t> & gridindexes);
+template <bool Inverse, typename CalcT, typename StreamPolicy, typename Range>
+inline bool pj_apply_gridshift_3(StreamPolicy const& stream_policy,
+                                 Range & range,
+                                 srs::grids & grids,
+                                 std::vector<std::size_t> const& gridindexes);
 
-struct grids_tag {};
-struct shared_grids_tag {};
-
+// Forward declaratios of projection_grids friends
+template <typename Par, typename GridsStorage>
+inline void pj_gridlist_from_nadgrids(Par const& defn,
+                                      srs::projection_grids<GridsStorage> & grids);
+template <bool Inverse, typename Par, typename Range, typename Grids>
+inline bool pj_apply_gridshift_2(Par const& defn, Range & range, Grids const& grids);
 
 }} // namespace projections::detail
 
@@ -47,9 +70,22 @@ public:
         return gridinfo.empty();
     }
 
-    typedef projections::detail::grids_tag tag;
+private:
+    template <typename StreamPolicy>
+    friend inline bool projections::detail::pj_gridlist_merge_gridfile(
+                            std::string const& gridname,
+                            StreamPolicy const& stream_policy,
+                            srs::grids & grids,
+                            std::vector<std::size_t> & gridindexes);
+    template <bool Inverse, typename CalcT, typename StreamPolicy, typename Range>
+    friend inline bool projections::detail::pj_apply_gridshift_3(
+                            StreamPolicy const& stream_policy,
+                            Range & range,
+                            srs::grids & grids,
+                            std::vector<std::size_t> const& gridindexes);
 
     projections::detail::pj_gridinfo gridinfo;
+
 };
 
 struct ifstream_policy
@@ -89,20 +125,29 @@ class projection_grids
 {
 public:
     projection_grids(GridsStorage & storage)
-        : m_storage_ptr(boost::addressof(storage))
+        : storage_ptr(boost::addressof(storage))
     {}
 
-    typedef GridsStorage grids_storage_type;
-
-    GridsStorage & grids_storage() const
+    std::size_t size() const
     {
-        return *m_storage_ptr;
+        return hindexes.size();
+    }
+
+    bool empty() const
+    {
+        return hindexes.empty();
     }
 
 private:
-    GridsStorage * const m_storage_ptr;
+    template <typename Par, typename GridsStor>
+    friend inline void projections::detail::pj_gridlist_from_nadgrids(
+                            Par const& defn,
+                            srs::projection_grids<GridsStor> & grids);
+    template <bool Inverse, typename Par, typename Range, typename Grids>
+    friend inline bool projections::detail::pj_apply_gridshift_2(
+                            Par const& defn, Range & range, Grids const& grids);
 
-public:
+    GridsStorage * const storage_ptr;
     std::vector<std::size_t> hindexes;
 };
 

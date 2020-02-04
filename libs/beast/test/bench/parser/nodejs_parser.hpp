@@ -30,7 +30,7 @@ namespace http {
 
 namespace detail {
 
-class nodejs_message_category final
+class nodejs_message_category
     : public boost::system::error_category
 {
 public:

@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
-BOOST_OUTCOME_AUTO_TEST_CASE(issues_0016_test, "Default constructor of T is sometimes compiled when T has no default constructor")
+BOOST_OUTCOME_AUTO_TEST_CASE(issues_16, "Default constructor of T is sometimes compiled when T has no default constructor")
 {
   using namespace BOOST_OUTCOME_V2_NAMESPACE;
   struct udt

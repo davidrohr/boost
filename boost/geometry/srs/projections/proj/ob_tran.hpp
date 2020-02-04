@@ -60,12 +60,12 @@ namespace projections
     
         // fwd declaration needed below
         template <typename T>
-        inline detail::dynamic_wrapper_b<T, projections::parameters<T> >*
+        inline detail::base_v<T, projections::parameters<T> >*
             create_new(srs::detail::proj4_parameters const& params,
                        projections::parameters<T> const& parameters);
 
         template <typename T>
-        inline detail::dynamic_wrapper_b<T, projections::parameters<T> >*
+        inline detail::base_v<T, projections::parameters<T> >*
             create_new(srs::dpar::parameters<T> const& params,
                        projections::parameters<T> const& parameters);
 
@@ -163,11 +163,6 @@ namespace projections
                 return pj;
             }
 
-            // TODO: It's possible that the original Parameters could be used
-            // instead of a copy in link.
-            // But it's not possible with the current implementation of
-            // dynamic_wrapper_b always storing params
-
             template <typename T, typename Parameters>
             struct par_ob_tran
             {
@@ -181,15 +176,15 @@ namespace projections
 
                 inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
-                    link->fwd(link->params(), lp_lon, lp_lat, xy_x, xy_y);
+                    link->fwd(lp_lon, lp_lat, xy_x, xy_y);
                 }
 
                 inline void inv(T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
                 {
-                    link->inv(link->params(), xy_x, xy_y, lp_lon, lp_lat);
+                    link->inv(xy_x, xy_y, lp_lon, lp_lat);
                 }
 
-                boost::shared_ptr<dynamic_wrapper_b<T, Parameters> > link;
+                boost::shared_ptr<base_v<T, Parameters> > link;
                 T lamp;
                 T cphip, sphip;
             };
@@ -224,12 +219,12 @@ namespace projections
 
                 inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
-                    link.fwd(link.params(), lp_lon, lp_lat, xy_x, xy_y);
+                    link.fwd(lp_lon, lp_lat, xy_x, xy_y);
                 }
 
                 inline void inv(T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
                 {
-                    link.inv(link.params(), xy_x, xy_y, lp_lon, lp_lat);
+                    link.inv(xy_x, xy_y, lp_lon, lp_lat);
                 }
 
                 projection_type link;
@@ -357,28 +352,33 @@ namespace projections
                 return phip;
             }
 
+            // template class, using CRTP to implement forward/inverse
             template <typename T, typename Parameters>
             struct base_ob_tran_oblique
+                : public base_t_fi<base_ob_tran_oblique<T, Parameters>, T, Parameters>
             {
                 par_ob_tran<T, Parameters> m_proj_parm;
 
-                inline base_ob_tran_oblique(par_ob_tran<T, Parameters> const& proj_parm)
-                    : m_proj_parm(proj_parm)
+                inline base_ob_tran_oblique(Parameters const& par,
+                                            par_ob_tran<T, Parameters> const& proj_parm)
+                    : base_t_fi
+                        <
+                            base_ob_tran_oblique<T, Parameters>, T, Parameters
+                        >(*this, par)
+                    , m_proj_parm(proj_parm)
                 {}
 
                 // FORWARD(o_forward)  spheroid
                 // Project coordinates from geographic (lon, lat) to cartesian (x, y)
-                inline void fwd(Parameters const& , T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
+                inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     o_forward(lp_lon, lp_lat, xy_x, xy_y, this->m_proj_parm);
                 }
 
                 // INVERSE(o_inverse)  spheroid
                 // Project coordinates from cartesian (x, y) to geographic (lon, lat)
-                inline void inv(Parameters const& , T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
+                inline void inv(T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     o_inverse(xy_x, xy_y, lp_lon, lp_lat, this->m_proj_parm);
                 }
 
@@ -389,28 +389,33 @@ namespace projections
 
             };
 
+            // template class, using CRTP to implement forward/inverse
             template <typename T, typename Parameters>
             struct base_ob_tran_transverse
+                : public base_t_fi<base_ob_tran_transverse<T, Parameters>, T, Parameters>
             {
                 par_ob_tran<T, Parameters> m_proj_parm;
 
-                inline base_ob_tran_transverse(par_ob_tran<T, Parameters> const& proj_parm)
-                    : m_proj_parm(proj_parm)
+                inline base_ob_tran_transverse(Parameters const& par,
+                                               par_ob_tran<T, Parameters> const& proj_parm)
+                    : base_t_fi
+                        <
+                            base_ob_tran_transverse<T, Parameters>, T, Parameters
+                        >(*this, par)
+                    , m_proj_parm(proj_parm)
                 {}
 
                 // FORWARD(t_forward)  spheroid
                 // Project coordinates from geographic (lon, lat) to cartesian (x, y)
-                inline void fwd(Parameters const& , T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
+                inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     t_forward(lp_lon, lp_lat, xy_x, xy_y, this->m_proj_parm);
                 }
 
                 // INVERSE(t_inverse)  spheroid
                 // Project coordinates from cartesian (x, y) to geographic (lon, lat)
-                inline void inv(Parameters const& , T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
+                inline void inv(T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     t_inverse(xy_x, xy_y, lp_lon, lp_lat, this->m_proj_parm);
                 }
 
@@ -421,21 +426,23 @@ namespace projections
 
             };
 
+            // template class, using CRTP to implement forward/inverse
             template <typename StaticParameters, typename T, typename Parameters>
             struct base_ob_tran_static
+                : public base_t_fi<base_ob_tran_static<StaticParameters, T, Parameters>, T, Parameters>
             {
                 par_ob_tran_static<StaticParameters, T, Parameters> m_proj_parm;
                 bool m_is_oblique;
 
                 inline base_ob_tran_static(StaticParameters const& params, Parameters const& par)
-                    : m_proj_parm(params, par)
+                    : base_t_fi<base_ob_tran_static<StaticParameters, T, Parameters>, T, Parameters>(*this, par)
+                    , m_proj_parm(params, par)
                 {}
 
                 // FORWARD(o_forward)  spheroid
                 // Project coordinates from geographic (lon, lat) to cartesian (x, y)
-                inline void fwd(Parameters const& , T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
+                inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     if (m_is_oblique) {
                         o_forward(lp_lon, lp_lat, xy_x, xy_y, this->m_proj_parm);
                     } else {
@@ -445,9 +452,8 @@ namespace projections
 
                 // INVERSE(o_inverse)  spheroid
                 // Project coordinates from cartesian (x, y) to geographic (lon, lat)
-                inline void inv(Parameters const& , T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
+                inline void inv(T const& xy_x, T const& xy_y, T& lp_lon, T& lp_lat) const
                 {
-                    // NOTE: Parameters ignored, m_proj_parm.link has a copy
                     if (m_is_oblique) {
                         o_inverse(xy_x, xy_y, lp_lon, lp_lat, this->m_proj_parm);
                     } else {
@@ -493,10 +499,9 @@ namespace projections
     template <typename T, typename Parameters>
     struct ob_tran_oblique : public detail::ob_tran::base_ob_tran_oblique<T, Parameters>
     {
-        template <typename Params>
-        inline ob_tran_oblique(Params const& , Parameters const& ,
+        inline ob_tran_oblique(Parameters const& par,
                                detail::ob_tran::par_ob_tran<T, Parameters> const& proj_parm)
-            : detail::ob_tran::base_ob_tran_oblique<T, Parameters>(proj_parm)
+            : detail::ob_tran::base_ob_tran_oblique<T, Parameters>(par, proj_parm)
         {
             // already done
             //detail::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
@@ -530,11 +535,10 @@ namespace projections
     */
     template <typename T, typename Parameters>
     struct ob_tran_transverse : public detail::ob_tran::base_ob_tran_transverse<T, Parameters>
-    {        
-        template <typename Params>
-        inline ob_tran_transverse(Params const& , Parameters const& ,
+    {
+        inline ob_tran_transverse(Parameters const& par,
                                   detail::ob_tran::par_ob_tran<T, Parameters> const& proj_parm)
-            : detail::ob_tran::base_ob_tran_transverse<T, Parameters>(proj_parm)
+            : detail::ob_tran::base_ob_tran_transverse<T, Parameters>(par, proj_parm)
         {
             // already done
             //detail::ob_tran::setup_ob_tran(this->m_par, this->m_proj_parm);
@@ -572,7 +576,7 @@ namespace projections
         inline ob_tran_static(StaticParameters const& params, Parameters const& par)
             : detail::ob_tran::base_ob_tran_static<StaticParameters, T, Parameters>(params, par)
         {
-            T phip = detail::ob_tran::setup_ob_tran<T>(params, par, this->m_proj_parm);
+            T phip = detail::ob_tran::setup_ob_tran<T>(params, this->m_par, this->m_proj_parm);
             this->m_is_oblique = fabs(phip) > detail::ob_tran::tolerance;
         }
     };
@@ -585,12 +589,12 @@ namespace projections
         template <typename SP, typename CT, typename P>
         struct static_projection_type<srs::spar::proj_ob_tran, srs_sphere_tag, SP, CT, P>
         {
-            typedef static_wrapper_fi<ob_tran_static<SP, CT, P>, P> type;
+            typedef ob_tran_static<SP, CT, P> type;
         };
         template <typename SP, typename CT, typename P>
         struct static_projection_type<srs::spar::proj_ob_tran, srs_spheroid_tag, SP, CT, P>
         {
-            typedef static_wrapper_fi<ob_tran_static<SP, CT, P>, P> type;
+            typedef ob_tran_static<SP, CT, P> type;
         };
 
         // Factory entry(s)
@@ -601,9 +605,9 @@ namespace projections
             T phip = detail::ob_tran::setup_ob_tran<T>(params, parameters_copy, proj_parm);
 
             if (fabs(phip) > detail::ob_tran::tolerance)
-                return new dynamic_wrapper_fi<ob_tran_oblique<T, Parameters>, T, Parameters>(params, parameters_copy, proj_parm);
+                return new base_v_fi<ob_tran_oblique<T, Parameters>, T, Parameters>(parameters_copy, proj_parm);
             else
-                return new dynamic_wrapper_fi<ob_tran_transverse<T, Parameters>, T, Parameters>(params, parameters_copy, proj_parm);
+                return new base_v_fi<ob_tran_transverse<T, Parameters>, T, Parameters>(parameters_copy, proj_parm);
         }
         BOOST_GEOMETRY_PROJECTIONS_DETAIL_FACTORY_ENTRY_END
 

@@ -33,19 +33,21 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library is compiled so it can be linked
     as a shared library (a.k.a., Dynamically Linked Library or DLL) to user
     code.
-    This library will automatically define this macro when Boost libraries are
-    built as shared libraries (e.g., defining @c BOOST_ALL_DYN_LINK or using
-    <c>bjam link=shared ...</c>).
+    Also, this library will automatically define this macro when Boost libraries
+    are built as dynamic libraries (e.g., defining @c BOOST_ALL_DYN_LINK).
     
     @warning    In general this library will correctly check contracts at
                 run-time only when compiled as a shared library, unless  user
                 code checks contracts in a single program unit (e.g., a single
-                program with only statically linked libraries).
+                program with only statically linked libraries that check
+                contracts).
                 Therefore, it is recommended to build and use this library as
-                a shared library by defining this macro (or equivalently by
-                building all Boost libraries as shared libraries).
+                a dynamic library by defining this macro (or equivalently by
+                building all Boost libraries as dynamic libraries and
+                @c BOOST_ALL_DYN_LINK is defined).
                 
-    @see    @RefSect{getting_started, Getting Started}
+    @see    @RefSect{getting_started.compilers_and_platforms, Compilers and
+            Platforms}
     */
     #define BOOST_CONTRACT_DYN_LINK
 #elif defined(BOOST_CONTRACT_DYN_LINK) && defined(BOOST_CONTRACT_STATIC_LINK)
@@ -59,8 +61,8 @@ Configure this library compile-time and run-time behaviours.
 
     If this macro is defined, this library is compiled so it can be linked
     statically to user code.
-    This library will automatically define this macro when Boost libraries
-    are built as static libraries.
+    This library build scripts will automatically define this macro when Boost
+    libraries are being built as static libraries.
 
     @warning    This library is not guaranteed to always work correctly at
                 run-time when this macro is defined (define
@@ -69,9 +71,10 @@ Configure this library compile-time and run-time behaviours.
                 However, this macro can be defined and this library can be
                 safely used as a static library for user code that checks
                 contracts in a single program unit (e.g., a single program with
-                only statically linked libraries).
+                only statically linked libraries that check contracts).
                 
-    @see    @RefSect{getting_started, Getting Started}
+    @see    @RefSect{getting_started.compilers_and_platforms, Compilers and
+            Platforms}
     */
     #define BOOST_CONTRACT_STATIC_LINK
 #elif defined(BOOST_CONTRACT_STATIC_LINK) && defined(BOOST_CONTRACT_DYN_LINK)
@@ -87,11 +90,11 @@ Configure this library compile-time and run-time behaviours.
     Automatically defined by this library when it is being used as a header-only
     library (not recommended).
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users do not define
+    This library will define this macro when users do not define
     @RefMacro{BOOST_CONTRACT_DYN_LINK} (or @c BOOST_ALL_DYN_LINK) and
-    @RefMacro{BOOST_CONTRACT_STATIC_LINK}.
+    @RefMacro{BOOST_CONTRACT_STATIC_LINK} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     When used as a header-only library, this library code does not have to be
     compiled separately from user code, this library headers are simply included
     and compiled as part of the user program.
@@ -103,9 +106,10 @@ Configure this library compile-time and run-time behaviours.
                 However, this macro can be defined and this library can be
                 safely used as a header-only library for user code that checks
                 contracts in a single program unit (e.g., a single program with
-                only statically linked libraries).
+                only statically linked libraries that check contracts).
                 
-    @see    @RefSect{getting_started, Getting Started}
+    @see    @RefSect{getting_started.compilers_and_platforms, Compilers and
+            Platforms}
     */
     #define BOOST_CONTRACT_HEADER_ONLY
 #endif
@@ -140,14 +144,14 @@ Configure this library compile-time and run-time behaviours.
     Maximum number of arguments for public function overrides on compilers that
     do not support variadic templates (default to @c 10).
 
-    On compilers that do not support C++11 variadic templates, this macro is
-    defined to the maximum number of arguments that public function overrides
-    can have and pass to @RefFunc{boost::contract::public_function} (users can
-    redefine this macro to a different value).
+    On compilers that do not support variadic templates, this macro is defined
+    to the maximum number of arguments that public function overrides can have
+    and pass to @RefFunc{boost::contract::public_function} (users can redefine
+    this macro to a different value).
     On compilers that support variadic templates, this macro has no effect.
 
     @note   Regardless of the value of this macro and of compiler support for
-            variadic templates, there might be an intrinsic limit of about 18
+            variadic templates, there is an intrinsic limit of about 18
             arguments for public function overrides (because of similar limits
             in Boost.MPL and Boost.FunctionTypes internally used by this
             library).
@@ -165,22 +169,21 @@ Configure this library compile-time and run-time behaviours.
     classes for subcontracting via @RefMacro{BOOST_CONTRACT_BASE_TYPES}:
 
     @code
-        class u
+        class u :
             #define BASES public b, private w
-            : BASES
+            BASES
         {
             friend class boost::contract:access;
 
-            typedef BOOST_CONTRACT_BASE_TYPES(BASES) BOOST_CONTRACT_TYPEDEF;
+            typedef BOOST_CONTRACT_BASES(BASES) BOOST_CONTRACT_TYPEDEF;
             #undef BASES
 
             ...
         };
     @endcode
 
-    When used this way, users can redefine this macro if the @c typedef must
-    have a name different from @c base_types (because of name clashes in user
-    code, etc.).
+    Users can redefine this macro if the @c typedef must have a name different
+    from @c base_types (because of name clashes in user code, etc.).
     
     @see @RefSect{tutorial.base_classes__subcontracting_, Base Classes}
     */
@@ -214,9 +217,8 @@ Configure this library compile-time and run-time behaviours.
         };
     @endcode
 
-    When used this way, users can redefine this macro if the invariant functions
-    must have a name different from @c invariant (because of name clashes in
-    user code, etc.).
+    Users can redefine this macro if the invariant functions must have a name
+    different from @c invariant (because of name clashes in user code, etc.).
     
     @note   C++ does not allow to overload member functions based on the
             @c static classifier, so this macro must always be defined to be
@@ -251,9 +253,9 @@ Configure this library compile-time and run-time behaviours.
         };
     @endcode
 
-    When used this way, users can redefine this macro if the static invariant
-    function must have a name different from @c static_invariant (because of
-    name clashes in user code, etc.).
+    Users can redefine this macro if the static invariant function must have a
+    name different from @c static_invariant (because of name clashes in user
+    code, etc.).
 
     @note   C++ does not allow to overload member functions based on the
             @c static classifier, so this macro must always be defined to be
@@ -273,11 +275,11 @@ Configure this library compile-time and run-time behaviours.
     Defining this macro disables a number of static checks and related
     compile-time errors generated by this library, for example:
 
-    @li The static invariant member function named as
-        @c BOOST_CONTRACT_STATIC_INVARIANT_FUNC must be declared @c static.
-    @li Non-static invariant member functions named as
-        @c BOOST_CONTRACT_INVARIANT_FUNC must be declared either @c const,
-        <c>const volatile</c>, or <c>volatile const</c>.
+    @li The static invariant member @c BOOST_CONTRACT_STATIC_INVARIANT_FUNC
+        function must be declared @c static.
+    @li Non-static invariant member functions @c BOOST_CONTRACT_INVARIANT_FUNC
+        must be declared either @c const, <c>const volatile</c>, or
+        <c>volatile const</c>.
     @li Derived classes that program contracts for one or more public function
         overrides via @RefFunc{boost::contract::public_function} must also
         define the @RefMacro{BOOST_CONTRACT_BASE_TYPES} @c typedef.
@@ -294,23 +296,22 @@ Configure this library compile-time and run-time behaviours.
 #ifdef BOOST_CONTRACT_DETAIL_DOXYGEN
     /**
     Code block to execute if contracts are not assigned to a
-    @RefClass{boost::contract::check} variable (undefined and executes
-    @c BOOST_ASSERT(false) by default).
+    @RefClass{boost::contract::check} variable (undefined by default and
+    executes @c BOOST_ASSERT(false)).
 
     In general, there is a logic error in the program when contracts are not
-    explicitly assigned to a local variable of type
-    @RefClass{boost::contract::check} and without using C++11 @c auto
-    declarations (because that is a misuse of this library).
+    assigned to a local variable of type @RefClass{boost::contract::check}
+    (because that is a misuse of this library).
     Therefore, by default (i.e., when this macro is not defined) this library
     calls <c>BOOST_ASSERT(false)</c> in those cases.
-    If this macro is defined, this library will execute the code expanded by
-    this macro instead of calling @c BOOST_ASSERT(false) (if programmers prefer
-    to throw an exception, etc.).
+    If this macro is defined, this library will execute the code expanded by the
+    macro instead of calling @c BOOST_ASSERT(false) (if programmers prefer to
+    throw an exception, etc.).
 
-    This macro can also be defined to be any block of code (and use empty curly
-    brackets @c {} to generate no error, not recommended), for example (on GCC):
+    This macro can be defined to be any block of code (use empty curly brackets
+    @c {} to generate no error), for example (on GCC):
     @code
-        gcc -DBOOST_CONTRACT_ON_MISSING_CHECK_DECL='{ throw std::logic_error("missing contract check declaration"); }' ...
+        -DBOOST_CONTRACT_ON_MISSING_CHECK_DECL='{ throw std::logic_error("missing contract check declaration"); }'
     @endcode
 
     @see @RefSect{tutorial, Tutorial}
@@ -326,13 +327,13 @@ Configure this library compile-time and run-time behaviours.
     Not disabling other assertions while checking preconditions can lead to
     infinite recursion in user code so by default this macro is not defined.
 
-    However, the @RefSect{bibliography, [N1962]} proposal does not disable
+    However, the @RefSect{bibliography, [1962]} proposal does not disable
     assertions while checking preconditions because arguments can reach the
     function body unchecked if assertions are disabled while checking
     preconditions (e.g., when these same functions bodies are called to check
     the preconditions in question).
     This macro can be defined to obtain the behaviour specified in
-    @RefSect{bibliography, [N1962]} (at the risk of infinite recursion).
+    @RefSect{bibliography, [1962]} (at the risk of infinite recursion).
 
     @see    @RefSect{contract_programming_overview.feature_summary,
             Feature Summary}
@@ -369,8 +370,7 @@ Configure this library compile-time and run-time behaviours.
     syntactically.
     However, they are not evaluated and checked at run-time unless
     this macro is defined (because these conditions can be computationally
-    expensive, at least compared to the computational cost of executing the
-    function body).
+    expensive, at least compared to the cost of executing the function body).
 
     @see @RefSect{extras.assertion_levels, Assertion Levels}
     */
@@ -379,15 +379,15 @@ Configure this library compile-time and run-time behaviours.
 
 #ifdef BOOST_CONTRACT_DETAIL_DOXYGEN
     /**
-    If defined, this library disables implementation checks (undefined by
-    default).
+    If defined, this library does not perform implementation checks (undefined
+    by default).
 
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     implementation checks.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of implementation checks
-    or use @RefMacro{BOOST_CONTRACT_CHECK} (recommended).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of implementation checks or use
+    @RefMacro{BOOST_CONTRACT_CHECK} (recommended).
     
     @see    @RefSect{advanced.implementation_checks,
             Implementation Checks},
@@ -407,11 +407,11 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking preconditions.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of preconditions or use
-    the macros defined in @c boost/contract_macro.hpp (recommended only for
-    applications where it is truly necessary to completely remove contract code
-    compilation from production code).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of preconditions or use the macros
+    defined in @c boost/contract_macro.hpp (recommended only for applications
+    where it is truly necessary to completely remove contract code compilation
+    from production code).
 
     @see    @RefSect{tutorial.preconditions, Preconditions},
             @RefSect{extras.disable_contract_checking,
@@ -430,11 +430,11 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking postconditions.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of postconditions or use
-    the macros defined in @c boost/contract_macro.hpp (recommended only for
-    applications where it is truly necessary to completely remove contract code
-    compilation from production code).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of postconditions or use the macros
+    defined in @c boost/contract_macro.hpp (recommended only for applications
+    where it is truly necessary to completely remove contract code compilation
+    from production code).
 
     It is necessary to disable both postconditions and exception guarantees
     defining @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS} and
@@ -458,11 +458,11 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking exception guarantees.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of exception guarantees
-    or use the macros defined in @c boost/contract_macro.hpp (recommended only
-    for applications where it is truly necessary to completely remove contract
-    code compilation from production code).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of exception guarantees or use the
+    macros defined in @c boost/contract_macro.hpp (recommended only for
+    applications where it is truly necessary to completely remove contract code
+    compilation from production code).
     
     It is necessary to disable both postconditions and exception guarantees
     defining @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS} and
@@ -490,11 +490,11 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking class invariants at entry.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of entry class invariants
-    or use the macros defined in @c boost/contract_macro.hpp (recommended only
-    for applications where it is truly necessary to completely remove contract
-    code compilation from production code).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of entry class invariants or use the
+    macros defined in @c boost/contract_macro.hpp (recommended only for
+    applications where it is truly necessary to completely remove contract code
+    compilation from production code).
 
     This macro is automatically defined when
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS} is defined.
@@ -520,11 +520,11 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking class invariants at exit.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of exit class invariants
-    or use the macros defined in @c boost/contract_macro.hpp (recommended only
-    for applications where it is truly necessary to completely remove contract
-    code compilation from production code).
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of exit class invariants or use the
+    macros defined in @c boost/contract_macro.hpp (recommended only for
+    applications where it is truly necessary to completely remove contract code
+    compilation from production code).
 
     This macro is automatically defined when
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS} is defined.
@@ -548,9 +548,9 @@ Configure this library compile-time and run-time behaviours.
     If this macro is defined, this library internal code is also optimized to
     reduce compile-time (not just run-time) overhead associated with
     checking class invariants.
-    In addition, users can manually program @c \#ifndef statements in their code
-    using this macro to completely disable compilation of class invariants or
-    use the macros defined in @c boost/contract_macro.hpp (recommended only for
+    Users can manually program @c \#ifndef statements in their code using this
+    macro to completely disable compilation of class invariants or use the
+    macros defined in @c boost/contract_macro.hpp (recommended only for
     applications where it is truly necessary to completely remove contract code
     compilation from production code).
 
@@ -575,11 +575,11 @@ Configure this library compile-time and run-time behaviours.
     Automatically defined by this library when old value copies are not to be
     performed.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define both
+    This library will define this macro when users define both
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS} and
-    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}.
+    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of old value copies or use the
     macros defined in @c boost/contract_macro.hpp (recommended only for
@@ -587,8 +587,8 @@ Configure this library compile-time and run-time behaviours.
     compilation from production code).
 
     @see    @RefSect{tutorial.old_values, Old Values},
-            @RefSect{advanced.old_values_copied_at_body,
-            Old Values Copied at Body},
+            @RefSect{advanced.old_value_copies_at_body,
+            Old Value Copies at Body},
             @RefSect{extras.disable_contract_compilation__macro_interface_,
             Disable Contract Compilation}
     */
@@ -605,12 +605,12 @@ Configure this library compile-time and run-time behaviours.
     Automatically defined by this library when contracts are not checked for
     constructors.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS}, and
-    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}.
+    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of contracts for constructors or use
     the macros defined in @c boost/contract_macro.hpp (recommended only for
@@ -637,12 +637,12 @@ Configure this library compile-time and run-time behaviours.
     Automatically defined by this library when contracts are not checked for
     destructors.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS}, and
-    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}.
+    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of contracts for destructors or use
     the macros defined in @c boost/contract_macro.hpp (recommended only for
@@ -666,13 +666,13 @@ Configure this library compile-time and run-time behaviours.
     Automatically defined by this library when contracts are not checked for
     public functions.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS},
     @RefMacro{BOOST_CONTRACT_NO_PRECONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS}, and
-    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}.
+    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of contracts for public functions or
     use the macros defined in @c boost/contract_macro.hpp (recommended only for
@@ -693,14 +693,14 @@ Configure this library compile-time and run-time behaviours.
         defined(BOOST_CONTRACT_NO_EXCEPTS)
     /**
     Automatically defined by this library when contracts are not checked for
-    non-member, private, or protected functions.
+    non-member, private and protected functions.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_PRECONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS}, and
-    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}.
+    @RefMacro{BOOST_CONTRACT_NO_EXCEPTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of contracts for non-member,
     private and protected functions, or use the macros defined in
@@ -708,7 +708,7 @@ Configure this library compile-time and run-time behaviours.
     truly necessary to completely remove contract code compilation from
     production code).
 
-    This macro is also used when contracts are not checked for private or
+    This macro is also used when contracts are not checked for private and
     protected functions, lambda functions, code blocks, loops, etc.
 
     @see    @RefSect{tutorial.non_member_functions, Non-Member Functions},
@@ -733,20 +733,18 @@ Configure this library compile-time and run-time behaviours.
     preconditions, postconditions, exceptions guarantees, and class invariants
     (excluding implementation checks).
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_PRECONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}, and
-    @RefMacro{BOOST_CONTRACT_NO_INVARIANTS}.
+    @RefMacro{BOOST_CONTRACT_NO_INVARIANTS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     Users can manually program @c \#ifndef statements in their code using this
     macro to completely disable compilation of contracts within specifications
-    (so excluding implementation checks which are contracts within
-    implementations instead), or use the macros defined in
-    @c boost/contract_macro.hpp (recommended only for applications where it is
-    truly necessary to completely remove contract code compilation from
-    production code).
+    or use the macros defined in @c boost/contract_macro.hpp (recommended only
+    for applications where it is truly necessary to completely remove contract
+    code compilation from production code).
 
     @see    @RefSect{extras.disable_contract_compilation__macro_interface_,
             Disable Contract Compilation}
@@ -762,17 +760,16 @@ Configure this library compile-time and run-time behaviours.
         defined(BOOST_CONTRACT_NO_EXCEPTS) && \
         defined(BOOST_CONTRACT_NO_CHECKS)
     /**
-    Automatically defined by this library when contracts are not checked at all
-    (neither for specifications nor for implementations).
+    Automatically defined by this library when contracts are not checked at all.
 
-    This macro is not a configuration macro and this library will generate a
-    compile-time error if users try to define it directly.
-    This library will automatically define this macro when users define all
+    This library will define this macro when users define all
     @RefMacro{BOOST_CONTRACT_NO_INVARIANTS},
     @RefMacro{BOOST_CONTRACT_NO_PRECONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_POSTCONDITIONS},
     @RefMacro{BOOST_CONTRACT_NO_EXCEPTS}, and
-    @RefMacro{BOOST_CONTRACT_NO_CHECKS}.
+    @RefMacro{BOOST_CONTRACT_NO_CHECKS} (this macro is not a configuration
+    macro and this library will generate a compile-time error if users try to
+    define it directly).
     For example, users can manually program @c \#ifndef statements in their code
     using this macro to avoid including the @c boost/contract.hpp header all
     together:

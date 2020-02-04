@@ -7,18 +7,16 @@
 
 //  Library home page: http://www.boost.org/libs/filesystem
 
-// Include Boost.Predef first so that windows.h is guaranteed to be not included
-#include <boost/predef/os/windows.h>
-#if BOOST_OS_WINDOWS
-#include <boost/winapi/config.hpp>
-#endif
-
 //  Old standard library configurations, particularly MingGW, don't support wide strings.
 //  Report this with an explicit error message.
 #include <boost/config.hpp>
 # if defined( BOOST_NO_STD_WSTRING )
 #   error Configuration not supported: Boost.Filesystem V3 and later requires std::wstring support
 # endif
+
+// define BOOST_FILESYSTEM_SOURCE so that <boost/system/config.hpp> knows
+// the library is being built (possibly exporting rather than importing code)
+#define BOOST_FILESYSTEM_SOURCE
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 # define BOOST_SYSTEM_NO_DEPRECATED
@@ -32,7 +30,6 @@
 #include <boost/assert.hpp>
 #include <algorithm>
 #include <iterator>
-#include <utility>
 #include <cstddef>
 #include <cstring>
 #include <cassert>
@@ -387,31 +384,16 @@ namespace filesystem
 
   BOOST_FILESYSTEM_DECL path path::lexically_relative(const path& base) const
   {
-    path::iterator b = begin(), e = end(), base_b = base.begin(), base_e = base.end();
-    std::pair<path::iterator, path::iterator> mm = detail::mismatch(b, e, base_b, base_e);
-    if (mm.first == b && mm.second == base_b)
+    std::pair<path::iterator, path::iterator> mm
+      = detail::mismatch(begin(), end(), base.begin(), base.end());
+    if (mm.first == begin() && mm.second == base.begin())
       return path();
-    if (mm.first == e && mm.second == base_e)
+    if (mm.first == end() && mm.second == base.end())
       return detail::dot_path();
-
-    std::ptrdiff_t n = 0;
-    for (; mm.second != base_e; ++mm.second)
-    {
-      path const& p = *mm.second;
-      if (p == detail::dot_dot_path())
-        --n;
-      else if (!p.empty() && p != detail::dot_path())
-        ++n;
-    }
-    if (n < 0)
-      return path();
-    if (n == 0 && (mm.first == e || mm.first->empty()))
-      return detail::dot_path();
-
     path tmp;
-    for (; n > 0; --n)
+    for (; mm.second != base.end(); ++mm.second)
       tmp /= detail::dot_dot_path();
-    for (; mm.first != e; ++mm.first)
+    for (; mm.first != end(); ++mm.first)
       tmp /= *mm.first;
     return tmp;
   }

@@ -81,7 +81,6 @@ namespace trait
     template <> struct _is_exception_ptr_available<std::exception_ptr>
     {
       static constexpr bool value = true;
-      using type = std::exception_ptr;
     };
   }  // namespace detail
 

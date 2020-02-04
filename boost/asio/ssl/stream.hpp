@@ -431,19 +431,15 @@ public:
    *   const boost::system::error_code& error // Result of operation.
    * ); @endcode
    */
-  template <
-      BOOST_ASIO_COMPLETION_TOKEN_FOR(void (boost::system::error_code))
-        HandshakeHandler
-          BOOST_ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(HandshakeHandler,
+  template <typename HandshakeHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(HandshakeHandler,
       void (boost::system::error_code))
   async_handshake(handshake_type type,
-      BOOST_ASIO_MOVE_ARG(HandshakeHandler) handler
-        BOOST_ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
+      BOOST_ASIO_MOVE_ARG(HandshakeHandler) handler)
   {
     return async_initiate<HandshakeHandler,
       void (boost::system::error_code)>(
-        initiate_async_handshake(this), handler, type);
+        initiate_async_handshake(), handler, this, type);
   }
 
   /// Start an asynchronous SSL handshake.
@@ -467,19 +463,15 @@ public:
    *   std::size_t bytes_transferred // Amount of buffers used in handshake.
    * ); @endcode
    */
-  template <typename ConstBufferSequence,
-      BOOST_ASIO_COMPLETION_TOKEN_FOR(void (boost::system::error_code,
-        std::size_t)) BufferedHandshakeHandler
-          BOOST_ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(BufferedHandshakeHandler,
+  template <typename ConstBufferSequence, typename BufferedHandshakeHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(BufferedHandshakeHandler,
       void (boost::system::error_code, std::size_t))
   async_handshake(handshake_type type, const ConstBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(BufferedHandshakeHandler) handler
-        BOOST_ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
+      BOOST_ASIO_MOVE_ARG(BufferedHandshakeHandler) handler)
   {
     return async_initiate<BufferedHandshakeHandler,
       void (boost::system::error_code, std::size_t)>(
-        initiate_async_buffered_handshake(this), handler, type, buffers);
+        initiate_async_buffered_handshake(), handler, this, type, buffers);
   }
 
   /// Shut down SSL on the stream.
@@ -521,19 +513,14 @@ public:
    *   const boost::system::error_code& error // Result of operation.
    * ); @endcode
    */
-  template <
-      BOOST_ASIO_COMPLETION_TOKEN_FOR(void (boost::system::error_code))
-        ShutdownHandler
-          BOOST_ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(ShutdownHandler,
+  template <typename ShutdownHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(ShutdownHandler,
       void (boost::system::error_code))
-  async_shutdown(
-      BOOST_ASIO_MOVE_ARG(ShutdownHandler) handler
-        BOOST_ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
+  async_shutdown(BOOST_ASIO_MOVE_ARG(ShutdownHandler) handler)
   {
     return async_initiate<ShutdownHandler,
       void (boost::system::error_code)>(
-        initiate_async_shutdown(this), handler);
+        initiate_async_shutdown(), handler, this);
   }
 
   /// Write some data to the stream.
@@ -608,19 +595,15 @@ public:
    * ensure that all data is written before the asynchronous operation
    * completes.
    */
-  template <typename ConstBufferSequence,
-      BOOST_ASIO_COMPLETION_TOKEN_FOR(void (boost::system::error_code,
-        std::size_t)) WriteHandler
-          BOOST_ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(WriteHandler,
+  template <typename ConstBufferSequence, typename WriteHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
       void (boost::system::error_code, std::size_t))
   async_write_some(const ConstBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(WriteHandler) handler
-        BOOST_ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
+      BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
   {
     return async_initiate<WriteHandler,
       void (boost::system::error_code, std::size_t)>(
-        initiate_async_write_some(this), handler, buffers);
+        initiate_async_write_some(), handler, this, buffers);
   }
 
   /// Read some data from the stream.
@@ -695,72 +678,40 @@ public:
    * ensure that the requested amount of data is read before the asynchronous
    * operation completes.
    */
-  template <typename MutableBufferSequence,
-      BOOST_ASIO_COMPLETION_TOKEN_FOR(void (boost::system::error_code,
-        std::size_t)) ReadHandler
-          BOOST_ASIO_DEFAULT_COMPLETION_TOKEN_TYPE(executor_type)>
-  BOOST_ASIO_INITFN_AUTO_RESULT_TYPE(ReadHandler,
+  template <typename MutableBufferSequence, typename ReadHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
       void (boost::system::error_code, std::size_t))
   async_read_some(const MutableBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(ReadHandler) handler
-        BOOST_ASIO_DEFAULT_COMPLETION_TOKEN(executor_type))
+      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
   {
     return async_initiate<ReadHandler,
       void (boost::system::error_code, std::size_t)>(
-        initiate_async_read_some(this), handler, buffers);
+        initiate_async_read_some(), handler, this, buffers);
   }
 
 private:
-  class initiate_async_handshake
+  struct initiate_async_handshake
   {
-  public:
-    typedef typename stream::executor_type executor_type;
-
-    explicit initiate_async_handshake(stream* self)
-      : self_(self)
-    {
-    }
-
-    executor_type get_executor() const BOOST_ASIO_NOEXCEPT
-    {
-      return self_->get_executor();
-    }
-
     template <typename HandshakeHandler>
     void operator()(BOOST_ASIO_MOVE_ARG(HandshakeHandler) handler,
-        handshake_type type) const
+        stream* self, handshake_type type) const
     {
       // If you get an error on the following line it means that your handler
       // does not meet the documented type requirements for a HandshakeHandler.
       BOOST_ASIO_HANDSHAKE_HANDLER_CHECK(HandshakeHandler, handler) type_check;
 
       boost::asio::detail::non_const_lvalue<HandshakeHandler> handler2(handler);
-      detail::async_io(self_->next_layer_, self_->core_,
+      detail::async_io(self->next_layer_, self->core_,
           detail::handshake_op(type), handler2.value);
     }
-
-  private:
-    stream* self_;
   };
 
-  class initiate_async_buffered_handshake
+  struct initiate_async_buffered_handshake
   {
-  public:
-    typedef typename stream::executor_type executor_type;
-
-    explicit initiate_async_buffered_handshake(stream* self)
-      : self_(self)
-    {
-    }
-
-    executor_type get_executor() const BOOST_ASIO_NOEXCEPT
-    {
-      return self_->get_executor();
-    }
-
     template <typename BufferedHandshakeHandler, typename ConstBufferSequence>
     void operator()(BOOST_ASIO_MOVE_ARG(BufferedHandshakeHandler) handler,
-        handshake_type type, const ConstBufferSequence& buffers) const
+        stream* self, handshake_type type,
+        const ConstBufferSequence& buffers) const
     {
       // If you get an error on the following line it means that your
       // handler does not meet the documented type requirements for a
@@ -770,108 +721,58 @@ private:
 
       boost::asio::detail::non_const_lvalue<
           BufferedHandshakeHandler> handler2(handler);
-      detail::async_io(self_->next_layer_, self_->core_,
+      detail::async_io(self->next_layer_, self->core_,
           detail::buffered_handshake_op<ConstBufferSequence>(type, buffers),
           handler2.value);
     }
-
-  private:
-    stream* self_;
   };
 
-  class initiate_async_shutdown
+  struct initiate_async_shutdown
   {
-  public:
-    typedef typename stream::executor_type executor_type;
-
-    explicit initiate_async_shutdown(stream* self)
-      : self_(self)
-    {
-    }
-
-    executor_type get_executor() const BOOST_ASIO_NOEXCEPT
-    {
-      return self_->get_executor();
-    }
-
     template <typename ShutdownHandler>
-    void operator()(BOOST_ASIO_MOVE_ARG(ShutdownHandler) handler) const
+    void operator()(BOOST_ASIO_MOVE_ARG(ShutdownHandler) handler,
+        stream* self) const
     {
       // If you get an error on the following line it means that your handler
       // does not meet the documented type requirements for a ShutdownHandler.
       BOOST_ASIO_HANDSHAKE_HANDLER_CHECK(ShutdownHandler, handler) type_check;
 
       boost::asio::detail::non_const_lvalue<ShutdownHandler> handler2(handler);
-      detail::async_io(self_->next_layer_, self_->core_,
+      detail::async_io(self->next_layer_, self->core_,
           detail::shutdown_op(), handler2.value);
     }
-
-  private:
-    stream* self_;
   };
 
-  class initiate_async_write_some
+  struct initiate_async_write_some
   {
-  public:
-    typedef typename stream::executor_type executor_type;
-
-    explicit initiate_async_write_some(stream* self)
-      : self_(self)
-    {
-    }
-
-    executor_type get_executor() const BOOST_ASIO_NOEXCEPT
-    {
-      return self_->get_executor();
-    }
-
     template <typename WriteHandler, typename ConstBufferSequence>
     void operator()(BOOST_ASIO_MOVE_ARG(WriteHandler) handler,
-        const ConstBufferSequence& buffers) const
+        stream* self, const ConstBufferSequence& buffers) const
     {
       // If you get an error on the following line it means that your handler
       // does not meet the documented type requirements for a WriteHandler.
       BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler) type_check;
 
       boost::asio::detail::non_const_lvalue<WriteHandler> handler2(handler);
-      detail::async_io(self_->next_layer_, self_->core_,
+      detail::async_io(self->next_layer_, self->core_,
           detail::write_op<ConstBufferSequence>(buffers), handler2.value);
     }
-
-  private:
-    stream* self_;
   };
 
-  class initiate_async_read_some
+  struct initiate_async_read_some
   {
-  public:
-    typedef typename stream::executor_type executor_type;
-
-    explicit initiate_async_read_some(stream* self)
-      : self_(self)
-    {
-    }
-
-    executor_type get_executor() const BOOST_ASIO_NOEXCEPT
-    {
-      return self_->get_executor();
-    }
-
     template <typename ReadHandler, typename MutableBufferSequence>
     void operator()(BOOST_ASIO_MOVE_ARG(ReadHandler) handler,
-        const MutableBufferSequence& buffers) const
+        stream* self, const MutableBufferSequence& buffers) const
     {
       // If you get an error on the following line it means that your handler
       // does not meet the documented type requirements for a ReadHandler.
       BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
 
       boost::asio::detail::non_const_lvalue<ReadHandler> handler2(handler);
-      detail::async_io(self_->next_layer_, self_->core_,
+      detail::async_io(self->next_layer_, self->core_,
           detail::read_op<MutableBufferSequence>(buffers), handler2.value);
     }
-
-  private:
-    stream* self_;
   };
 
   Stream next_layer_;

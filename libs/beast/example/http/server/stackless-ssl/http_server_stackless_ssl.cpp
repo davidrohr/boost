@@ -20,7 +20,6 @@
 #include <boost/beast/ssl.hpp>
 #include <boost/beast/version.hpp>
 #include <boost/asio/coroutine.hpp>
-#include <boost/asio/dispatch.hpp>
 #include <boost/asio/strand.hpp>
 #include <boost/config.hpp>
 #include <algorithm>
@@ -305,16 +304,7 @@ public:
     void
     run()
     {
-        // We need to be executing within a strand to perform async operations
-        // on the I/O objects in this session.Although not strictly necessary
-        // for single-threaded contexts, this example code is written to be
-        // thread-safe by default.
-        net::dispatch(stream_.get_executor(),
-                      beast::bind_front_handler(&session::loop,
-                                                shared_from_this(),
-                                                beast::error_code{},
-                                                0,
-                                                false));
+        loop({}, 0, false);
     }
 
     #include <boost/asio/yield.hpp>

@@ -1,4 +1,4 @@
-# Copyright Mateusz Loskot 2018 <mateusz@loskot.net>
+# Copyright (c) 2018 Mateusz Loskot <mateusz@loskot.net>
 # Copyright Klemens David Morgenstern, Hans P. Dembinski 2016-2017
 #
 # Use, modification and distribution is subject to the Boost Software License,
@@ -25,10 +25,17 @@ variant histogram_ubasan : debug :
     <linkflags>"-fsanitize=address,leak,undefined"
     ;
 
-## Special builds:
-#
-# Generate coverage data:              `b2 cxxstd=latest coverage=on`
-# Build without exceptions and rtti:   `b2 exception-handling=off rtti=off`
+# only works with gcc-5
+variant histogram_coverage : debug :
+    <cxxflags>"--coverage"
+    <linkflags>"--coverage"
+    ;
+
+# for restricted environments without rtti and exceptions
+variant histogram_restricted : debug :
+    <exception-handling>off
+    <rtti>off
+    ;
 
 build-project test ;
 build-project examples ;

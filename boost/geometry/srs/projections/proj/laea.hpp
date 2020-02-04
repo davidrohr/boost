@@ -2,8 +2,8 @@
 
 // Copyright (c) 2008-2015 Barend Gehrels, Amsterdam, the Netherlands.
 
-// This file was modified by Oracle on 2017, 2018, 2019.
-// Modifications copyright (c) 2017-2019, Oracle and/or its affiliates.
+// This file was modified by Oracle on 2017, 2018.
+// Modifications copyright (c) 2017-2018, Oracle and/or its affiliates.
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle.
 
 // Use, modification and distribution is subject to the Boost Software License,
@@ -83,14 +83,20 @@ namespace projections
                 mode_type mode;
             };
 
+            // template class, using CRTP to implement forward/inverse
             template <typename T, typename Parameters>
             struct base_laea_ellipsoid
+                : public base_t_fi<base_laea_ellipsoid<T, Parameters>, T, Parameters>
             {
                 par_laea<T> m_proj_parm;
 
+                inline base_laea_ellipsoid(const Parameters& par)
+                    : base_t_fi<base_laea_ellipsoid<T, Parameters>, T, Parameters>(*this, par)
+                {}
+
                 // FORWARD(e_forward)  ellipsoid
                 // Project coordinates from geographic (lon, lat) to cartesian (x, y)
-                inline void fwd(Parameters const& par, T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
+                inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
                     static const T half_pi = detail::half_pi<T>();
 
@@ -99,7 +105,7 @@ namespace projections
                     coslam = cos(lp_lon);
                     sinlam = sin(lp_lon);
                     sinphi = sin(lp_lat);
-                    q = pj_qsfn(sinphi, par.e, par.one_es);
+                    q = pj_qsfn(sinphi, this->m_par.e, this->m_par.one_es);
 
                     if (this->m_proj_parm.mode == obliq || this->m_proj_parm.mode == equit) {
                         sinb = q / this->m_proj_parm.qp;
@@ -152,7 +158,7 @@ namespace projections
 
                 // INVERSE(e_inverse)  ellipsoid
                 // Project coordinates from cartesian (x, y) to geographic (lon, lat)
-                inline void inv(Parameters const& par, T xy_x, T xy_y, T& lp_lon, T& lp_lat) const
+                inline void inv(T xy_x, T xy_y, T& lp_lon, T& lp_lat) const
                 {
                     T cCe, sCe, q, rho, ab=0.0;
 
@@ -164,7 +170,7 @@ namespace projections
                         rho = boost::math::hypot(xy_x, xy_y);
                         if (rho < epsilon10) {
                             lp_lon = 0.;
-                            lp_lat = par.phi0;
+                            lp_lat = this->m_par.phi0;
                             return;
                         }
                         sCe = 2. * asin(.5 * rho / this->m_proj_parm.rq);
@@ -186,7 +192,7 @@ namespace projections
                         q = (xy_x * xy_x + xy_y * xy_y);
                         if (q == 0.0) {
                             lp_lon = 0.;
-                            lp_lat = par.phi0;
+                            lp_lat = this->m_par.phi0;
                             return;
                         }
                         ab = 1. - q / this->m_proj_parm.qp;
@@ -205,14 +211,20 @@ namespace projections
 
             };
 
+            // template class, using CRTP to implement forward/inverse
             template <typename T, typename Parameters>
             struct base_laea_spheroid
+                : public base_t_fi<base_laea_spheroid<T, Parameters>, T, Parameters>
             {
                 par_laea<T> m_proj_parm;
 
+                inline base_laea_spheroid(const Parameters& par)
+                    : base_t_fi<base_laea_spheroid<T, Parameters>, T, Parameters>(*this, par)
+                {}
+
                 // FORWARD(s_forward)  spheroid
                 // Project coordinates from geographic (lon, lat) to cartesian (x, y)
-                inline void fwd(Parameters const& par, T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
+                inline void fwd(T const& lp_lon, T const& lp_lat, T& xy_x, T& xy_y) const
                 {
                     static const T fourth_pi = detail::fourth_pi<T>();
 
@@ -240,7 +252,7 @@ namespace projections
                         coslam = -coslam;
                         BOOST_FALLTHROUGH;
                     case s_pole:
-                        if (fabs(lp_lat + par.phi0) < epsilon10) {
+                        if (fabs(lp_lat + this->m_par.phi0) < epsilon10) {
                             BOOST_THROW_EXCEPTION( projection_exception(error_tolerance_condition) );
                         }
                         xy_y = fourth_pi - lp_lat * .5;
@@ -253,7 +265,7 @@ namespace projections
 
                 // INVERSE(s_inverse)  spheroid
                 // Project coordinates from cartesian (x, y) to geographic (lon, lat)
-                inline void inv(Parameters const& par, T xy_x, T xy_y, T& lp_lon, T& lp_lat) const
+                inline void inv(T xy_x, T xy_y, T& lp_lon, T& lp_lat) const
                 {
                     static const T half_pi = detail::half_pi<T>();
 
@@ -275,7 +287,7 @@ namespace projections
                         xy_y = cosz * rh;
                         break;
                     case obliq:
-                        lp_lat = fabs(rh) <= epsilon10 ? par.phi0 :
+                        lp_lat = fabs(rh) <= epsilon10 ? this->m_par.phi0 :
                            asin(cosz * this->m_proj_parm.sinb1 + xy_y * sinz * this->m_proj_parm.cosb1 / rh);
                         xy_x *= sinz * this->m_proj_parm.cosb1;
                         xy_y = (cosz - sin(lp_lat) * this->m_proj_parm.sinb1) * rh;
@@ -317,7 +329,7 @@ namespace projections
                 if (par.es != 0.0) {
                     double sinphi;
 
-                    par.e = sqrt(par.es); // TODO : Isn't it already set?
+                    par.e = sqrt(par.es);
                     proj_parm.qp = pj_qsfn(1., par.e, par.one_es);
                     proj_parm.mmf = .5 / (1. - par.es);
                     proj_parm.apa = pj_authset<T>(par.es);
@@ -370,9 +382,10 @@ namespace projections
     struct laea_ellipsoid : public detail::laea::base_laea_ellipsoid<T, Parameters>
     {
         template <typename Params>
-        inline laea_ellipsoid(Params const& , Parameters & par)
+        inline laea_ellipsoid(Params const& , Parameters const& par)
+            : detail::laea::base_laea_ellipsoid<T, Parameters>(par)
         {
-            detail::laea::setup_laea(par, this->m_proj_parm);
+            detail::laea::setup_laea(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -393,9 +406,10 @@ namespace projections
     struct laea_spheroid : public detail::laea::base_laea_spheroid<T, Parameters>
     {
         template <typename Params>
-        inline laea_spheroid(Params const& , Parameters & par)
+        inline laea_spheroid(Params const& , Parameters const& par)
+            : detail::laea::base_laea_spheroid<T, Parameters>(par)
         {
-            detail::laea::setup_laea(par, this->m_proj_parm);
+            detail::laea::setup_laea(this->m_par, this->m_proj_parm);
         }
     };
 
@@ -404,7 +418,7 @@ namespace projections
     {
 
         // Static projection
-        BOOST_GEOMETRY_PROJECTIONS_DETAIL_STATIC_PROJECTION_FI2(srs::spar::proj_laea, laea_spheroid, laea_ellipsoid)
+        BOOST_GEOMETRY_PROJECTIONS_DETAIL_STATIC_PROJECTION(srs::spar::proj_laea, laea_spheroid, laea_ellipsoid)
 
         // Factory entry(s)
         BOOST_GEOMETRY_PROJECTIONS_DETAIL_FACTORY_ENTRY_FI2(laea_entry, laea_spheroid, laea_ellipsoid)

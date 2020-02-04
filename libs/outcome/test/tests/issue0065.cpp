@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
-BOOST_OUTCOME_AUTO_TEST_CASE(issues_0065_outcome, "BOOST_OUTCOME_TRY does not preserve the exception_ptr")
+BOOST_OUTCOME_AUTO_TEST_CASE(issues_65_outcome, "BOOST_OUTCOME_TRY does not preserve the exception_ptr")
 {
 #ifndef BOOST_NO_EXCEPTIONS
   using namespace BOOST_OUTCOME_V2_NAMESPACE;

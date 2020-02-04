@@ -47,10 +47,8 @@ namespace win32
   // A Win32 HMODULE
   using HMODULE = void *;
   // Used to retrieve where the NTDLL DLL is mapped into memory
-  extern HMODULE __stdcall GetModuleHandleW(const wchar_t *lpModuleName);
-#pragma comment(lib, "kernel32.lib")
-#pragma comment(linker, "/alternatename:?GetModuleHandleW@win32@system_error2@@YAPEAXPEB_W@Z=GetModuleHandleW")
-}  // namespace win32
+  extern "C" HMODULE __stdcall GetModuleHandleW(const wchar_t *lpModuleName);
+}
 
 class _nt_code_domain;
 //! (Windows only) A NT error code, those returned by NT kernel functions.

@@ -19,15 +19,12 @@
 
 using namespace boost::histogram;
 
-constexpr auto n_fill = 80000;
-static_assert(n_fill % 4 == 0, "must be multiple of 4");
+constexpr auto n_fill = 400000;
 
 template <class Tag, class A1, class A2, class X, class Y>
 void fill_test(const A1& a1, const A2& a2, const X& x, const Y& y) {
   auto h1 = make_s(Tag{}, dense_storage<int>(), a1, a2);
-  auto xy = {x, y};
-  h1.fill(xy);
-
+  for (unsigned i = 0; i != n_fill; ++i) h1(x[i], y[i]);
   auto h2 = make_s(Tag{}, dense_storage<accumulators::thread_safe<int>>(), a1, a2);
   auto run = [&h2, &x, &y](int k) {
     constexpr auto shift = n_fill / 4;

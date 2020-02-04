@@ -212,15 +212,11 @@
     <span class="special">}</span>
 
     <span class="comment">/// Read some data from the stream asynchronously</span>
-    <span class="keyword">template</span><span class="special">&lt;</span>
-        <span class="keyword">class</span> <span class="identifier">MutableBufferSequence</span><span class="special">,</span>
-        <span class="keyword">class</span> <span class="identifier">ReadHandler</span> <span class="special">=</span>
-            <span class="identifier">net</span><span class="special">::</span><span class="identifier">default_completion_token_t</span><span class="special">&lt;</span><span class="identifier">executor_type</span><span class="special">&gt;&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">MutableBufferSequence</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">ReadHandler</span><span class="special">&gt;</span>
     <span class="identifier">BOOST_BEAST_ASYNC_RESULT2</span><span class="special">(</span><span class="identifier">ReadHandler</span><span class="special">)</span>
     <span class="identifier">async_read_some</span><span class="special">(</span>
         <span class="identifier">MutableBufferSequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">buffers</span><span class="special">,</span>
-        <span class="identifier">ReadHandler</span><span class="special">&amp;&amp;</span> <span class="identifier">handler</span> <span class="special">=</span>
-            <span class="identifier">net</span><span class="special">::</span><span class="identifier">default_completion_token_t</span><span class="special">&lt;</span><span class="identifier">executor_type</span><span class="special">&gt;{})</span>
+        <span class="identifier">ReadHandler</span><span class="special">&amp;&amp;</span> <span class="identifier">handler</span><span class="special">)</span>
     <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">net</span><span class="special">::</span><span class="identifier">async_initiate</span><span class="special">&lt;</span>
             <span class="identifier">ReadHandler</span><span class="special">,</span>
@@ -232,16 +228,11 @@
     <span class="special">}</span>
 
     <span class="comment">/// Write some data to the stream asynchronously</span>
-    <span class="keyword">template</span><span class="special">&lt;</span>
-        <span class="keyword">class</span> <span class="identifier">ConstBufferSequence</span><span class="special">,</span>
-        <span class="keyword">class</span> <span class="identifier">WriteHandler</span> <span class="special">=</span>
-            <span class="identifier">net</span><span class="special">::</span><span class="identifier">default_completion_token_t</span><span class="special">&lt;</span><span class="identifier">executor_type</span><span class="special">&gt;&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ConstBufferSequence</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">WriteHandler</span><span class="special">&gt;</span>
     <span class="identifier">BOOST_BEAST_ASYNC_RESULT2</span><span class="special">(</span><span class="identifier">WriteHandler</span><span class="special">)</span>
     <span class="identifier">async_write_some</span><span class="special">(</span>
         <span class="identifier">ConstBufferSequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">buffers</span><span class="special">,</span>
-        <span class="identifier">WriteHandler</span><span class="special">&amp;&amp;</span> <span class="identifier">handler</span> <span class="special">=</span>
-            <span class="identifier">net</span><span class="special">::</span><span class="identifier">default_completion_token_t</span><span class="special">&lt;</span>
-                <span class="identifier">executor_type</span><span class="special">&gt;{})</span>
+        <span class="identifier">WriteHandler</span><span class="special">&amp;&amp;</span> <span class="identifier">handler</span><span class="special">)</span>
     <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">net</span><span class="special">::</span><span class="identifier">async_initiate</span><span class="special">&lt;</span>
             <span class="identifier">WriteHandler</span><span class="special">,</span>

@@ -1,12 +1,12 @@
-# Copyright Peter Dimov, Hans Dembinski 2018-2019
+# Copyright 2018-2019 Peter Dimov, Hans Dembinski
 # Distributed under the Boost Software License, Version 1.0.
 # See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt
 
-# Warning: Boost-CMake support is incomplete; testing works, install target doesn't
+# Beware: Boost-CMake support is experimental; testing works, install target doesn't
 
 cmake_minimum_required(VERSION 3.6)
 
-project(BoostHistogram VERSION 1.72.0 LANGUAGES CXX)
+project(BoostHistogram VERSION 1.71.0 LANGUAGES CXX)
 
 add_library(boost_histogram INTERFACE)
 set_property(TARGET boost_histogram PROPERTY EXPORT_NAME histogram)
@@ -23,6 +23,7 @@ target_include_directories(boost_histogram
 target_link_libraries(boost_histogram
     INTERFACE
         Boost::assert
+        Boost::callable_traits
         Boost::config
         Boost::core
         Boost::mp11
@@ -55,6 +56,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   fetch_and_include(cmake/boost_fetch.cmake)
 
   boost_fetch(boostorg/assert TAG develop)
+  boost_fetch(hdembinski/callable_traits TAG origin/fix_cmake)
   boost_fetch(boostorg/config TAG develop)
   boost_fetch(boostorg/core TAG develop)
   boost_fetch(boostorg/mp11 TAG develop)
@@ -96,11 +98,11 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   #
   # install(TARGETS boost_histogram
   #   boost_assert
+  #   boost_callable_traits
   #   boost_config
   #   boost_core
   #   boost_mp11
   #   boost_throw_exception
-  #   boost_variant2
   #   EXPORT ${PROJECT_NAME}Targets)
   # install(EXPORT ${PROJECT_NAME}Targets
   #   DESTINATION ${CONFIG_INSTALL_DIR}

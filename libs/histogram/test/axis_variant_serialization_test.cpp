@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
   BOOST_TEST_EQ(a, b);
 
   variant<I> c; // load incompatible version
-  BOOST_TEST_THROWS(load_xml(filename, c), std::runtime_error);
+  BOOST_TEST_THROWS(load_xml(filename, c), boost::archive::archive_exception);
 
   return boost::report_errors();
 }

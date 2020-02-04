@@ -13,8 +13,9 @@
 #include <boost/gil/extension/toolbox/metafunctions/is_homogeneous.hpp>
 #include <boost/gil/extension/toolbox/metafunctions/pixel_bit_size.hpp>
 
-#include <boost/gil/detail/mp11.hpp>
 #include <boost/gil/io/typedefs.hpp>
+
+#include <boost/mpl/and.hpp>
 
 #include <cstddef>
 #include <type_traits>
@@ -107,7 +108,7 @@ struct row_buffer_helper
     Pixel,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             typename is_bit_aligned<Pixel>::type,
             typename is_homogeneous<Pixel>::type

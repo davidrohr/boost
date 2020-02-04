@@ -3,7 +3,6 @@
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_MATH_TEST_TEST_HPP
 #define BOOST_MATH_TEST_TEST_HPP
 #include <atomic>
@@ -13,6 +12,7 @@
 #include <boost/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/core/demangle.hpp>
+
 
 namespace boost { namespace math { namespace  test {
 
@@ -39,7 +39,7 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
     }
     using std::max;
     using std::abs;
-    Real denom = (max)(abs(expected), Real(1));
+    Real denom = max(abs(expected), Real(1));
     Real mollified_relative_error = abs(expected - computed)/denom;
     if (mollified_relative_error > tol)
     {
@@ -69,13 +69,10 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using std::max;
     using std::abs;
     using std::isnan;
-    // Of course integers can be expected values, and they are exact:
-    if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
-                         "The expected number must be computed in higher (or equal) precision than the number being tested.");
-        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
-    }
+    BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
+                     "The expected number must be computed in higher (or equal) precision than the number being tested.");
 
+    BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
     if (isnan(computed))
     {
         std::ios_base::fmtflags f( std::cerr.flags() );
@@ -92,7 +89,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     if (dist > ulps)
     {
         detail::total_ulp_distance += static_cast<int64_t>(dist);
-        Real denom = (max)(abs(expected), Real(1));
+        Real denom = max(abs(expected), Real(1));
         Real mollified_relative_error = abs(expected - computed)/denom;
         std::ios_base::fmtflags f( std::cerr.flags() );
         std::cerr << std::setprecision(3);
@@ -126,18 +123,18 @@ int report_errors()
     {
         std::cerr << "\033[0;31mError count: " << detail::global_error_count;
         if (detail::total_ulp_distance > 0) {
-            std::cerr << ", total ulp distance = " << detail::total_ulp_distance << "\n\033[0m";
+            std::cerr << ", total ulp distance = " << detail::total_ulp_distance << "\n";
         }
         else {
             // else we overflowed the ULPs counter and all we could print is a bizarre negative number.
-            std::cerr << "\n\033[0m";
+            std::cerr << "\n";
         }
 
         detail::global_error_count = 0;
         detail::total_ulp_distance = 0;
         return 1;
     }
-    std::cout << "\x1B[32mNo errors detected.\n\033[0m";
+    std::cout << "\x1B[32mNo errors detected.\n";
     return 0;
 }
 

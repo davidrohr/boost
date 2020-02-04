@@ -1,6 +1,5 @@
-#include <boost/coroutine/all.hpp>
-
 #include <boost/bind.hpp>
+#include <boost/coroutine/all.hpp>
 
 #include "X.h"
 

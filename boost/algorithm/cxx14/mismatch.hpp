@@ -13,7 +13,6 @@
 #define BOOST_ALGORITHM_MISMATCH_HPP
 
 #include <utility>      // for std::pair
-
 #include <boost/config.hpp>
 
 namespace boost { namespace algorithm {

@@ -329,13 +329,11 @@ inline bool load_grid(StreamPolicy const& stream_policy, pj_gi_load & gi)
 /*      This is the real workhorse, given a gridlist.                   */
 /************************************************************************/
 
-// Generic stream policy and standard grids
-template <bool Inverse, typename CalcT, typename StreamPolicy, typename Range, typename Grids>
+template <bool Inverse, typename CalcT, typename StreamPolicy, typename Range>
 inline bool pj_apply_gridshift_3(StreamPolicy const& stream_policy,
                                  Range & range,
-                                 Grids & grids,
-                                 std::vector<std::size_t> const& gridindexes,
-                                 grids_tag)
+                                 srs::grids & grids,
+                                 std::vector<std::size_t> const& gridindexes)
 {
     typedef typename boost::range_size<Range>::type size_type;
     
@@ -383,103 +381,6 @@ inline bool pj_apply_gridshift_3(StreamPolicy const& stream_policy,
     return true;
 }
 
-// Generic stream policy and shared grids
-template <bool Inverse, typename CalcT, typename StreamPolicy, typename Range, typename SharedGrids>
-inline bool pj_apply_gridshift_3(StreamPolicy const& stream_policy,
-                                 Range & range,
-                                 SharedGrids & grids,
-                                 std::vector<std::size_t> const& gridindexes,
-                                 shared_grids_tag)
-{
-    typedef typename boost::range_size<Range>::type size_type;
-    
-    // If the grids are empty the indexes are as well
-    if (gridindexes.empty())
-    {
-        //pj_ctx_set_errno(ctx, PJD_ERR_FAILED_TO_LOAD_GRID);
-        //return PJD_ERR_FAILED_TO_LOAD_GRID;
-        return false;
-    }
-
-    size_type point_count = boost::size(range);
-
-    // local storage
-    pj_gi_load local_gi;
-
-    for (size_type i = 0 ; i < point_count ; )
-    {
-        bool load_needed = false;
-
-        CalcT in_lon = 0;
-        CalcT in_lat = 0;
-
-        {
-            typename SharedGrids::read_locked lck_grids(grids);
-
-            for ( ; i < point_count ; ++i )
-            {
-                typename boost::range_reference<Range>::type
-                    point = range::at(range, i);
-
-                in_lon = geometry::get_as_radian<0>(point);
-                in_lat = geometry::get_as_radian<1>(point);
-
-                pj_gi * gip = find_grid(in_lon, in_lat, lck_grids.gridinfo, gridindexes);
-
-                if (gip == NULL)
-                {
-                    // do nothing
-                }
-                else if (! gip->ct.cvs.empty())
-                {
-                    // TODO: use set_invalid_point() or similar mechanism
-                    CalcT out_lon = HUGE_VAL;
-                    CalcT out_lat = HUGE_VAL;
-
-                    nad_cvt<Inverse>(in_lon, in_lat, out_lon, out_lat, *gip);
-
-                    // TODO: check differently
-                    if (out_lon != HUGE_VAL)
-                    {
-                        geometry::set_from_radian<0>(point, out_lon);
-                        geometry::set_from_radian<1>(point, out_lat);
-                    }
-                }
-                else
-                {
-                    // loading is needed
-                    local_gi = *gip;
-                    load_needed = true;
-                    break;
-                }
-            }
-        }
-
-        if (load_needed)
-        {
-            if (load_grid(stream_policy, local_gi))
-            {
-                typename SharedGrids::write_locked lck_grids(grids);
-
-                // check again in case other thread already loaded the grid.
-                pj_gi * gip = find_grid(in_lon, in_lat, lck_grids.gridinfo, gridindexes);
-
-                if (gip != NULL && gip->ct.cvs.empty())
-                {
-                    // swap loaded local storage with empty grid
-                    local_gi.swap(*gip);
-                }
-            }
-            else
-            {
-                ++i;
-            }
-        }
-    }
-
-    return true;
-}
-
 
 /************************************************************************/
 /*                        pj_apply_gridshift_2()                        */
@@ -491,7 +392,7 @@ inline bool pj_apply_gridshift_3(StreamPolicy const& stream_policy,
 /************************************************************************/
 
 template <bool Inverse, typename Par, typename Range, typename ProjGrids>
-inline bool pj_apply_gridshift_2(Par const& /*defn*/, Range & range, ProjGrids const& proj_grids)
+inline bool pj_apply_gridshift_2(Par const& /*defn*/, Range & range, ProjGrids const& grids)
 {
     /*if( defn->catalog_name != NULL )
         return pj_gc_apply_gridshift( defn, inverse, point_count, point_offset,
@@ -503,18 +404,19 @@ inline bool pj_apply_gridshift_2(Par const& /*defn*/, Range & range, ProjGrids c
                               grids.storage_ptr->grids,
                               gridindexes);*/
 
+    BOOST_GEOMETRY_ASSERT(grids.storage_ptr != NULL);
+
     // At this point the grids should be initialized
-    if (proj_grids.hindexes.empty())
+    if (grids.hindexes.empty())
         return false;
 
     return pj_apply_gridshift_3
             <
                 Inverse, typename Par::type
-            >(proj_grids.grids_storage().stream_policy,
+            >(grids.storage_ptr->stream_policy,
               range,
-              proj_grids.grids_storage().hgrids,
-              proj_grids.hindexes,
-              typename ProjGrids::grids_storage_type::grids_type::tag());
+              grids.storage_ptr->hgrids,
+              grids.hindexes);
 }
 
 template <bool Inverse, typename Par, typename Range>

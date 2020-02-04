@@ -8,15 +8,11 @@
 #include <cctype>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/spirit/home/support/char_set/range_run.hpp>
+#include <boost/random.hpp>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/integer_traits.hpp>
-#if defined(_MSC_VER) && _MSC_VER < 1700
-# pragma warning(disable: 4127) // conditional expression is constant
-#endif
-#include <boost/random.hpp>
 
-#if defined(_MSC_VER)
-# pragma warning(disable: 4127) // conditional expression is constant
+#if defined(BOOST_MSVC)
 # pragma warning(disable: 4800) // 'int' : forcing value to bool 'true' or 'false' warning
 #endif
 

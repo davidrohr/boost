@@ -24,7 +24,6 @@
 
 #include <algorithm>
 #include <string>
-#include <type_traits>
 #include <vector>
 
 // taken from jpegxx - https://bitbucket.org/edd/jpegxx/src/ea2492a1a4a6/src/ijg_headers.hpp
@@ -174,7 +173,7 @@ public:
             // the tiff type need to compatible. Which means:
             // color_spaces_are_compatible && channels_are_pairwise_compatible
 
-            using is_read_only = typename std::is_same
+            using is_read_only = typename is_same
                 <
                     ConversionPolicy,
                     detail::read_and_no_convert
@@ -209,7 +208,7 @@ private:
 
     template< typename View >
     void read( View v
-             , std::true_type // is_read_only
+             , mpl::true_ // is_read_only
              )
     {
         read_data< detail::row_buffer_helper_view< View > >( v, 0 );
@@ -217,7 +216,7 @@ private:
 
     template< typename View >
     void read( View v
-             , std::false_type  // is_read_only
+             , mpl::false_  // is_read_only
              )
     {
         // the read_data function needs to know what gil type the source image is
@@ -303,13 +302,11 @@ private:
                           , this->_info._height - this->_settings._top_left.y );
 
       // read the palette first
-      read_data< detail::row_buffer_helper_view
-          <
-            typename PaletteImage::view_t>
-        >(view(indices), 0);
+      read_data< detail::row_buffer_helper_view< typename PaletteImage::view_t > >( view( indices ), 0 );
 
-      read_palette_image(dst_view, view(indices),
-          typename std::is_same<View, rgb16_view_t>::type());
+      read_palette_image( dst_view
+                        , view( indices )
+                        , typename is_same< View, rgb16_view_t >::type() );
    }
 
    template< typename View
@@ -317,7 +314,7 @@ private:
            >
    void read_palette_image( const View&         dst_view
                           , const Indices_View& indices_view
-                          , std::true_type   // is View rgb16_view_t
+                          , mpl::true_   // is View rgb16_view_t
                           )
    {
       tiff_color_map::red_t   red   = nullptr;
@@ -359,7 +356,7 @@ private:
    inline
    void read_palette_image( const View&         /* dst_view     */
                           , const Indices_View& /* indices_view */
-                          , std::false_type  // is View rgb16_view_t
+                          , mpl::false_  // is View rgb16_view_t
                           )
    {
       io_error( "User supplied image type must be rgb16_image_t." );
@@ -656,7 +653,7 @@ private:
 
     template< typename Pixel >
     std::size_t buffer_size( std::size_t width
-                           , std::false_type // is_bit_aligned
+                           , mpl::false_ // is_bit_aligned
                            )
     {
         std::size_t scanline_size_in_bytes = this->_io_dev.get_scanline_size();
@@ -672,7 +669,7 @@ private:
 
     template< typename Pixel >
     std::size_t buffer_size( std::size_t /* width */
-                            , std::true_type  // is_bit_aligned
+                            , mpl::true_  // is_bit_aligned
                             )
     {
         return this->_io_dev.get_scanline_size();
@@ -697,7 +694,7 @@ struct tiff_type_format_checker
         using view_t = typename Image::view_t;
 
         return is_allowed< view_t >( _info
-                                   , std::true_type()
+                                   , mpl::true_()
                                    );
     }
 

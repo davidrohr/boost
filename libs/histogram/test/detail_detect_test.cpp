@@ -21,9 +21,9 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include "std_ostream.hpp"
 #include "throw_exception.hpp"
 #include "utility_allocator.hpp"
+#include "std_ostream.hpp"
 
 using namespace boost::histogram;
 using namespace boost::histogram::detail;
@@ -155,13 +155,12 @@ int main() {
   {
     struct A {};
     struct B {
-      double forward(A);
-      A inverse(double);
+      double forward(double);
+      double inverse(double);
     };
 
-    BOOST_TEST_TRAIT_FALSE((is_transform<A, double>));
-    BOOST_TEST_TRAIT_TRUE((is_transform<B, A>));
-    BOOST_TEST_TRAIT_TRUE((is_transform<axis::transform::id, double>));
+    BOOST_TEST_TRAIT_FALSE((is_transform<A>));
+    BOOST_TEST_TRAIT_TRUE((is_transform<B>));
   }
 
   // is_vector_like
@@ -267,6 +266,26 @@ int main() {
     BOOST_TEST_TRAIT_FALSE((is_sequence_of_axis<B>));
     BOOST_TEST_TRAIT_FALSE((is_sequence_of_any_axis<C>));
     BOOST_TEST_TRAIT_TRUE((is_sequence_of_any_axis<decltype(v)>));
+  }
+
+  // is_weight
+  {
+    struct A {};
+    using B = int;
+    using C = weight_type<int>;
+    BOOST_TEST_TRAIT_FALSE((is_weight<A>));
+    BOOST_TEST_TRAIT_FALSE((is_weight<B>));
+    BOOST_TEST_TRAIT_TRUE((is_weight<C>));
+  }
+
+  // is_sample
+  {
+    struct A {};
+    using B = int;
+    using C = sample_type<int>;
+    BOOST_TEST_TRAIT_FALSE((is_sample<A>));
+    BOOST_TEST_TRAIT_FALSE((is_sample<B>));
+    BOOST_TEST_TRAIT_TRUE((is_sample<C>));
   }
 
   // has_operator_equal

@@ -243,15 +243,11 @@ public:
     }
 
     /// Read some data from the stream asynchronously
-    template<
-        class MutableBufferSequence,
-        class ReadHandler =
-            net::default_completion_token_t<executor_type>>
+    template <class MutableBufferSequence, class ReadHandler>
     BOOST_BEAST_ASYNC_RESULT2(ReadHandler)
     async_read_some(
         MutableBufferSequence const& buffers,
-        ReadHandler&& handler =
-            net::default_completion_token_t<executor_type>{})
+        ReadHandler&& handler)
     {
         return net::async_initiate<
             ReadHandler,
@@ -263,16 +259,11 @@ public:
     }
 
     /// Write some data to the stream asynchronously
-    template<
-        class ConstBufferSequence,
-        class WriteHandler =
-            net::default_completion_token_t<executor_type>>
+    template <class ConstBufferSequence, class WriteHandler>
     BOOST_BEAST_ASYNC_RESULT2(WriteHandler)
     async_write_some(
         ConstBufferSequence const& buffers,
-        WriteHandler&& handler =
-            net::default_completion_token_t<
-                executor_type>{})
+        WriteHandler&& handler)
     {
         return net::async_initiate<
             WriteHandler,

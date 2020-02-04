@@ -990,15 +990,9 @@ auto d = xrange(param);
           <template-nontype-parameter name="Args"><type>class ...</type></template-nontype-parameter>
         </template><parameter name="args"><paramtype>Args &amp;&amp;...</paramtype></parameter><purpose>Variadic template initialization. </purpose></constructor>
 </class><class-specialization name="init_list"><template>
-    </template><specialization><template-arg>bool</template-arg></specialization><purpose>Specialization of <classname alt="boost::unit_test::data::monomorphic::init_list">init_list</classname> for type bool. </purpose><struct name="non_proxy_iterator"><data-member name="iterator"><type>std::vector&lt; bool &gt;::const_iterator</type></data-member>
-<method-group name="public member functions">
-<method name="operator *" cv="const"><type>bool</type></method>
-<method name="operator++"><type>non_proxy_iterator &amp;</type></method>
-</method-group>
-<constructor><parameter name="it"><paramtype>std::vector&lt; bool &gt;::const_iterator &amp;&amp;</paramtype></parameter></constructor>
-</struct><enum name="@5"><enumvalue name="arity"><default>= 1</default></enumvalue></enum>
+    </template><specialization><template-arg>bool</template-arg></specialization><purpose>Specialization of <classname alt="boost::unit_test::data::monomorphic::init_list">init_list</classname> for type bool. </purpose><enum name="@5"><enumvalue name="arity"><default>= 1</default></enumvalue></enum>
 <typedef name="sample"><type>bool</type></typedef>
-<typedef name="iterator"><type>non_proxy_iterator</type></typedef>
+<typedef name="iterator"><type>std::vector&lt; bool &gt;::const_iterator</type></typedef>
 <method-group name="public member functions">
 <method name="size" cv="const"><type><classname>data::size_t</classname></type><purpose>dataset interface </purpose></method>
 <method name="begin" cv="const"><type>iterator</type></method>

@@ -16,8 +16,6 @@ project boost/filesystem
 
 SOURCES =
     codecvt_error_category
-    exception
-    directory
     operations
     path
     path_traits
@@ -29,8 +27,7 @@ SOURCES =
 
 lib boost_filesystem
     : $(SOURCES).cpp
-    : <define>BOOST_FILESYSTEM_SOURCE
-      <link>shared:<define>BOOST_FILESYSTEM_DYN_LINK=1
+    : <link>shared:<define>BOOST_FILESYSTEM_DYN_LINK=1
       <link>static:<define>BOOST_FILESYSTEM_STATIC_LINK=1
     :
     :

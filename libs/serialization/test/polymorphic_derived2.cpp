@@ -12,7 +12,10 @@
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 #include <boost/serialization/export.hpp>
 
+#define POLYMORPHIC_BASE_IMPORT
 #include "polymorphic_base.hpp"
+
+#define POLYMORPHIC_DERIVED2_EXPORT
 #include "polymorphic_derived2.hpp"
 
 template<class Archive>

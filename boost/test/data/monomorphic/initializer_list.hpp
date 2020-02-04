@@ -77,6 +77,8 @@ public:
 
     enum { arity = 1 };
 
+    typedef std::vector<bool>::const_iterator iterator;
+
     //! Constructor copies content of initializer_list
     init_list( std::initializer_list<bool>&& il )
     : m_data( std::forward<std::initializer_list<bool>>( il ) )
@@ -89,24 +91,6 @@ public:
     init_list( Args&& ... args ) : m_data{ args... }
     { }
 #endif
-
-    struct non_proxy_iterator {
-        std::vector<bool>::const_iterator iterator;
-        non_proxy_iterator(std::vector<bool>::const_iterator &&it)
-        : iterator(std::forward<std::vector<bool>::const_iterator>(it))
-        {}
-
-        bool operator*() const {
-            return *iterator;
-        }
-
-        non_proxy_iterator& operator++() {
-            ++iterator;
-            return *this;
-        }
-    };
-
-    typedef non_proxy_iterator iterator;
 
     //! dataset interface
     data::size_t    size() const    { return m_data.size(); }

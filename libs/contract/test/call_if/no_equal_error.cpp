@@ -25,7 +25,9 @@ void push_back(std::vector<T>& vect, T const& value) {
 }
 
 struct j { // Type without operator==.
-    explicit j(int /* i */) {}
+    explicit j(int i) : j_(i) {}
+private:
+    int j_;
 };
 
 int main() {

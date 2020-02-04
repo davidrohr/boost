@@ -9,7 +9,8 @@ using namespace boost::multiprecision;
 
 int main()
 {
-   cpp_int  i = 3;
+   cpp_int i = 3;
    int256_t j;
    j = i;
 }
+

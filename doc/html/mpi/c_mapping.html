@@ -33,12 +33,6 @@
       that are already familiar with the C or Fortran interfaces to MPI, or for porting
       existing parallel programs to Boost.MPI.
     </p>
-<p>
-      Note that this is not a perfect one to one mapping, the Boost.MPI will sometime
-      use function from the C API in a way that is transparent for the end user.
-      For example, <a href="http://www.mpi-forum.org/docs/mpi-1.1/mpi-11-html/node50.html#Node50" target="_top"><code class="computeroutput"><span class="identifier">MPI_Probe</span> <span class="keyword">and</span> <span class="identifier">friends</span></code></a> can be used to implement
-      asynchronous send/recv.
-    </p>
 <div class="table">
 <a name="mpi.c_mapping.point_to_point_communication"></a><p class="title"><b>Table&#160;26.1.&#160;Point-to-point communication</b></p>
 <div class="table-contents"><table class="table" summary="Point-to-point communication">
@@ -331,7 +325,7 @@
             </td>
 <td>
               <p>
-                <code class="computeroutput"><a class="link" href="../boost/mpi/communicator.html#id-1_3_27_7_6_2_1_1_3_15-bb">communicator::sendrecv</a></code>
+                unsupported
               </p>
             </td>
 </tr>
@@ -2358,7 +2352,7 @@
             </td>
 <td>
               <p>
-                <code class="computeroutput"><a class="link" href="../boost/mpi/cartesian_communicator.html#id-1_3_27_7_3_2_1_1_4_3-bb">cartesian_communicator::shifted_ranks </a></code>
+                unsupported
               </p>
             </td>
 </tr>

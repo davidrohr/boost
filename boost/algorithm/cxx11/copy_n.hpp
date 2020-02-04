@@ -12,8 +12,6 @@
 #ifndef BOOST_ALGORITHM_COPY_N_HPP
 #define BOOST_ALGORITHM_COPY_N_HPP
 
-#include <boost/config.hpp>
-
 namespace boost { namespace algorithm {
 
 /// \fn copy_n ( InputIterator first, Size n, OutputIterator result )

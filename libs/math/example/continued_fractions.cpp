@@ -6,7 +6,6 @@
 #include <boost/math/tools/fraction.hpp>
 #include <iostream>
 #include <complex>
-#include <boost/multiprecision/cpp_complex.hpp>
 
 //[golden_ratio_1
 template <class T>
@@ -115,12 +114,6 @@ inline std::complex<T> gamma_Q_as_fraction(const std::complex<T>& a, const std::
    return pow(z, a) / (exp(z) *(z - a + T(1) + boost::math::tools::continued_fraction_a(f, eps)));
 }
 //]
-inline boost::multiprecision::cpp_complex_50 gamma_Q_as_fraction(const boost::multiprecision::cpp_complex_50& a, const boost::multiprecision::cpp_complex_50& z)
-{
-   upper_incomplete_gamma_fract<boost::multiprecision::cpp_complex_50> f(a, z);
-   boost::multiprecision::cpp_complex_50 eps(std::numeric_limits<boost::multiprecision::cpp_complex_50::value_type>::epsilon());
-   return pow(z, a) / (exp(z) * (z - a + 1 + boost::math::tools::continued_fraction_a(f, eps)));
-}
 
 
 int main()
@@ -142,9 +135,6 @@ int main()
 
    std::complex<double> a(3, 3), z(3, 2);
    std::cout << gamma_Q_as_fraction(a, z) << std::endl;
-
-   boost::multiprecision::cpp_complex_50 am(3, 3), zm(3, 2);
-   std::cout << gamma_Q_as_fraction(am, zm) << std::endl;
 
    return 0;
 }

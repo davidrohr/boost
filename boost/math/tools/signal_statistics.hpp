@@ -8,13 +8,12 @@
 
 #include <algorithm>
 #include <iterator>
+#include <boost/type_traits/is_complex.hpp>
 #include <boost/assert.hpp>
-#include <boost/math/tools/complex.hpp>
+#include <boost/multiprecision/detail/number_base.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/statistics/univariate_statistics.hpp>
-#include <boost/config/header_deprecated.hpp>
+#include <boost/math/tools/univariate_statistics.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/signal_statistics.hpp>");
 
 namespace boost::math::tools {
 
@@ -151,7 +150,8 @@ auto oracle_snr(Container const & signal, Container const & noisy_signal)
         }
         return numerator/denominator;
     }
-    else if constexpr (boost::math::tools::is_complex_type<Real>::value)
+    else if constexpr (boost::is_complex<Real>::value ||
+                       boost::multiprecision::number_category<Real>::value == boost::multiprecision::number_kind_complex)
 
     {
         using std::norm;
@@ -250,7 +250,8 @@ auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*f
     BOOST_ASSERT_MSG(estimated_noise_kurtosis > 0, "The estimated noise kurtosis must be positive.");
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::sqrt;
-    if constexpr (std::is_floating_point<Real>::value || std::numeric_limits<Real>::max_exponent)
+    if constexpr (std::is_floating_point<Real>::value ||
+       boost::multiprecision::number_category<Real>::value == boost::multiprecision::number_kind_floating_point)
     {
         // If we first eliminate N, we obtain the quadratic equation:
         // (ka+kw-6)S^2 + 2M2(3-kw)S + kw*M2^2 - M4 = 0 =: a*S^2 + bs*N + cs = 0

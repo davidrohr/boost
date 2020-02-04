@@ -51,16 +51,6 @@
       be declared in <code class="computeroutput"><span class="identifier">main</span></code> at the
       very beginning of the program.
     </p>
-<div class="warning"><table border="0" summary="Warning">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../doc/src/images/warning.png"></td>
-<th align="left">Warning</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Declaring an <code class="computeroutput"><a class="link" href="../boost/mpi/environment.html" title="Class environment">mpi::environment</a></code>
-        at global scope is undefined behavior. <a href="#ftn.mpi.tutorial.f0" class="footnote" name="mpi.tutorial.f0"><sup class="footnote">[11]</sup></a>
-      </p></td></tr>
-</table></div>
 <p>
       Communication with MPI always occurs over a <span class="bold"><strong>communicator</strong></span>,
       which can be created be simply default-constructing an object of type <code class="computeroutput"><a class="link" href="../boost/mpi/communicator.html" title="Class communicator">mpi::communicator</a></code>. This communicator
@@ -1173,13 +1163,6 @@ Rank 6 got 2117359639
           members should be skipped for serialization.
         </p>
 </div>
-</div>
-<div class="footnotes">
-<br><hr style="width:100; text-align:left;margin-left: 0">
-<div id="ftn.mpi.tutorial.f0" class="footnote"><p><a href="#mpi.tutorial.f0" class="para"><sup class="para">[11] </sup></a>
-          According to the MPI standard, initialization must take place at user's
-          initiative after once the main function has been called.
-        </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

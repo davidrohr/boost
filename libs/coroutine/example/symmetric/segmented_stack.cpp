@@ -4,12 +4,11 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/coroutine/all.hpp>
-
 #include <iostream>
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/coroutine/all.hpp>
 #include <boost/thread.hpp>
 
 int count = 384;

@@ -13,7 +13,9 @@
 #include <boost/gil/io/device.hpp>
 #include <boost/gil/io/get_reader.hpp>
 #include <boost/gil/io/path_spec.hpp>
-#include <boost/gil/detail/mp11.hpp>
+
+#include <boost/mpl/and.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <type_traits>
 
@@ -31,7 +33,7 @@ inline
 void read_view(Reader reader, View const& view,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_reader<Reader>,
             typename is_format_tag<typename Reader::format_tag_t>::type,
@@ -61,7 +63,7 @@ void read_view(
     image_read_settings<FormatTag> const& settings,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             detail::is_read_device<FormatTag, Device>,
             typename is_format_tag<FormatTag>::type,
@@ -90,7 +92,7 @@ inline
 void read_view(Device& file, View const& view, FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             typename is_format_tag<FormatTag>::type,
             detail::is_read_device<FormatTag, Device>,
@@ -121,7 +123,7 @@ void read_view(
     image_read_settings<FormatTag> const& settings,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             typename detail::is_supported_path_spec<String>::type,
             typename is_format_tag<FormatTag>::type,
@@ -150,7 +152,7 @@ inline
 void read_view(String const& file_name, View const& view, FormatTag const& tag,
     typename std::enable_if
     <
-        mp11::mp_and
+        mpl::and_
         <
             typename detail::is_supported_path_spec<String>::type,
             typename is_format_tag<FormatTag>::type,

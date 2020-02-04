@@ -10,13 +10,14 @@
 
 #include <boost/gil/extension/io/png/tags.hpp>
 
-#include <type_traits>
+#include <boost/mpl/bool_fwd.hpp>
+#include <boost/mpl/for_each.hpp>
 
 namespace boost { namespace gil { namespace detail {
 
 template< typename View >
 bool is_allowed( const image_read_info< png_tag >& info
-               , std::true_type   // is read_and_no_convert
+               , mpl::true_   // is read_and_no_convert
                )
 {
     using pixel_t = typename get_pixel_type<View>::type;
@@ -32,7 +33,7 @@ bool is_allowed( const image_read_info< png_tag >& info
 
 template< typename View >
 bool is_allowed( const image_read_info< png_tag >& /* info */
-               , std::false_type  // is read_and_convert
+               , mpl::false_  // is read_and_convert
                )
 {
     return true;

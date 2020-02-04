@@ -4,8 +4,6 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/coroutine/all.hpp>
-
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -14,6 +12,7 @@
 
 #include <boost/assign/list_of.hpp>
 #include <boost/bind.hpp>
+#include <boost/coroutine/all.hpp>
 #include <boost/range.hpp>
 
 struct FinalEOL

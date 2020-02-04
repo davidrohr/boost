@@ -8,15 +8,13 @@
 #ifdef _MSC_VER
 #pragma warning(disable : 4244)     // conversion from 'gil::image<V,Alloc>::coord_t' to 'int', possible loss of data (visual studio compiler doesn't realize that the two types are the same)
 #pragma warning(disable : 4503)     // decorated name length exceeded, name was truncated
-#pragma warning(disable : 4701)     // potentially uninitialized local variable 'result' used in boost/crc.hpp
 #endif
 
-#include <boost/gil.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/crc.hpp>
-#include <boost/mp11.hpp>
+#include <boost/mpl/vector.hpp>
 
 #include <ios>
 #include <iostream>
@@ -38,6 +36,7 @@ void error_if(bool condition);
 #pragma warning(push)
 #pragma warning(disable:4127) //conditional expression is constant
 #endif
+
 
 // When BOOST_GIL_GENERATE_REFERENCE_DATA is defined, the reference data is generated and saved.
 // When it is undefined, regression tests are checked against it
@@ -146,10 +145,10 @@ void x_gradient(const T& src, const gray8s_view_t& dst) {
 // A quick test whether a view is homogeneous
 
 template <typename Pixel>
-struct pixel_is_homogeneous : public std::true_type {};
+struct pixel_is_homogeneous : public mpl::true_ {};
 
 template <typename P, typename C, typename L>
-struct pixel_is_homogeneous<packed_pixel<P,C,L> > : public std::false_type {};
+struct pixel_is_homogeneous<packed_pixel<P,C,L> > : public mpl::false_ {};
 
 template <typename View>
 struct view_is_homogeneous : public pixel_is_homogeneous<typename View::value_type> {};
@@ -177,8 +176,8 @@ protected:
 private:
     template <typename Img> void basic_test(const string& prefix);
     template <typename View> void view_transformations_test(const View& img_view, const string& prefix);
-    template <typename View> void homogeneous_view_transformations_test(const View& img_view, const string& prefix, std::true_type);
-    template <typename View> void homogeneous_view_transformations_test(const View& img_view, const string& prefix, std::false_type)
+    template <typename View> void homogeneous_view_transformations_test(const View& img_view, const string& prefix, mpl::true_);
+    template <typename View> void homogeneous_view_transformations_test(const View& img_view, const string& prefix, mpl::false_)
     {
         boost::ignore_unused(img_view);
         boost::ignore_unused(prefix);
@@ -277,7 +276,7 @@ void image_test::view_transformations_test(const View& img_view, const string& p
 }
 
 template <typename View>
-void image_test::homogeneous_view_transformations_test(const View& img_view, const string& prefix, std::true_type) {
+void image_test::homogeneous_view_transformations_test(const View& img_view, const string& prefix, mpl::true_) {
     check_view(nth_channel_view(img_view,0),prefix+"0th_n_channel");
 }
 
@@ -326,7 +325,7 @@ void image_test::dynamic_image_test()
 {
     using any_image_t = any_image
         <
-            mp11::mp_list
+            mpl::vector
             <
                 gray8_image_t,
                 bgr8_image_t,
@@ -373,7 +372,7 @@ void image_test::run() {
     using bgr121_ref_t = bit_aligned_pixel_reference
         <
             boost::uint8_t,
-            mp11::mp_list_c<int, 1, 2, 1>,
+            mpl::vector3_c<int, 1, 2, 1>,
             bgr_layout_t,
             true
         > const;
@@ -541,7 +540,7 @@ void static_checks() {
         <
             derived_view_type
             <
-                cmyk8c_planar_step_view_t, use_default, rgb_layout_t, std::false_type, use_default, std::false_type
+                cmyk8c_planar_step_view_t, use_default, rgb_layout_t, mpl::false_, use_default, mpl::false_
             >::type,
             rgb8c_step_view_t
         >::value, "");

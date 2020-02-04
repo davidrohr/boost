@@ -69,28 +69,13 @@ struct unsafe_access {
   */
   template <class Histogram>
   static auto& storage(Histogram& hist) {
-    return hist.storage_;
+    return hist.storage_and_mutex_.first();
   }
 
   /// @copydoc storage()
   template <class Histogram>
   static const auto& storage(const Histogram& hist) {
-    return hist.storage_;
-  }
-
-  /**
-    Get index offset.
-    @param hist histogram
-    */
-  template <class Histogram>
-  static auto& offset(Histogram& hist) {
-    return hist.offset_;
-  }
-
-  /// @copydoc offset()
-  template <class Histogram>
-  static const auto& offset(const Histogram& hist) {
-    return hist.offset_;
+    return hist.storage_and_mutex_.first();
   }
 
   /**

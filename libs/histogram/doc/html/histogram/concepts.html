@@ -274,7 +274,7 @@
                   in the reduced axis. If <code class="computeroutput"><span class="identifier">n</span></code>
                   is larger than 1, <code class="computeroutput"><span class="identifier">n</span></code>
                   adjacent bins are merged into one larger cell. If this constructor
-                  is not implemented, <code class="computeroutput"><a class="link" href="../boost/histogram/algorithm/reduce_idm45414524960512.html" title="Function template reduce">boost::histogram::algorithm::reduce</a></code>
+                  is not implemented, <code class="computeroutput"><a class="link" href="../boost/histogram/algorithm/reduce_idm45525156086992.html" title="Function template reduce">boost::histogram::algorithm::reduce</a></code>
                   throws an exception on an attempt to reduce this axis.
                 </p>
               </td>
@@ -294,29 +294,6 @@
                 <p>
                   Static constexpr member function which returns the <code class="computeroutput"><a class="link" href="reference.html#header.boost.histogram.axis.option_hpp" title="Header &lt;boost/histogram/axis/option.hpp&gt;">axis options</a></code>
                   for this axis.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">a</span><span class="special">.</span><span class="identifier">inclusive</span><span class="special">()</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="keyword">bool</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  Static constexpr member function which returns true, if the axis
-                  has a bin for every possible input value, and false otherwise.
-                  Faster code can be generated if all axes types in a histogram are
-                  inclusive. An axis with underflow and overflow bins is always inclusive.
-                  An axis may be inclusive even if underflow or overflow bins are
-                  missing. For example, a category axis is inclusive if it has an
-                  overflow bin or if it is growing.
                 </p>
               </td>
 </tr>
@@ -429,8 +406,8 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">a</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">ar</span><span class="special">,</span>
-                  <span class="identifier">n</span><span class="special">)</span></code>
+                  <code class="computeroutput"><span class="identifier">ar</span> <span class="special">&amp;</span>
+                  <span class="identifier">a</span></code>
                 </p>
               </td>
 <td>
@@ -438,11 +415,8 @@
 <td>
                 <p>
                   <code class="computeroutput"><span class="identifier">ar</span></code> is a value of
-                  an archive with Boost.Serialization semantics and <code class="computeroutput"><span class="identifier">n</span></code> is an unsigned integral value.
-                  Saves to the archive or loads serialized state from the archive.
-                  The version number <code class="computeroutput"><span class="identifier">n</span></code>
-                  is the stored version when the object is loaded or the current
-                  version when the object is saved.
+                  an archive with Boost.Serialization semantics. Serializes <code class="computeroutput"><span class="identifier">a</span></code> to the archive or loads serialized
+                  state from the archive.
                 </p>
               </td>
 </tr>
@@ -1117,20 +1091,18 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">t</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">ar</span><span class="special">,</span>
-                  <span class="identifier">n</span><span class="special">)</span></code>
+                  <code class="computeroutput"><span class="identifier">ar</span> <span class="special">&amp;</span>
+                  <span class="identifier">t</span></code>
                 </p>
               </td>
 <td>
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">ar</span></code> is a value of
-                  an archive with Boost.Serialization semantics and <code class="computeroutput"><span class="identifier">n</span></code> is an unsigned integral value.
-                  Saves to the archive or loads serialized state from the archive.
-                  The version number <code class="computeroutput"><span class="identifier">n</span></code>
-                  is the stored version when the object is loaded or the current
-                  version when the object is saved.
+                  Serializes <code class="computeroutput"><span class="identifier">a</span></code> to
+                  the archive or loads serialized state from the archive. Can be
+                  omitted if <code class="computeroutput"><span class="identifier">T</span></code> is
+                  stateless.
                 </p>
               </td>
 </tr></tbody>
@@ -1562,20 +1534,16 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">ar</span><span class="special">,</span>
-                  <span class="identifier">n</span><span class="special">)</span></code>
+                  <code class="computeroutput"><span class="identifier">ar</span> <span class="special">&amp;</span>
+                  <span class="identifier">s</span></code>
                 </p>
               </td>
 <td>
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">ar</span></code> is a value of
-                  an archive with Boost.Serialization semantics and <code class="computeroutput"><span class="identifier">n</span></code> is an unsigned integral value.
-                  Saves to the archive or loads serialized state from the archive.
-                  The version number <code class="computeroutput"><span class="identifier">n</span></code>
-                  is the stored version when the object is loaded or the current
-                  version when the object is saved.
+                  Serializes <code class="computeroutput"><span class="identifier">s</span></code> to
+                  the archive or loads serialized state from the archive.
                 </p>
               </td>
 </tr>
@@ -1634,7 +1602,7 @@
           </li>
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">ts</span><span class="special">...</span></code>
-            is a pack of values of arbitrary types
+            is a pack of values
           </li>
 </ul></div>
 <div class="table">
@@ -1675,9 +1643,7 @@
 <td>
                 <p>
                   Either a call operator accepting a fixed number of arguments must
-                  be implemented, or the pre-increment operator. The call operator
-                  may not be templated and not overloaded, except to support weights
-                  as described under optional features.
+                  be implemented, or the pre-increment operator.
                 </p>
               </td>
 </tr>
@@ -1738,19 +1704,6 @@
             <code class="computeroutput"><span class="identifier">a</span></code> and <code class="computeroutput"><span class="identifier">b</span></code>
             are values of type <code class="computeroutput"><span class="identifier">A</span></code>
           </li>
-<li class="listitem">
-            <code class="computeroutput"><span class="identifier">w</span></code> is a value of type
-            <code class="computeroutput"><a class="link" href="../boost/histogram/weight_type.html" title="Struct template weight_type">boost::histogram::weight_type</a></code>,
-            where <code class="computeroutput"><span class="identifier">T</span></code> is a number type
-          </li>
-<li class="listitem">
-            <code class="computeroutput"><span class="identifier">ts</span><span class="special">...</span></code>
-            is a pack of values of arbitrary types
-          </li>
-<li class="listitem">
-            <code class="computeroutput"><span class="identifier">v</span></code> is a number value (integral
-            or floating point)
-          </li>
 </ul></div>
 <div class="table">
 <a name="histogram.concepts.Accumulator.valid_expressions0"></a><p class="title"><b>Table&#160;1.10.&#160;Valid expressions</b></p>
@@ -1778,28 +1731,6 @@
               </th>
 </tr></thead>
 <tbody>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">a</span> <span class="special">+=</span>
-                  <span class="identifier">v</span></code> or <code class="computeroutput"><span class="identifier">a</span><span class="special">(</span><span class="identifier">w</span><span class="special">,</span> <span class="identifier">ts</span><span class="special">...)</span></code>
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  Does a weighted fill of the accumulator. Use this to implement
-                  weight support for an accumulator that is normally filled with
-                  <code class="computeroutput"><span class="special">++</span><span class="identifier">a</span></code>
-                  or <code class="computeroutput"><span class="identifier">a</span><span class="special">(</span><span class="identifier">ts</span><span class="special">...)</span></code>,
-                  respectively. Only the corresponding matching form may be implemented:
-                  <code class="computeroutput"><span class="identifier">a</span> <span class="special">+=</span>
-                  <span class="identifier">v</span></code> for <code class="computeroutput"><span class="special">++</span><span class="identifier">a</span></code>, <code class="computeroutput"><span class="identifier">a</span><span class="special">(</span><span class="identifier">w</span><span class="special">,</span> <span class="identifier">ts</span><span class="special">...)</span></code> for <code class="computeroutput"><span class="identifier">a</span><span class="special">(</span><span class="identifier">ts</span><span class="special">...)</span></code>. The implementations may not
-                  be templated and not overloaded.
-                </p>
-              </td>
-</tr>
 <tr>
 <td>
                 <p>
@@ -1866,8 +1797,8 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">a</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">ar</span><span class="special">,</span>
-                  <span class="identifier">n</span><span class="special">)</span></code>
+                  <code class="computeroutput"><span class="identifier">ar</span> <span class="special">&amp;</span>
+                  <span class="identifier">a</span></code>
                 </p>
               </td>
 <td>
@@ -1875,11 +1806,8 @@
 <td>
                 <p>
                   <code class="computeroutput"><span class="identifier">ar</span></code> is a value of
-                  an archive with Boost.Serialization semantics and <code class="computeroutput"><span class="identifier">n</span></code> is an unsigned integral value.
-                  Saves to the archive or loads serialized state from the archive.
-                  The version number <code class="computeroutput"><span class="identifier">n</span></code>
-                  is the stored version when the object is loaded or the current
-                  version when the object is saved.
+                  an archive with Boost.Serialization semantics. Serializes <code class="computeroutput"><span class="identifier">a</span></code> to the archive or loads serialized
+                  state from the archive.
                 </p>
               </td>
 </tr>

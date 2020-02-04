@@ -20,7 +20,6 @@
 #include <boost/gil/io/typedefs.hpp>
 
 #include <csetjmp>
-#include <type_traits>
 #include <vector>
 
 namespace boost { namespace gil {
@@ -100,7 +99,7 @@ public:
 
         this->get()->dct_method = this->_settings._dct_method;
 
-        using is_read_and_convert_t = typename std::is_same
+        using is_read_and_convert_t = typename is_same
             <
                 ConversionPolicy,
                 detail::read_and_no_convert

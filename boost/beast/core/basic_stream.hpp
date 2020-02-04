@@ -217,15 +217,6 @@ public:
     */
     using executor_type = beast::executor_type<socket_type>;
 
-    /// Rebinds the stream type to another executor.
-    template<class Executor1>
-    struct rebind_executor
-    {
-        /// The stream type when rebound to the specified executor.
-        using other = basic_stream<
-            Protocol, Executor1, RatePolicy>;
-    };
-
     /// The protocol type.
     using protocol_type = Protocol;
 
@@ -246,15 +237,7 @@ private:
 
         op_state read;
         op_state write;
-#if 0
-        net::basic_waitable_timer<
-            std::chrono::steady_clock,
-            net::wait_traits<
-                std::chrono::steady_clock>,
-            Executor> timer; // rate timer;
-#else
-        net::steady_timer timer;
-#endif
+        net::steady_timer timer; // rate timer
         int waiting = 0;
 
         impl_type(impl_type&&) = default;
@@ -920,16 +903,11 @@ public:
 
         @see async_connect
     */
-    template<
-        BOOST_BEAST_ASYNC_TPARAM1 ConnectHandler =
-            net::default_completion_token_t<executor_type>
-    >
+    template<class ConnectHandler>
     BOOST_BEAST_ASYNC_RESULT1(ConnectHandler)
     async_connect(
         endpoint_type const& ep,
-        ConnectHandler&& handler =
-            net::default_completion_token_t<
-                executor_type>{});
+        ConnectHandler&& handler);
 
     /** Establishes a connection by trying each endpoint in a sequence asynchronously.
 
@@ -974,23 +952,17 @@ public:
     */
     template<
         class EndpointSequence,
-        BOOST_ASIO_COMPLETION_TOKEN_FOR(
-            void(error_code, typename Protocol::endpoint))
-            RangeConnectHandler =
-                net::default_completion_token_t<executor_type>
+        class RangeConnectHandler
     #if ! BOOST_BEAST_DOXYGEN
         ,class = typename std::enable_if<
             net::is_endpoint_sequence<
                 EndpointSequence>::value>::type
     #endif
     >
-    BOOST_ASIO_INITFN_RESULT_TYPE(
-        RangeConnectHandler,
-        void(error_code, typename Protocol::endpoint))
+    BOOST_ASIO_INITFN_RESULT_TYPE(RangeConnectHandler,void (error_code, typename Protocol::endpoint))
     async_connect(
         EndpointSequence const& endpoints,
-        RangeConnectHandler&& handler =
-            net::default_completion_token_t<executor_type>{});
+        RangeConnectHandler&& handler);
 
     /** Establishes a connection by trying each endpoint in a sequence asynchronously.
 
@@ -1067,25 +1039,18 @@ public:
     template<
         class EndpointSequence,
         class ConnectCondition,
-        BOOST_ASIO_COMPLETION_TOKEN_FOR(
-            void(error_code, typename Protocol::endpoint))
-            RangeConnectHandler =
-                net::default_completion_token_t<executor_type>
+        class RangeConnectHandler
     #if ! BOOST_BEAST_DOXYGEN
         ,class = typename std::enable_if<
             net::is_endpoint_sequence<
                 EndpointSequence>::value>::type
     #endif
     >
-    BOOST_ASIO_INITFN_RESULT_TYPE(
-        RangeConnectHandler,
-        void(error_code, typename Protocol::endpoint))
+    BOOST_ASIO_INITFN_RESULT_TYPE(RangeConnectHandler,void (error_code, typename Protocol::endpoint))
     async_connect(
         EndpointSequence const& endpoints,
         ConnectCondition connect_condition,
-        RangeConnectHandler&& handler =
-            net::default_completion_token_t<
-                executor_type>{});
+        RangeConnectHandler&& handler);
 
     /** Establishes a connection by trying each endpoint in a sequence asynchronously.
 
@@ -1131,17 +1096,11 @@ public:
     */
     template<
         class Iterator,
-        BOOST_ASIO_COMPLETION_TOKEN_FOR(
-            void(error_code, Iterator))
-            IteratorConnectHandler =
-                net::default_completion_token_t<executor_type>>
-    BOOST_ASIO_INITFN_RESULT_TYPE(
-        IteratorConnectHandler,
-        void(error_code, Iterator))
+        class IteratorConnectHandler>
+    BOOST_ASIO_INITFN_RESULT_TYPE(IteratorConnectHandler,void (error_code, Iterator))
     async_connect(
         Iterator begin, Iterator end,
-        IteratorConnectHandler&& handler =
-            net::default_completion_token_t<executor_type>{});
+        IteratorConnectHandler&& handler);
 
     /** Establishes a connection by trying each endpoint in a sequence asynchronously.
 
@@ -1192,18 +1151,12 @@ public:
     template<
         class Iterator,
         class ConnectCondition,
-        BOOST_ASIO_COMPLETION_TOKEN_FOR(
-            void(error_code, Iterator))
-            IteratorConnectHandler =
-                net::default_completion_token_t<executor_type>>
-    BOOST_ASIO_INITFN_RESULT_TYPE(
-        IteratorConnectHandler,
-        void(error_code, Iterator))
+        class IteratorConnectHandler>
+    BOOST_ASIO_INITFN_RESULT_TYPE(IteratorConnectHandler,void (error_code, Iterator))
     async_connect(
         Iterator begin, Iterator end,
         ConnectCondition connect_condition,
-        IteratorConnectHandler&& handler =
-            net::default_completion_token_t<executor_type>{});
+        IteratorConnectHandler&& handler);
 
     //--------------------------------------------------------------------------
 
@@ -1316,17 +1269,11 @@ public:
         to ensure that the requested amount of data is read before the asynchronous
         operation completes.
     */
-    template<
-        class MutableBufferSequence,
-        BOOST_BEAST_ASYNC_TPARAM2 ReadHandler =
-            net::default_completion_token_t<executor_type>
-    >
+    template<class MutableBufferSequence, class ReadHandler>
     BOOST_BEAST_ASYNC_RESULT2(ReadHandler)
     async_read_some(
         MutableBufferSequence const& buffers,
-        ReadHandler&& handler =
-            net::default_completion_token_t<executor_type>{}
-    );
+        ReadHandler&& handler);
 
     /** Write some data.
 
@@ -1439,16 +1386,11 @@ public:
         to ensure that the requested amount of data is sent before the asynchronous
         operation completes.
     */
-    template<
-        class ConstBufferSequence,
-        BOOST_BEAST_ASYNC_TPARAM2 WriteHandler =
-            net::default_completion_token_t<Executor>
-    >
+    template<class ConstBufferSequence, class WriteHandler>
     BOOST_BEAST_ASYNC_RESULT2(WriteHandler)
     async_write_some(
         ConstBufferSequence const& buffers,
-        WriteHandler&& handler =
-            net::default_completion_token_t<Executor>{});
+        WriteHandler&& handler);
 };
 
 } // beast

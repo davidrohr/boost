@@ -73,7 +73,6 @@ rule python-tag ( name : type ? : property-set )
     return  [ tag $(result) : $(type) : $(property-set) ] ;
 }
 
-mpi_python_libs = ;
 
 if [ mpi.configured ]
 {
@@ -169,8 +168,6 @@ lib boost_mpi
                 <link>shared <runtime-link>shared
                 <python-debugging>on:<define>BOOST_DEBUG_PYTHON
               ;
-
-            mpi_python_libs = boost_mpi_python mpi ;
   }
 }
 else if ! ( --without-mpi in  [ modules.peek : ARGV ] )
@@ -187,4 +184,4 @@ else
   alias boost_mpi ;
 }
 
-boost-install boost_mpi $(mpi_python_libs) ;
+boost-install boost_mpi ;

@@ -10,6 +10,7 @@ using namespace boost::multiprecision;
 int main()
 {
    cpp_dec_float_100 f(2);
-   cpp_dec_float_50  f2;
+   cpp_dec_float_50 f2;
    f2 = f;
 }
+

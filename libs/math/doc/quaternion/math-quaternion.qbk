@@ -48,7 +48,7 @@ Some traditional constructs, such as the exponential, carry over without
 too much change into the realms of quaternions, but other, such as taking
 a square root, do not.
 
-[endsect] [/section:quat_overview Overview]
+[endsect]
 
 [section:quat_header Header File]
 
@@ -141,7 +141,7 @@ The interface and implementation are both supplied by the header file
    } // namespace math
    } // namespace boost
 
-[endsect] [/section:quat_header Header File]
+[endsect]
 
 [section:quat Template Class quaternion]
 
@@ -198,7 +198,7 @@ The interface and implementation are both supplied by the header file
    } // namespace math
    } // namespace boost
 
-[endsect] [/section:quat Template Class quaternion]
+[endsect]
 
 [section:spec Quaternion Specializations]
 
@@ -352,7 +352,7 @@ The interface and implementation are both supplied by the header file
    } // namespace math
    } // namespace boost
 
-[endsect] [/section:spec Quaternion Specializations]
+[endsect]
 
 [section:mem_typedef Quaternion Member Typedefs]
 
@@ -520,8 +520,7 @@ and store the result in `*this`. The unspecialized form has exception guards,
 which the specialized forms do not, so as to insure exception safety.
 For the unspecialized form, the base type's assignment operators must not throw.
 
-[endsect] [/section:mem_typedef Quaternion Member Typedefs]
-
+[endsect]
 [section:quat_non_mem Quaternion Non-Member Operators]
 
 [h4 Unary Plus]
@@ -650,7 +649,7 @@ Inserts the quaternion q onto the stream `os` as if it were implemented as follo
       return os << s.str();
    }
 
-[endsect] [/section:quat_non_mem Quaternion Non-Member Operators]
+[endsect]
 
 [section:value_op Quaternion Value Operations]
 
@@ -697,7 +696,7 @@ Euclidian norm (and quadratic functionals). For this version of
 (the mathematical objects known as) quaternions, the Euclidian norm
 (also known as magnitude) is the square root of the Cayley norm.
 
-[endsect] [/section:value_op Quaternion Value Operations]
+[endsect]
 
 [section:create Quaternion Creation Functions]
 
@@ -758,7 +757,7 @@ done is presented here for
 [@../../example/HSO4.hpp __R4]
 ([@../../example/HSO3SO4.cpp example test file]).
 
-[endsect] [/section:create Quaternion Creation Functions]
+[endsect]
 
 [section:trans Quaternion Transcendentals]
 
@@ -835,7 +834,7 @@ Computes the hyperbolic tangent of the quaternion.
 
 Computes the n-th power of the quaternion q.
 
-[endsect] [/section:trans Quaternion Transcendentals]
+[endsect]
 
 [section:quat_tests Test Program]
 
@@ -854,7 +853,7 @@ BOOST_INTERACTIVE_TEST_INPUT_ITERATOR to interactively test the input
 operator with input of your choice from the standard input
 (instead of hard-coding it in the test).
 
-[endsect] [/section:quat_tests Test Program]
+[endsect]
 
 [section:exp The Quaternionic Exponential]
 
@@ -863,8 +862,7 @@ Please refer to the following PDF's:
 *[@../quaternion/TQE.pdf The Quaternionic Exponential (and beyond)]
 *[@../quaternion/TQE_EA.pdf The Quaternionic Exponential (and beyond) ERRATA & ADDENDA]
 
-[endsect] [/section:exp The Quaternionic Exponential]
-
+[endsect]
 
 [section:acknowledgement Acknowledgements]
 
@@ -874,7 +872,7 @@ portability and standard adherence, and was the Review Manager
 for this library. More acknowledgements in the History section.
 Thank you to all who contributed to the discution about this library.
 
-[endsect] [/section:quat_tests Test Program]
+[endsect]
 
 [section:quat_history History]
 
@@ -895,8 +893,7 @@ Thank you to all who contributed to the discution about this library.
 * 1.1.0 - 23/05/2000: changed sinc into sinc_pi; added sin, cos, sinh, cosh.
 * 1.0.0 - 10/08/1999: first public version.
 
-[endsect] [/section:quat_history History]
-
+[endsect]
 [section:quat_todo To Do]
 
 * Improve testing.
@@ -906,9 +903,8 @@ Thank you to all who contributed to the discution about this library.
 [@../../example/HSO3SO4.cpp example]
 implementation to an efficient one).
 
-[endsect] [/section:quat_todo To Do]
-
-[endmathpart] [/mathpart quaternions Quaternions]
+[endsect]
+[endmathpart]
 
 [/
 Copyright 1999, 2005, 2013 Hubert Holin.

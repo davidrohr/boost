@@ -10,13 +10,11 @@
 
 #include <boost/gil/extension/io/jpeg/tags.hpp>
 
-#include <type_traits>
-
 namespace boost { namespace gil { namespace detail {
 
 template< typename View >
 bool is_allowed( const image_read_info< jpeg_tag >& info
-               , std::true_type   // is read_and_no_convert
+               , mpl::true_   // is read_and_no_convert
                )
 {
     if( info._color_space == JCS_YCbCr )
@@ -34,7 +32,7 @@ bool is_allowed( const image_read_info< jpeg_tag >& info
 
 template< typename View >
 bool is_allowed( const image_read_info< jpeg_tag >& /* info */
-               , std::false_type  // is read_and_convert
+               , mpl::false_  // is read_and_convert
                )
 {
     return true;

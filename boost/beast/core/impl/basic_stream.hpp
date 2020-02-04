@@ -145,12 +145,8 @@ basic_stream<Protocol, Executor, RatePolicy>::
 impl_type::
 close()
 {
-    {
-        error_code ec;
-        socket.close(ec);
-    }
+    socket.close();
     timer.cancel();
-
 
     // have to let the read/write ops cancel the timer,
     // otherwise we will get error::timeout on close when

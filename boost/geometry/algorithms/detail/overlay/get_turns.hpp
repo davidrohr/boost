@@ -209,6 +209,7 @@ private :
     RobustPolicy m_robust_policy;
 };
 
+
 template
 <
     typename Geometry1, typename Geometry2,

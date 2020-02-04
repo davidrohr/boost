@@ -15,7 +15,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/regex.hpp>
-#include <boost/assert.hpp>
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -45,7 +44,7 @@ private:
 
 void bcp_implementation::copy_path(const fs::path& p)
 {
-   BOOST_ASSERT(!fs::is_directory(m_boost_path / p));
+   assert(!fs::is_directory(m_boost_path / p));
    if(fs::exists(m_dest_path / p))
    {
       std::cout << "Copying (and overwriting) file: " << p.string() << "\n";
@@ -161,8 +160,6 @@ void bcp_implementation::copy_path(const fs::path& p)
             "(\\(\\s*)boost(\\s*\\))\\s*(\\(\\s*)phoenix(\\s*\\))"
          "|"
             "(\\(\\s*)boost(\\s*\\))"
-         "|"
-            "(BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE[^\\)]*)boost(\\))"
          ")"
       );
 

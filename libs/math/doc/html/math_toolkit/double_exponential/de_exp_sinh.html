@@ -4,7 +4,7 @@
 <title>exp_sinh</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_sinh_sinh.html" title="sinh_sinh">
 <link rel="next" href="de_tol.html" title="Setting the Termination Condition for Integration">
@@ -47,8 +47,7 @@
 <span class="special">};</span>
 </pre>
 <p>
-        For half-infinite intervals, the <code class="computeroutput"><span class="identifier">exp</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature
-        is provided:
+        For half-infinite intervals, the exp-sinh quadrature is provided:
       </p>
 <pre class="programlisting"><span class="identifier">exp_sinh</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">exp</span><span class="special">(-</span><span class="number">3</span><span class="special">*</span><span class="identifier">x</span><span class="special">);</span> <span class="special">};</span>
@@ -59,18 +58,17 @@
 </pre>
 <p>
         The native integration range of this integrator is (0, &#8734;), but we also support
-        /(a, &#8734;), (-&#8734;, 0)/ and /(-&#8734;, b)/ via argument transformations.
+        (a, &#8734;), (-&#8734;, 0) and (-&#8734;, b) via argument transformations.
       </p>
 <p>
-        Endpoint singularities and complex-valued integrands are supported by <code class="computeroutput"><span class="identifier">exp</span><span class="special">-</span><span class="identifier">sinh</span></code>.
+        Endpoint singularities and complex-valued integrands are supported by exp-sinh.
       </p>
 <p>
         For example, the modified Bessel function K can be represented via:
       </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><img src="../../../equations/complex_bessel_k_integral.svg"></span>
-
-        </p></blockquote></div>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/complex_bessel_k_integral.svg"></span>
+      </p>
 <p>
         Which we can code up as:
       </p>

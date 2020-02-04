@@ -175,12 +175,7 @@ void run_tests() {
     BOOST_TEST_EQ(hyx.at(1, 1), 1);
     BOOST_TEST_EQ(hyx.at(2, 1), 2);
 
-    // indices must be unique
     x = {0, 0};
-    BOOST_TEST_THROWS((void)project(h, x), std::invalid_argument);
-
-    // indices must be valid
-    x = {2, 1};
     BOOST_TEST_THROWS((void)project(h, x), std::invalid_argument);
   }
 }

@@ -7,9 +7,6 @@
 // Tools for operator on complex as well as scalar types.
 //
 
-#ifndef BOOST_MATH_TOOLS_COMPLEX_HPP
-#define BOOST_MATH_TOOLS_COMPLEX_HPP
-
 #include <boost/type_traits/is_complex.hpp>
 
 namespace boost {
@@ -58,5 +55,3 @@ namespace boost {
 
 
 } } }
-
-#endif // BOOST_MATH_TOOLS_COMPLEX_HPP

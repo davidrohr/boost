@@ -11,8 +11,6 @@ Evaluate an expression which results in a type matching the following customisat
 
 Default overloads for these customisation points are provided. See [the recipe for supporting foreign input to `BOOST_OUTCOME_TRY`]({{% relref "/recipes/foreign-try" %}}).
 
-Hints are given to the compiler that the expression will be successful. If you expect failure, you should use {{% api "BOOST_OUTCOME_TRY_FAILURE_LIKELY(var, expr)" %}} instead.
-
 *Overridable*: Not overridable.
 
 *Definition*: See {{% api "BOOST_OUTCOME_TRYV(expr)" %}} for most of the mechanics.

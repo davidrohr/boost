@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
-BOOST_OUTCOME_AUTO_TEST_CASE(issues_0059_test, "result<NonMovable> supported?")
+BOOST_OUTCOME_AUTO_TEST_CASE(issues_59, "result<NonMovable> supported?")
 {
 #if defined(_MSC_VER) || __cplusplus >= 201700
   using namespace BOOST_OUTCOME_V2_NAMESPACE;

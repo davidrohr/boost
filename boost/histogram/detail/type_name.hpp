@@ -9,6 +9,7 @@
 
 #include <boost/core/typeinfo.hpp>
 #include <boost/type.hpp>
+#include <sstream>
 #include <string>
 
 namespace boost {
@@ -16,28 +17,31 @@ namespace histogram {
 namespace detail {
 
 template <class T>
-std::string type_name_impl(boost::type<T>) {
-  return boost::core::demangled_name(BOOST_CORE_TYPEID(T));
+std::ostream& type_name_impl(std::ostream& os, boost::type<T>) {
+  os << boost::core::demangled_name(BOOST_CORE_TYPEID(T));
+  return os;
 }
 
 template <class T>
-std::string type_name_impl(boost::type<const T>) {
-  return type_name_impl(boost::type<T>{}) + " const";
+std::ostream& type_name_impl(std::ostream& os, boost::type<const T>) {
+  return type_name_impl(os, boost::type<T>{}) << " const";
 }
 
 template <class T>
-std::string type_name_impl(boost::type<T&>) {
-  return type_name_impl(boost::type<T>{}) + " &";
+std::ostream& type_name_impl(std::ostream& os, boost::type<T&>) {
+  return type_name_impl(os, boost::type<T>{}) << "&";
 }
 
 template <class T>
-std::string type_name_impl(boost::type<T&&>) {
-  return type_name_impl(boost::type<T>{}) + " &&";
+std::ostream& type_name_impl(std::ostream& os, boost::type<T&&>) {
+  return type_name_impl(os, boost::type<T>{}) << "&&";
 }
 
 template <class T>
 std::string type_name() {
-  return type_name_impl(boost::type<T>{});
+  std::ostringstream os;
+  type_name_impl(os, boost::type<T>{});
+  return os.str();
 }
 
 } // namespace detail

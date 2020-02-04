@@ -5,11 +5,13 @@
 
 #include <Eigen/Dense>
 
+
 int main()
 {
-#if EIGEN_VERSION_AT_LEAST(3, 3, 0)
+#if EIGEN_VERSION_AT_LEAST(3,3,0)
 #else
 #error "Obsolete Eigen"
 #endif
    return 0;
 }
+

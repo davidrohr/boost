@@ -1,13 +1,7 @@
 #!/bin/sh
 # must be executed in project root folder
-
-# Copyright Hans Dembinski 2018-2019
-# Distributed under the Boost Software License, Version 1.0.
-# See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt
-
 if [ -z $GCOV ]; then
-  # gcov-9, gcov-7, gcov-6 do not work
-  for i in 8 5; do
+  for i in 9 8 5; do
     if test $(which gcov-$i); then
       GCOV=gcov-$i
       break;
@@ -38,7 +32,7 @@ $LCOV --extract coverage.info "*/boost/histogram/*" --output-file coverage.info
 
 if [ $CI ] || [ $1 ]; then
   # upload if on CI or when token is passed as argument
-  which cpp-coveralls || echo "Error: you need to install cpp-coveralls"
+  which cpp-coveralls || pip install --user cpp-coveralls
   if [ $1 ]; then
     cpp-coveralls -l coverage.info -r ../.. -n -t $1
   else

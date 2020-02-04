@@ -360,10 +360,7 @@ doWrite(z_params& zs, boost::optional<Flush> flush, error_code& ec)
 {
     maybe_init();
 
-    if(zs.next_in == nullptr && zs.avail_in != 0)
-        BOOST_THROW_EXCEPTION(std::invalid_argument{"invalid input"});
-
-    if(zs.next_out == nullptr ||
+    if(zs.next_out == 0 || (zs.next_in == 0 && zs.avail_in != 0) ||
         (status_ == FINISH_STATE && flush != Flush::finish))
     {
         ec = error::stream_error;
@@ -399,7 +396,7 @@ doWrite(z_params& zs, boost::optional<Flush> flush, error_code& ec)
         }
     }
     else if(zs.avail_in == 0 && (
-            old_flush && flush <= *old_flush // Caution: depends on enum order
+            old_flush && flush <= *old_flush
         ) && flush != Flush::finish)
     {
         /* Make sure there is something to do and avoid duplicate consecutive
@@ -467,7 +464,7 @@ doWrite(z_params& zs, boost::optional<Flush> flush, error_code& ec)
             else if(flush != Flush::block)
             {
                 /* FULL_FLUSH or SYNC_FLUSH */
-                tr_stored_block(nullptr, 0L, 0);
+                tr_stored_block((char*)0, 0L, 0);
                 /* For a full flush, this empty block will be recognized
                  * as a special marker by inflate_sync().
                  */
@@ -1298,9 +1295,9 @@ copy_block(
         put_short((std::uint16_t)len);
         put_short((std::uint16_t)~len);
     }
-    if(buf)
-        std::memcpy(&pending_buf_[pending_], buf, len);
-    pending_ += len;
+    // VFALCO Use memcpy?
+    while (len--)
+        put_byte(*buf++);
 }
 
 //------------------------------------------------------------------------------

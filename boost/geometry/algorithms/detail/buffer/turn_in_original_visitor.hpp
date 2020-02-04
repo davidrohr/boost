@@ -150,11 +150,16 @@ inline bool point_in_section(Strategy& strategy, State& state,
 }
 
 
-template <typename Point, typename Original, typename PointInGeometryStrategy>
-inline int point_in_original(Point const& point, Original const& original,
-                             PointInGeometryStrategy const& strategy)
+template <typename Point, typename Original>
+inline int point_in_original(Point const& point, Original const& original)
 {
-    typename PointInGeometryStrategy::state_type state;
+    // The winding strategy is scanning in x direction
+    // therefore it's critical to pass direction calculated
+    // for x dimension below.
+    typedef strategy::within::winding<Point> strategy_type;
+
+    typename strategy_type::state_type state;
+    strategy_type strategy;
 
     if (boost::size(original.m_sections) == 0
         || boost::size(original.m_ring) - boost::size(original.m_sections) < 16)
@@ -202,13 +207,12 @@ inline int point_in_original(Point const& point, Original const& original,
 }
 
 
-template <typename Turns, typename PointInGeometryStrategy>
+template <typename Turns>
 class turn_in_original_visitor
 {
 public:
-    turn_in_original_visitor(Turns& turns, PointInGeometryStrategy const& strategy)
+    turn_in_original_visitor(Turns& turns)
         : m_mutable_turns(turns)
-        , m_point_in_geometry_strategy(strategy)
     {}
 
     template <typename Turn, typename Original>
@@ -228,7 +232,7 @@ public:
             return true;
         }
 
-        int const code = point_in_original(turn.robust_point, original, m_point_in_geometry_strategy);
+        int const code = point_in_original(turn.robust_point, original);
 
         if (code == -1)
         {
@@ -265,7 +269,6 @@ public:
 
 private :
     Turns& m_mutable_turns;
-    PointInGeometryStrategy const& m_point_in_geometry_strategy;
 };
 
 

@@ -10,6 +10,7 @@
 
 #include <boost/serialization/export.hpp>
 
+#define POLYMORPHIC_BASE_EXPORT
 #include "polymorphic_base.hpp"
 
 template<class Archive>

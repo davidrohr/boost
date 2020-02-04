@@ -14,10 +14,11 @@
 #include <tuple>
 #include <utility>
 #include <vector>
-#include "std_ostream.hpp"
 #include "throw_exception.hpp"
+#include "std_ostream.hpp"
 
 using namespace boost::histogram;
+using namespace boost::histogram::detail;
 
 int main() {
   // dynamic axis_get with tuples
@@ -129,48 +130,8 @@ int main() {
   // bincount overflow
   {
     auto v = std::vector<axis::integer<>>(
-        100, axis::integer<>(0, (std::numeric_limits<int>::max)() - 2));
+        100, axis::integer<>(0, std::numeric_limits<int>::max() - 2));
     BOOST_TEST_THROWS(detail::bincount(v), std::overflow_error);
-  }
-
-  // has_growing_axis
-  {
-    struct growing {
-      auto update(int) { return std::make_pair(0, 0); }
-    };
-    using T = growing;
-    using I = axis::integer<>;
-
-    using A = std::tuple<I, T>;
-    using B = std::vector<T>;
-    using C = std::vector<axis::variant<I, T>>;
-    using D = std::tuple<I>;
-    using E = std::vector<I>;
-    using F = std::vector<axis::variant<I>>;
-
-    BOOST_TEST_TRAIT_TRUE((detail::has_growing_axis<A>));
-    BOOST_TEST_TRAIT_TRUE((detail::has_growing_axis<B>));
-    BOOST_TEST_TRAIT_TRUE((detail::has_growing_axis<C>));
-    BOOST_TEST_TRAIT_FALSE((detail::has_growing_axis<D>));
-    BOOST_TEST_TRAIT_FALSE((detail::has_growing_axis<E>));
-    BOOST_TEST_TRAIT_FALSE((detail::has_growing_axis<F>));
-  }
-
-  // value_types
-  {
-    using R = axis::regular<float>;
-    using I = axis::integer<int>;
-    using CI = axis::category<int>;
-    using CS = axis::category<std::string>;
-    using A = std::vector<axis::variant<R, I, CS>>;
-    using B = std::vector<axis::variant<CS, I, CI, R>>;
-    using C = std::tuple<I, R, CS>;
-    using D = std::tuple<CS, I, CI, R>;
-    using Expected = boost::mp11::mp_list<int, float, std::string>;
-    BOOST_TEST_TRAIT_SAME(detail::value_types<A>, Expected);
-    BOOST_TEST_TRAIT_SAME(detail::value_types<B>, Expected);
-    BOOST_TEST_TRAIT_SAME(detail::value_types<C>, Expected);
-    BOOST_TEST_TRAIT_SAME(detail::value_types<D>, Expected);
   }
 
   return boost::report_errors();

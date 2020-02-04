@@ -81,7 +81,7 @@ namespace
 {
   struct ConversionErrorCategory : std::error_category
   {
-    const char* name() const noexcept override { return "bad-convert"; }
+    const char* name() const noexcept override { return "bad-convet"; }
     std::string message(int ev) const override;
   };
 

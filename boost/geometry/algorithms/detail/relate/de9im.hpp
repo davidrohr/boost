@@ -2,8 +2,8 @@
 
 // Copyright (c) 2007-2015 Barend Gehrels, Amsterdam, the Netherlands.
 
-// This file was modified by Oracle on 2013, 2014, 2015, 2019.
-// Modifications copyright (c) 2013-2019 Oracle and/or its affiliates.
+// This file was modified by Oracle on 2013, 2014, 2015.
+// Modifications copyright (c) 2013-2015 Oracle and/or its affiliates.
 
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 
@@ -22,6 +22,7 @@
 #include <boost/tuple/tuple.hpp>
 
 #include <boost/geometry/algorithms/detail/relate/result.hpp>
+#include <boost/geometry/algorithms/not_implemented.hpp>
 #include <boost/geometry/core/topological_dimension.hpp>
 #include <boost/geometry/core/tag.hpp>
 
@@ -317,9 +318,9 @@ struct static_mask_touches_impl
 // Using the above mask the result would be always false
 template <typename Geometry1, typename Geometry2>
 struct static_mask_touches_impl<Geometry1, Geometry2, 0, 0>
-{
-    typedef geometry::detail::relate::false_mask type;
-};
+    : not_implemented<typename geometry::tag<Geometry1>::type,
+                      typename geometry::tag<Geometry2>::type>
+{};
 
 template <typename Geometry1, typename Geometry2>
 struct static_mask_touches_type
@@ -376,9 +377,12 @@ template
     typename Geometry1, typename Geometry2, std::size_t Dim
 >
 struct static_mask_crosses_impl<Geometry1, Geometry2, Dim, Dim, false>
-{
-    typedef geometry::detail::relate::false_mask type;
-};
+    : not_implemented
+        <
+            typename geometry::tag<Geometry1>::type,
+            typename geometry::tag<Geometry2>::type
+        >
+{};
 // dim(G1) == 1 && dim(G2) == 1 - L/L
 template <typename Geometry1, typename Geometry2>
 struct static_mask_crosses_impl<Geometry1, Geometry2, 1, 1, false>
@@ -402,9 +406,12 @@ template
     std::size_t Dim2 = geometry::topological_dimension<Geometry2>::value
 >
 struct static_mask_overlaps_impl
-{
-    typedef geometry::detail::relate::false_mask type;
-};
+    : not_implemented
+        <
+            typename geometry::tag<Geometry1>::type,
+            typename geometry::tag<Geometry2>::type
+        >
+{};
 // dim(G1) == D && dim(G2) == D - P/P A/A
 template <typename Geometry1, typename Geometry2, std::size_t Dim>
 struct static_mask_overlaps_impl<Geometry1, Geometry2, Dim, Dim>

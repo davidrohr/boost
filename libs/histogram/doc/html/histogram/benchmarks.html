@@ -46,8 +46,7 @@
       with Apple LLVM (clang-1001.0.46.4) and the flags <code class="computeroutput"><span class="special">-</span><span class="identifier">DNDEBUG</span> <span class="special">-</span><span class="identifier">O3</span> <span class="special">-</span><span class="identifier">funsafe</span><span class="special">-</span><span class="identifier">math</span><span class="special">-</span><span class="identifier">optimizations</span></code>. Adding <code class="computeroutput"><span class="special">-</span><span class="identifier">fno</span><span class="special">-</span><span class="identifier">exceptions</span>
       <span class="special">-</span><span class="identifier">fno</span><span class="special">-</span><span class="identifier">rtti</span></code> would
       increase the Boost.Histogram performance by another (10-20) %, but this is
-      not done here out of fairness, since the ROOT histograms do not compile with
-      these options.
+      not done here since the ROOT histograms do not compile with these options.
     </p>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -55,15 +54,11 @@
 </h3></div></div></div>
 <p>
         The fill performance of different configurations of Boost.Histogram are compared
-        with histogram classes and functions from other libraries. Random numbers
-        from a uniform and a normal distribution are filled into histograms with
-        1, 2, 3, and 6 axes. 100 bins per axis are used for 1, 2, 3 axes. 10 bins
-        per axis for the case with 6 axes. The histogram can be filled with the call
-        operator <code class="computeroutput"><span class="keyword">operator</span><span class="special">()</span></code>
-        or the more efficient <code class="computeroutput"><span class="identifier">fill</span></code>-method.
-        Results are shown for both. The GSL offers only 1D and 2D histograms, so
-        there are no entries for the higher dimensional benchmarks. Raw timing results
-        are converted to average number of CPU cycles used per input value.
+        with histogram classes and functions from other libraries. 6 million random
+        numbers from a uniform and a normal distribution are filled into histograms
+        with 1, 2, 3, and 6 axes. 100 bins per axis are used for 1, 2, 3 axes. 10
+        bins per axis for the case with 6 axes. Shown is the average computing time
+        per number in nanoseconds.
       </p>
 <p>
         There is one bar for each benchmark, and the upper end has a hatched part.
@@ -75,18 +70,18 @@
         inside the axis range.
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../fill_performance.svg" width="630" height="720"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../fill_performance.svg" width="576" height="432"></object></span>
       </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
 <dl class="variablelist">
-<dt><span class="term">ROOT 6</span></dt>
+<dt><span class="term">root</span></dt>
 <dd><p>
               <a href="https://root.cern.ch" target="_top">ROOT classes</a> (<code class="computeroutput"><span class="identifier">TH1I</span></code> for 1D, <code class="computeroutput"><span class="identifier">TH2I</span></code>
               for 2D, <code class="computeroutput"><span class="identifier">TH3I</span></code> for 3D
               and <code class="computeroutput"><span class="identifier">THnI</span></code> for 6D)
             </p></dd>
-<dt><span class="term">GSL</span></dt>
+<dt><span class="term">gsl</span></dt>
 <dd><p>
               <a href="https://www.gnu.org/software/gsl/doc/html/histogram.html" target="_top">GSL
               histograms</a> for 1D and 2D
@@ -110,23 +105,16 @@
 </dl>
 </div>
 <p>
-        Boost.Histogram is faster than other libraries. Simultaneously, it is much
-        more flexible, since the axis and storage types can be customized.
+        Boost.Histogram is mostly faster than the competition. Simultaneously, it
+        is much more flexible, since the axis and storage types can be customized.
       </p>
 <p>
-        When <code class="computeroutput"><span class="keyword">operator</span><span class="special">()</span></code>
-        is used, a histogram with compile-time configured axes is always faster than
-        one with run-time configured axes. The <code class="computeroutput"><a class="link" href="../boost/histogram/unlimited_storage.html" title="Class template unlimited_storage">boost::histogram::unlimited_storage</a></code>
+        A histogram with compile-time configured axes is always faster than one with
+        run-time configured axes. <code class="computeroutput"><a class="link" href="../boost/histogram/unlimited_storage.html" title="Class template unlimited_storage">boost::histogram::unlimited_storage</a></code>
         is faster than a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span></code> for
         histograms with many bins, because it uses the cache more effectively due
         to its smaller memory consumption per bin. If the number of bins is small,
-        it is slower because of the overhead of handling memory dynamically. If the
-        <code class="computeroutput"><span class="identifier">fill</span></code> method is used, histograms
-        with run-time configured axes are as fast for 2D histograms and higher. In
-        this case, using <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span></code> for
-        storage is faster in all benchmarks that were carried out, although the performance
-        gap to <code class="computeroutput"><a class="link" href="../boost/histogram/unlimited_storage.html" title="Class template unlimited_storage">boost::histogram::unlimited_storage</a></code>
-        shrinks for higher dimensions.
+        it is slower because of the overhead of handling memory dynamically.
       </p>
 </div>
 <div class="section">

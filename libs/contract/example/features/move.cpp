@@ -22,7 +22,7 @@ public:
     }
     
     // Move constructor.
-    circular_buffer(circular_buffer&& other) :
+    /* implicit */ circular_buffer(circular_buffer&& other) :
         boost::contract::constructor_precondition<circular_buffer>([&] {
             BOOST_CONTRACT_ASSERT(!other.moved());
         })
@@ -87,7 +87,7 @@ public:
     }
 
     // Copy constructor.
-    circular_buffer(circular_buffer const& other) :
+    /* implicit */ circular_buffer(circular_buffer const& other) :
         boost::contract::constructor_precondition<circular_buffer>([&] {
             BOOST_CONTRACT_ASSERT(!other.moved());
         })

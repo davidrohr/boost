@@ -12,7 +12,6 @@
 #ifndef BOOST_ALGORITHM_FIND_IF_NOT_HPP
 #define BOOST_ALGORITHM_FIND_IF_NOT_HPP
 
-#include <boost/config.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 

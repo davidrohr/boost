@@ -13,6 +13,9 @@
 #include <array>
 #endif
 
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
+
 #ifndef BOOST_NO_CXX11_CONSTEXPR
 constexpr boost::array<int, 10> arr  {{ 0,1,2,3,4,5,6,7,8,9 }};
 constexpr std::array<int, 10> arr_std {{ 0,1,2,3,4,5,6,7,8,9 }};
@@ -23,7 +26,7 @@ void sink ( T t ) {}
 template <typename T, size_t N>
 void sink ( boost::array<T,N> &arr ) {}
 
-int main()
+BOOST_AUTO_TEST_CASE( test_main )
 {
 //    constexpr int two = arr_std.at (2);
     constexpr int three = arr.at (3);
@@ -33,7 +36,7 @@ int main()
 }
 
 #else   // no constexpr means no constexpr tests!
-int main()
+BOOST_AUTO_TEST_CASE( test_main )
 {
 }
 #endif

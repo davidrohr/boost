@@ -9,8 +9,6 @@
 #include <vector>
 #include <iterator>
 
-// Contains Quickbook snippets in comments.
-
 //[IE2
 
 /*`
@@ -42,7 +40,7 @@ int main()
    import_bits(i, v.begin(), v.end());
    cpp_bin_float_100 g(i);
    g.backend().exponent() = e;
-   BOOST_ASSERT(f == g);
+   assert(f == g);
 }
 
 //]

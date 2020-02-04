@@ -8,7 +8,6 @@
 #define BOOST_HISTOGRAM_DETAIL_STATIC_IF_HPP
 
 #include <type_traits>
-#include <utility>
 
 namespace boost {
 namespace histogram {

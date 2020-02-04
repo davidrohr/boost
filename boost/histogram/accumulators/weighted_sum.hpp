@@ -7,8 +7,7 @@
 #ifndef BOOST_HISTOGRAM_ACCUMULATORS_WEIGHTED_SUM_HPP
 #define BOOST_HISTOGRAM_ACCUMULATORS_WEIGHTED_SUM_HPP
 
-#include <boost/core/nvp.hpp>
-#include <boost/histogram/fwd.hpp> // for weighted_sum<>
+#include <boost/histogram/fwd.hpp>
 #include <type_traits>
 
 namespace boost {
@@ -79,10 +78,7 @@ public:
   }
 
   template <class Archive>
-  void serialize(Archive& ar, unsigned /* version */) {
-    ar& make_nvp("sum_of_weights", sum_of_weights_);
-    ar& make_nvp("sum_of_weights_squared", sum_of_weights_squared_);
-  }
+  void serialize(Archive&, unsigned /* version */);
 
 private:
   RealType sum_of_weights_ = RealType();

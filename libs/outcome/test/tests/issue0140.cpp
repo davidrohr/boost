@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_monitor.hpp>
 
-BOOST_OUTCOME_AUTO_TEST_CASE(issues_0140_result, "Construction of non copy constructible value_type fails to not compile")
+BOOST_OUTCOME_AUTO_TEST_CASE(issues_140_result, "Construction of non copy constructible value_type fails to not compile")
 {
   namespace out = BOOST_OUTCOME_V2_NAMESPACE;
 

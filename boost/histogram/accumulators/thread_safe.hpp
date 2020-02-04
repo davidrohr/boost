@@ -8,7 +8,6 @@
 #define BOOST_HISTOGRAM_ACCUMULATORS_THREAD_SAFE_HPP
 
 #include <atomic>
-#include <boost/core/nvp.hpp>
 #include <boost/mp11/utility.hpp>
 #include <type_traits>
 
@@ -31,7 +30,6 @@ namespace accumulators {
 template <class T>
 class thread_safe : public std::atomic<T> {
 public:
-  using value_type = T;
   using super_t = std::atomic<T>;
 
   thread_safe() noexcept : super_t(static_cast<T>(0)) {}
@@ -42,31 +40,14 @@ public:
     return *this;
   }
 
-  thread_safe(value_type arg) : super_t(arg) {}
-  thread_safe& operator=(value_type arg) {
+  thread_safe(T arg) : super_t(arg) {}
+  thread_safe& operator=(T arg) {
     super_t::store(arg);
     return *this;
   }
 
-  thread_safe& operator+=(const thread_safe& arg) {
-    operator+=(arg.load());
-    return *this;
-  }
-  thread_safe& operator+=(value_type arg) {
-    super_t::fetch_add(arg, std::memory_order_relaxed);
-    return *this;
-  }
-  thread_safe& operator++() {
-    operator+=(static_cast<value_type>(1));
-    return *this;
-  }
-
-  template <class Archive>
-  void serialize(Archive& ar, unsigned /* version */) {
-    auto value = super_t::load();
-    ar& make_nvp("value", value);
-    super_t::store(value);
-  }
+  void operator+=(T arg) { super_t::fetch_add(arg, std::memory_order_relaxed); }
+  void operator++() { operator+=(static_cast<T>(1)); }
 };
 
 } // namespace accumulators

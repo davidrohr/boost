@@ -51,9 +51,9 @@ put(ConstBufferSequence const& buffers,
     }
     // flatten
     net::buffer_copy(net::buffer(
-        buf_.get(), size), buffers);
+        buf_.get(), buf_len_), buffers);
     return put(net::const_buffer{
-        buf_.get(), size}, ec);
+        buf_.get(), buf_len_}, ec);
 }
 
 template<bool isRequest>

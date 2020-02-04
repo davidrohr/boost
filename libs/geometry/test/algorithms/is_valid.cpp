@@ -19,7 +19,6 @@
 #include <boost/test/included/unit_test.hpp>
 
 #include "test_is_valid.hpp"
-#include "overlay/overlay_cases.hpp"
 
 #include <boost/geometry/core/coordinate_type.hpp>
 
@@ -785,7 +784,6 @@ inline void test_open_polygons()
          false);
 }
 
-
 template <typename Point>
 inline void test_doc_example_polygon()
 {
@@ -796,16 +794,13 @@ inline void test_doc_example_polygon()
     std::cout << "************************************" << std::endl;
 #endif
 
-    typedef bg::model::polygon<Point> ClockwiseClosedPolygon;
+    typedef bg::model::polygon<Point> CCW_CG;
     typedef validity_tester_areal<true> tester;
-    typedef test_valid<tester, ClockwiseClosedPolygon> test;
+    typedef test_valid<tester, CCW_CG> test;
 
     test::apply("pg-doc",
                 "POLYGON((0 0,0 10,10 10,10 0,0 0),(0 0,9 1,9 2,0 0),(0 0,2 9,1 9,0 0),(2 9,9 2,9 9,2 9))",
                 false);
-
-    // Containing a self touching point, which should be valid
-    test::apply("ggl_list_20190307_matthieu_2", ggl_list_20190307_matthieu_2[1], true);
 }
 
 BOOST_AUTO_TEST_CASE( test_is_valid_polygon )

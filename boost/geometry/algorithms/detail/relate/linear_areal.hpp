@@ -263,7 +263,6 @@ struct linear_areal
         typedef typename IntersectionStrategy::template point_in_geometry_strategy<Geometry1, Geometry2>::type within_strategy_type;
         within_strategy_type const within_strategy = intersection_strategy.template get_point_in_geometry_strategy<Geometry1, Geometry2>();
 
-        typedef typename IntersectionStrategy::cs_tag cs_tag;
         typedef typename within_strategy_type::equals_point_point_strategy_type eq_pp_strategy_type;
         
         typedef boundary_checker
@@ -303,7 +302,7 @@ struct linear_areal
             return;
 
         {
-            sort_dispatch<cs_tag>(turns.begin(), turns.end(), is_multi<Geometry2>());
+            sort_dispatch(turns.begin(), turns.end(), is_multi<Geometry2>());
 
             turns_analyser<turn_type> analyser;
             analyse_each_turn(result, analyser,
@@ -400,7 +399,7 @@ struct linear_areal
                 else
                 {
                     // u, c
-                    typedef turns::less<1, turns::less_op_areal_linear<1>, cs_tag> less;
+                    typedef turns::less<1, turns::less_op_areal_linear<1> > less;
                     std::sort(it, next, less());
 
                     eq_pp_strategy_type const eq_pp_strategy = within_strategy.get_equals_point_point_strategy();
@@ -530,11 +529,11 @@ struct linear_areal
         }
     };
 
-    template <typename CSTag, typename TurnIt>
+    template <typename TurnIt>
     static void sort_dispatch(TurnIt first, TurnIt last, boost::true_type const& /*is_multi*/)
     {
         // sort turns by Linear seg_id, then by fraction, then by other multi_index
-        typedef turns::less<0, turns::less_other_multi_index<0>, CSTag> less;
+        typedef turns::less<0, turns::less_other_multi_index<0> > less;
         std::sort(first, last, less());
 
         // For the same IP and multi_index - the same other's single geometry
@@ -548,19 +547,19 @@ struct linear_areal
         // When priorities for single geometries are set now sort turns for the same IP
         // if multi_index is the same sort them according to the single-less
         // else use priority of the whole single-geometry set earlier
-        typedef turns::less<0, turns::less_op_linear_areal_single<0>, CSTag> single_less;
+        typedef turns::less<0, turns::less_op_linear_areal_single<0> > single_less;
         for_each_equal_range(first, last,
                              sort_turns_group<single_less>(),
                              same_ip());
     }
 
-    template <typename CSTag, typename TurnIt>
+    template <typename TurnIt>
     static void sort_dispatch(TurnIt first, TurnIt last, boost::false_type const& /*is_multi*/)
     {
         // sort turns by Linear seg_id, then by fraction, then
         // for same ring id: x, u, i, c
         // for different ring id: c, i, u, x
-        typedef turns::less<0, turns::less_op_linear_areal_single<0>, CSTag> less;
+        typedef turns::less<0, turns::less_op_linear_areal_single<0> > less;
         std::sort(first, last, less());
     }
     

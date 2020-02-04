@@ -10,15 +10,6 @@
 
 #include <boost/gil/io/base.hpp>
 
-// Historically, LibRaw expects WIN32, not _WIN32 (see https://github.com/LibRaw/LibRaw/pull/206)
-#ifdef _MSC_VER
-#ifndef WIN32
-#define WIN32
-#endif
-#pragma warning(push)
-#pragma warning(disable:4251) // 'type' needs to have dll-interface to be used by clients of class
-#endif
-
 #include <libraw/libraw.h>
 
 namespace boost { namespace gil {
@@ -199,10 +190,7 @@ struct image_write_info< raw_tag >
 {
 };
 
-}} // namespace boost::gil
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+} // namespace gil
+} // namespace boost
 
 #endif

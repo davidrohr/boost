@@ -135,7 +135,7 @@ test_skeleton_and_content(const communicator& comm, int root = 0)
   (comm.barrier)();
 }
 
-BOOST_AUTO_TEST_CASE(broadcast_check)
+BOOST_AUTO_TEST_CASE(broadcast)
 {
   boost::mpi::environment env;
   communicator comm;

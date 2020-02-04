@@ -9,7 +9,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ostream>
-#include <boost/predef/other/endian.h>
+#include <boost/detail/endian.hpp>
 #include "portable_binary_oarchive.hpp"
 
 void 
@@ -45,7 +45,7 @@ portable_binary_oarchive::save_impl(
     else
         ll = l;
     char * cptr = reinterpret_cast<char *>(& ll);
-    #if BOOST_ENDIAN_BIG_BYTE
+    #ifdef BOOST_BIG_ENDIAN
         cptr += (sizeof(boost::intmax_t) - size);
         if(m_flags & endian_little)
             reverse_bytes(size, cptr);

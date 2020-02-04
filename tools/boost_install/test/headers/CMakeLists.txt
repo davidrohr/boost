@@ -4,21 +4,11 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-if(POLICY CMP0074)
-  cmake_policy(SET CMP0074 NEW)
-endif()
-
 project(CmakeConfigHeadersTest LANGUAGES CXX)
 
 include(${CMAKE_CURRENT_LIST_DIR}/../BoostVersion.cmake)
 
-set(BOOST_HINTS)
-
-if(USE_STAGED_BOOST)
-  set(BOOST_HINTS HINTS ../../../../stage)
-endif()
-
-find_package(Boost ${BOOST_VERSION} EXACT REQUIRED ${BOOST_HINTS})
+find_package(Boost ${BOOST_VERSION} EXACT REQUIRED)
 
 # Using `include_directories` is bad practice, done here for
 # testing purposes. The right, "modern CMake", thing to do is

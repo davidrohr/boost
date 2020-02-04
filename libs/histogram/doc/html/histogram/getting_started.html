@@ -337,8 +337,8 @@
 </h3></div></div></div>
 <p>
         The library was designed to work well with the C++ standard library. Here
-        is an example on how to get the most common color from an image, using a
-        3d histogram and <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">max_element</span></code>.
+        is an example on how to get the maximum highest count in a 3d histogram with
+        <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">max_element</span></code>.
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span>           <span class="comment">// std::max_element</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">format</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>    <span class="comment">// only needed for printing</span>
@@ -352,8 +352,7 @@
 
   <span class="comment">/*
     We make a 3d histogram for color values (r, g, b) in an image. We assume the values
-    are of type char. The value range then is [0, 256). The integer axis is perfect for
-    color values.
+    are of type char. The value range then is [0, 256).
   */</span>
   <span class="keyword">auto</span> <span class="identifier">h</span> <span class="special">=</span> <span class="identifier">make_histogram</span><span class="special">(</span>
     <span class="identifier">axis</span><span class="special">::</span><span class="identifier">integer</span><span class="special">&lt;&gt;(</span><span class="number">0</span><span class="special">,</span> <span class="number">256</span><span class="special">,</span> <span class="string">"r"</span><span class="special">),</span>
@@ -369,16 +368,16 @@
   <span class="identifier">h</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="number">0</span><span class="special">);</span>
 
   <span class="comment">/*
-    Now let's say we want to know which color is most common. We can use std::max_element
-    on an indexed range for that.
+    Now let's say we want to know which color is most common. We can use std::max_element on an
+    indexed range for that.
   */</span>
   <span class="keyword">auto</span> <span class="identifier">ind</span> <span class="special">=</span> <span class="identifier">indexed</span><span class="special">(</span><span class="identifier">h</span><span class="special">);</span>
   <span class="keyword">auto</span> <span class="identifier">max_it</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">max_element</span><span class="special">(</span><span class="identifier">ind</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">ind</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
 
   <span class="comment">/*
-    max_it is a special iterator to the histogram cell with the highest count.
-    This iterator allows one to access the cell value, bin indices, and bin values.
-    You need to twice dereference it to get to the cell value.
+    max_it is the iterator to the maximum counter. This is the special iterator from indexed_range,
+    you can use it to access the cell index as well and the bin values. You need to
+    double-dereference it to get to the cell count.
   */</span>
   <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostringstream</span> <span class="identifier">os</span><span class="special">;</span>
   <span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="string">"count=%i rgb=(%i, %i, %i)"</span><span class="special">)</span>

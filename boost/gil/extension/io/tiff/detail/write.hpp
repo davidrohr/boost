@@ -19,7 +19,6 @@
 
 #include <algorithm>
 #include <string>
-#include <type_traits>
 #include <vector>
 
 extern "C" {
@@ -40,8 +39,7 @@ template <typename PixelReference>
 struct my_interleaved_pixel_iterator_type_from_pixel_reference
 {
 private:
-    using pixel_t = typename std::remove_reference<PixelReference>::type::value_type;
-
+    using pixel_t = typename remove_reference<PixelReference>::type::value_type;
 public:
     using type = typename iterator_type_from_pixel
         <
@@ -164,7 +162,7 @@ private:
 	template<typename View>
 	void write_bit_aligned_view_to_dev( const View&       view
                                       , const std::size_t row_size_in_bytes
-                                      , const std::true_type&    // has_alpha
+                                      , const mpl::true_&    // has_alpha
                                       )
     {
         byte_vector_t row( row_size_in_bytes );
@@ -194,7 +192,7 @@ private:
 	template<typename View>
 	void write_bit_aligned_view_to_dev( const View&       view
                                       , const std::size_t row_size_in_bytes
-                                      , const std::false_type&    // has_alpha
+                                      , const mpl::false_&    // has_alpha
                                       )
     {
         byte_vector_t row( row_size_in_bytes );
@@ -224,11 +222,11 @@ private:
     template< typename View >
     void write_data( const View&   view
                    , std::size_t   row_size_in_bytes
-                   , const std::true_type&    // bit_aligned
+                   , const mpl::true_&    // bit_aligned
                    )
     {
         using colour_space_t = typename color_space_type<typename View::value_type>::type;
-        using has_alpha_t = mp11::mp_contains<colour_space_t, alpha_t>;
+        using has_alpha_t = mpl::bool_<mpl::contains<colour_space_t, alpha_t>::value>;
 
         write_bit_aligned_view_to_dev(view, row_size_in_bytes, has_alpha_t());
     }
@@ -237,7 +235,7 @@ private:
     void write_tiled_data( const View&            view
                          , tiff_tile_width::type  tw
                          , tiff_tile_length::type th
-                         , const std::true_type&    // bit_aligned
+                         , const mpl::true_&    // bit_aligned
                          )
     {
         byte_vector_t row( this->_io_dev.get_tile_size() );
@@ -251,7 +249,7 @@ private:
     template< typename View >
     void write_data( const View&   view
                    , std::size_t
-                   , const std::false_type&    // bit_aligned
+                   , const mpl::false_&    // bit_aligned
                    )
     {
         std::vector< pixel< typename channel_type< View >::type
@@ -285,7 +283,7 @@ private:
     void write_tiled_data( const View&            view
                          , tiff_tile_width::type  tw
                          , tiff_tile_length::type th
-                         , const std::false_type&    // bit_aligned
+                         , const mpl::false_&    // bit_aligned
                          )
     {
         byte_vector_t row( this->_io_dev.get_tile_size() );
@@ -304,7 +302,7 @@ private:
             >
 	void write_tiled_view_to_dev( const View&  view
                                 , IteratorType it
-                                , const std::true_type& // has_alpha
+                                , const mpl::true_& // has_alpha
                                 )
     {
         auto pm_view = premultiply_view <typename View:: value_type>( view );
@@ -321,7 +319,7 @@ private:
             >
 	void write_tiled_view_to_dev( const View&  view
                                 , IteratorType it
-                                , const std::false_type& // has_alpha
+                                , const mpl::false_& // has_alpha
                                 )
     {
         std::copy( view.begin()
@@ -361,7 +359,7 @@ private:
                                                       );
 
                     using colour_space_t = typename color_space_type<typename View::value_type>::type;
-                    using has_alpha_t = mp11::mp_contains<colour_space_t, alpha_t>;
+                    using has_alpha_t = mpl::bool_<mpl::contains<colour_space_t, alpha_t>::value>;
 
                     write_tiled_view_to_dev(tile_subimage_view, it, has_alpha_t());
                 }

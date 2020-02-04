@@ -24,11 +24,11 @@ main()
     std::cin >> m;
     month = greg_month(m);
   }
-  catch(const bad_year& by) {
+  catch(bad_year by) {
     std::cout << "Invalid Year Entered: " << by.what() << '\n'
       << "Using minimum values for month and year." << std::endl;
   }
-  catch(const bad_month& bm) {
+  catch(bad_month bm) {
     std::cout << "Invalid Month Entered" << bm.what() << '\n'
       << "Using minimum value for month. " << std::endl;
   }

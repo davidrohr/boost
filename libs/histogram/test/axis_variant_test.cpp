@@ -11,22 +11,21 @@
 #include <boost/histogram/axis/ostream.hpp>
 #include <boost/histogram/axis/regular.hpp>
 #include <boost/histogram/axis/variant.hpp>
+#include <boost/histogram/detail/cat.hpp>
 #include <boost/histogram/detail/type_name.hpp>
+#include <sstream>
 #include <string>
 #include <type_traits>
 #include <vector>
 #include "throw_exception.hpp"
 #include "utility_allocator.hpp"
 #include "utility_axis.hpp"
-#include "utility_str.hpp"
+
+using namespace boost::histogram;
+namespace tr = axis::transform;
 
 int main() {
-  using namespace boost::histogram;
-  namespace tr = axis::transform;
-
-  {
-    (void)axis::variant<>{};
-  }
+  { (void)axis::variant<>{}; }
 
   {
     using meta_type = std::vector<int>;
@@ -125,15 +124,17 @@ int main() {
     auto test = [](auto&& a, const char* ref) {
       using T = std::decay_t<decltype(a)>;
       axis::variant<T> axis(std::move(a));
-      BOOST_TEST_CSTR_EQ(str(axis).c_str(), ref);
+      std::ostringstream os;
+      os << axis;
+      BOOST_TEST_EQ(os.str(), std::string(ref));
     };
 
     test(axis::regular<>(2, -1, 1, "regular1"),
          "regular(2, -1, 1, metadata=\"regular1\", options=underflow | overflow)");
 
     struct user_defined {};
-    const auto ref = "integer(-1, 1, metadata=" + detail::type_name<user_defined>() +
-                     ", options=none)";
+    const auto ref = detail::cat(
+        "integer(-1, 1, metadata=", detail::type_name<user_defined>(), ", options=none)");
     test(axis::integer<int, user_defined, axis::option::none_t>(-1, 1), ref.c_str());
   }
 
@@ -142,7 +143,9 @@ int main() {
     auto test = [](auto&& a, const char* ref) {
       using T = std::decay_t<decltype(a)>;
       axis::variant<T> axis(std::move(a));
-      BOOST_TEST_CSTR_EQ(str(axis.bin(0)).c_str(), ref);
+      std::ostringstream os;
+      os << axis.bin(0);
+      BOOST_TEST_EQ(os.str(), std::string(ref));
     };
 
     test(axis::regular<>(2, 1, 2), "[1, 1.5)");
@@ -191,7 +194,7 @@ int main() {
     BOOST_TEST_EQ(axis.index(9), 1);
     BOOST_TEST_EQ(axis.size(), 2);
     BOOST_TEST_EQ(axis.metadata(), axis::null_type{});
-    BOOST_TEST_CSTR_EQ(str(axis).c_str(), "<unstreamable>");
+    BOOST_TEST_THROWS(std::ostringstream() << axis, std::runtime_error);
     BOOST_TEST_THROWS(axis.value(0), std::runtime_error);
 
     axis = axis::category<std::string>({"A", "B"}, "category");

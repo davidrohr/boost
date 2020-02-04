@@ -458,7 +458,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#changelog">Revision History</a>
 <ul class="sectlevel2">
-<li><a href="#overview_changes_in_1_72_0">Changes in 1.72.0</a></li>
 <li><a href="#overview_changes_in_1_71_0">Changes in 1.71.0</a></li>
 </ul>
 </li>
@@ -1217,32 +1216,6 @@ anyone has been missed.</p>
 <h2 id="changelog">Revision History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="overview_changes_in_1_72_0">Changes in 1.72.0</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Made <code>endian_reverse</code>, <code>conditional_reverse</code> and <code>*_to_*</code> <code>constexpr</code>
-on GCC and Clang</p>
-</li>
-<li>
-<p>Added convenience load and store functions</p>
-</li>
-<li>
-<p>Added floating point convenience typedefs</p>
-</li>
-<li>
-<p>Added a non-const overload of <code>data()</code>; changed its return type to <code>unsigned char*</code></p>
-</li>
-<li>
-<p>Added <code>__int128</code> support to <code>endian_reverse</code> when available</p>
-</li>
-<li>
-<p>Added a convenience header <code>boost/endian.hpp</code></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
 <h3 id="overview_changes_in_1_71_0">Changes in 1.71.0</h3>
 <div class="ulist">
 <ul>
@@ -1332,8 +1305,6 @@ namespace endian
     little = <code>see below</code>,
   };
 
-  // Byte reversal functions
-
   template &lt;class Endian&gt;
     Endian endian_reverse(Endian x) noexcept;
 
@@ -1351,8 +1322,6 @@ namespace endian
   template &lt;class EndianReversible&gt;
     EndianReversible conditional_reverse(EndianReversible x,
       order order1, order order2) noexcept;
-
-  // In-place byte reversal functions
 
   template &lt;class EndianReversible&gt;
     void endian_reverse_inplace(EndianReversible&amp; x) noexcept;
@@ -1372,87 +1341,11 @@ namespace endian
    void conditional_reverse_inplace(EndianReversibleInplace&amp; x,
      order order1, order order2) noexcept;
 
-  // Generic load and store functions
-
   template&lt;class T, std::size_t N, order Order&gt;
     T endian_load( unsigned char const * p ) noexcept;
 
   template&lt;class T, std::size_t N, order Order&gt;
     void endian_store( unsigned char * p, T const &amp; v ) noexcept;
-
-  // Convenience load functions
-
-  boost::int16_t load_little_s16( unsigned char const * p ) noexcept;
-  boost::uint16_t load_little_u16( unsigned char const * p ) noexcept;
-  boost::int16_t load_big_s16( unsigned char const * p ) noexcept;
-  boost::uint16_t load_big_u16( unsigned char const * p ) noexcept;
-
-  boost::int32_t load_little_s24( unsigned char const * p ) noexcept;
-  boost::uint32_t load_little_u24( unsigned char const * p ) noexcept;
-  boost::int32_t load_big_s24( unsigned char const * p ) noexcept;
-  boost::uint32_t load_big_u24( unsigned char const * p ) noexcept;
-
-  boost::int32_t load_little_s32( unsigned char const * p ) noexcept;
-  boost::uint32_t load_little_u32( unsigned char const * p ) noexcept;
-  boost::int32_t load_big_s32( unsigned char const * p ) noexcept;
-  boost::uint32_t load_big_u32( unsigned char const * p ) noexcept;
-
-  boost::int64_t load_little_s40( unsigned char const * p ) noexcept;
-  boost::uint64_t load_little_u40( unsigned char const * p ) noexcept;
-  boost::int64_t load_big_s40( unsigned char const * p ) noexcept;
-  boost::uint64_t load_big_u40( unsigned char const * p ) noexcept;
-
-  boost::int64_t load_little_s48( unsigned char const * p ) noexcept;
-  boost::uint64_t load_little_u48( unsigned char const * p ) noexcept;
-  boost::int64_t load_big_s48( unsigned char const * p ) noexcept;
-  boost::uint64_t load_big_u48( unsigned char const * p ) noexcept;
-
-  boost::int64_t load_little_s56( unsigned char const * p ) noexcept;
-  boost::uint64_t load_little_u56( unsigned char const * p ) noexcept;
-  boost::int64_t load_big_s56( unsigned char const * p ) noexcept;
-  boost::uint64_t load_big_u56( unsigned char const * p ) noexcept;
-
-  boost::int64_t load_little_s64( unsigned char const * p ) noexcept;
-  boost::uint64_t load_little_u64( unsigned char const * p ) noexcept;
-  boost::int64_t load_big_s64( unsigned char const * p ) noexcept;
-  boost::uint64_t load_big_u64( unsigned char const * p ) noexcept;
-
-  // Convenience store functions
-
-  void store_little_s16( unsigned char * p, boost::int16_t v ) noexcept;
-  void store_little_u16( unsigned char * p, boost::uint16_t v ) noexcept;
-  void store_big_s16( unsigned char * p, boost::int16_t v ) noexcept;
-  void store_big_u16( unsigned char * p, boost::uint16_t v ) noexcept;
-
-  void store_little_s24( unsigned char * p, boost::int32_t v ) noexcept;
-  void store_little_u24( unsigned char * p, boost::uint32_t v ) noexcept;
-  void store_big_s24( unsigned char * p, boost::int32_t v ) noexcept;
-  void store_big_u24( unsigned char * p, boost::uint32_t v ) noexcept;
-
-  void store_little_s32( unsigned char * p, boost::int32_t v ) noexcept;
-  void store_little_u32( unsigned char * p, boost::uint32_t v ) noexcept;
-  void store_big_s32( unsigned char * p, boost::int32_t v ) noexcept;
-  void store_big_u32( unsigned char * p, boost::uint32_t v ) noexcept;
-
-  void store_little_s40( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_little_u40( unsigned char * p, boost::uint64_t v ) noexcept;
-  void store_big_s40( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_big_u40( unsigned char * p, boost::uint64_t v ) noexcept;
-
-  void store_little_s48( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_little_u48( unsigned char * p, boost::uint64_t v ) noexcept;
-  void store_big_s48( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_big_u48( unsigned char * p, boost::uint64_t v ) noexcept;
-
-  void store_little_s56( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_little_u56( unsigned char * p, boost::uint64_t v ) noexcept;
-  void store_big_s56( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_big_u56( unsigned char * p, boost::uint64_t v ) noexcept;
-
-  void store_little_s64( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_little_u64( unsigned char * p, boost::uint64_t v ) noexcept;
-  void store_big_s64( unsigned char * p, boost::int64_t v ) noexcept;
-  void store_big_u64( unsigned char * p, boost::uint64_t v ) noexcept;
 
 } // namespace endian
 } // namespace boost</code></pre>
@@ -1618,7 +1511,7 @@ perform reversal of endianness if needed by making an unqualified call to
 </div>
 </div>
 <div class="sect3">
-<h4 id="conversion_byte_reversal_functions">Byte Reversal Functions</h4>
+<h4 id="conversion_functions">Functions</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code>template &lt;class Endian&gt;
@@ -1776,9 +1669,6 @@ EndianReversible conditional_reverse(EndianReversible x,
 </li>
 </ul>
 </div>
-</div>
-<div class="sect3">
-<h4 id="conversion_in_place_byte_reversal_functions">In-place Byte Reversal Functions</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code>template &lt;class EndianReversible&gt;
@@ -1931,9 +1821,6 @@ void conditional_reverse_inplace(EndianReversibleInplace&amp; x,
 </li>
 </ul>
 </div>
-</div>
-<div class="sect3">
-<h4 id="conversion_generic_load_and_store_functions">Generic Load and Store Functions</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code>template&lt;class T, std::size_t N, order Order&gt;
@@ -1988,196 +1875,6 @@ equal to <code>sizeof(T)</code>, <code>T</code> must be integral or <code>enum</
 <p>Writes to <code>p</code> the <code>N</code> least significant bytes from the object
 representation of <code>v</code>, in forward or reverse order depending on whether
 <code>Order</code> matches the native endianness or not.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="conversion_convenience_load_functions">Convenience Load Functions</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline boost::intM_t load_little_sN( unsigned char const * p ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Reads an N-bit signed little-endian integer from <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Returns</dt>
-<dd>
-<p><code>endian_load&lt;boost::intM_t, N/8, order::little&gt;( p )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline boost::uintM_t load_little_uN( unsigned char const * p ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Reads an N-bit unsigned little-endian integer from <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Returns</dt>
-<dd>
-<p><code>endian_load&lt;boost::uintM_t, N/8, order::little&gt;( p )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline boost::intM_t load_big_sN( unsigned char const * p ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Reads an N-bit signed big-endian integer from <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Returns</dt>
-<dd>
-<p><code>endian_load&lt;boost::intM_t, N/8, order::big&gt;( p )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline boost::uintM_t load_big_uN( unsigned char const * p ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Reads an N-bit unsigned big-endian integer from <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Returns</dt>
-<dd>
-<p><code>endian_load&lt;boost::uintM_t, N/8, order::big&gt;( p )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="conversion_convenience_store_functions">Convenience Store Functions</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline void store_little_sN( unsigned char * p, boost::intM_t v ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Writes an N-bit signed little-endian integer to <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Effects</dt>
-<dd>
-<p><code>endian_store&lt;boost::intM_t, N/8, order::little&gt;( p, v )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline void store_little_uN( unsigned char * p, boost::uintM_t v ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Writes an N-bit unsigned little-endian integer to <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Effects</dt>
-<dd>
-<p><code>endian_store&lt;boost::uintM_t, N/8, order::little&gt;( p, v )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline void store_big_sN( unsigned char * p, boost::intM_t v ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Writes an N-bit signed big-endian integer to <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Effects</dt>
-<dd>
-<p><code>endian_store&lt;boost::intM_t, N/8, order::big&gt;( p, v )</code>.</p>
-</dd>
-</dl>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>inline void store_big_uN( unsigned char * p, boost::uintM_t v ) noexcept;</code></pre>
-</div>
-</div>
-<div class="ulist none">
-<ul class="none">
-<li>
-<p></p>
-<div class="paragraph">
-<p>Writes an N-bit unsigned big-endian integer to <code>p</code>.</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Effects</dt>
-<dd>
-<p><code>endian_store&lt;boost::uintM_t, N/8, order::big&gt;( p, v )</code>.</p>
 </dd>
 </dl>
 </div>
@@ -2319,7 +2016,7 @@ int main(int, char* [])
   //  Low-level I/O such as POSIX read/write or &lt;cstdio&gt;
   //  fread/fwrite is sometimes used for binary file operations
   //  when ultimate efficiency is important. Such I/O is often
-  //  performed in some C++ wrapper class, but to drive home the
+  //  performed in some {cpp} wrapper class, but to drive home the
   //  point that endian integers are often used in fairly
   //  low-level code that does bulk I/O operations, &lt;cstdio&gt;
   //  fopen/fwrite is used for I/O in this example.
@@ -2614,13 +2311,12 @@ user-specified endianness, value type, size, and alignment.</p>
       explicit endian_buffer(T v) noexcept;
 
       endian_buffer&amp; operator=(T v) noexcept;
-      value_type value() const noexcept;
-      unsigned char* data() noexcept;
-      unsigned char const* data() const noexcept;
+      value_type     value() const noexcept;
+      const char*    data() const noexcept;
 
     private:
 
-      unsigned char value_[Nbits / CHAR_BIT]; // exposition only
+      unsigned char value_[ Nbits / CHAR_BIT]; // exposition only
     };
 
     //  stream inserter
@@ -2659,10 +2355,6 @@ user-specified endianness, value type, size, and alignment.</p>
     typedef endian_buffer&lt;order::big, uint_least64_t, 56&gt;     big_uint56_buf_t;
     typedef endian_buffer&lt;order::big, uint_least64_t, 64&gt;     big_uint64_buf_t;
 
-    // unaligned big endian floating point buffers
-    typedef endian_buffer&lt;order::big, float, 32&gt;              big_float32_buf_t;
-    typedef endian_buffer&lt;order::big, double, 64&gt;             big_float64_buf_t;
-
     // unaligned little endian signed integer buffers
     typedef endian_buffer&lt;order::little, int_least8_t, 8&gt;     little_int8_buf_t;
     typedef endian_buffer&lt;order::little, int_least16_t, 16&gt;   little_int16_buf_t;
@@ -2682,10 +2374,6 @@ user-specified endianness, value type, size, and alignment.</p>
     typedef endian_buffer&lt;order::little, uint_least64_t, 48&gt;  little_uint48_buf_t;
     typedef endian_buffer&lt;order::little, uint_least64_t, 56&gt;  little_uint56_buf_t;
     typedef endian_buffer&lt;order::little, uint_least64_t, 64&gt;  little_uint64_buf_t;
-
-    // unaligned little endian floating point buffers
-    typedef endian_buffer&lt;order::little, float, 32&gt;           little_float32_buf_t;
-    typedef endian_buffer&lt;order::little, double, 64&gt;          little_float64_buf_t;
 
     // unaligned native endian signed integer types
     typedef implementation-defined_int8_buf_t   native_int8_buf_t;
@@ -2707,10 +2395,6 @@ user-specified endianness, value type, size, and alignment.</p>
     typedef implementation-defined_uint56_buf_t  native_uint56_buf_t;
     typedef implementation-defined_uint64_buf_t  native_uint64_buf_t;
 
-    // unaligned native endian floating point types
-    typedef implementation-defined_float32_buf_t  native_float32_buf_t;
-    typedef implementation-defined_float64_buf_t  native_float64_buf_t;
-
     // aligned big endian signed integer buffers
     typedef endian_buffer&lt;order::big, int8_t, 8, align::yes&gt;       big_int8_buf_at;
     typedef endian_buffer&lt;order::big, int16_t, 16, align::yes&gt;     big_int16_buf_at;
@@ -2723,10 +2407,6 @@ user-specified endianness, value type, size, and alignment.</p>
     typedef endian_buffer&lt;order::big, uint32_t, 32, align::yes&gt;    big_uint32_buf_at;
     typedef endian_buffer&lt;order::big, uint64_t, 64, align::yes&gt;    big_uint64_buf_at;
 
-    // aligned big endian floating point buffers
-    typedef endian_buffer&lt;order::big, float, 32, align::yes&gt;       big_float32_buf_at;
-    typedef endian_buffer&lt;order::big, double, 64, align::yes&gt;      big_float64_buf_at;
-
     // aligned little endian signed integer buffers
     typedef endian_buffer&lt;order::little, int8_t, 8, align::yes&gt;    little_int8_buf_at;
     typedef endian_buffer&lt;order::little, int16_t, 16, align::yes&gt;  little_int16_buf_at;
@@ -2738,10 +2418,6 @@ user-specified endianness, value type, size, and alignment.</p>
     typedef endian_buffer&lt;order::little, uint16_t, 16, align::yes&gt; little_uint16_buf_at;
     typedef endian_buffer&lt;order::little, uint32_t, 32, align::yes&gt; little_uint32_buf_at;
     typedef endian_buffer&lt;order::little, uint64_t, 64, align::yes&gt; little_uint64_buf_at;
-
-    // aligned little endian floating point buffers
-    typedef endian_buffer&lt;order::little, float, 32, align::yes&gt;    little_float32_buf_at;
-    typedef endian_buffer&lt;order::little, double, 64, align::yes&gt;   little_float64_buf_at;
 
     // aligned native endian typedefs are not provided because
     // &lt;cstdint&gt; types are superior for this use case
@@ -2879,12 +2555,7 @@ type (C&#43;&#43;std, [basic.fundamental]) or an <code>enum</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>unsigned char* data() noexcept;</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>unsigned char const* data() const noexcept;</code></pre>
+<pre class="highlight"><code>const char* data() const noexcept;</code></pre>
 </div>
 </div>
 <div class="ulist none">
@@ -3479,8 +3150,7 @@ namespace boost
       endian_arithmetic&amp; operator=(T v) noexcept;
       operator value_type() const noexcept;
       value_type value() const noexcept; // for exposition; see endian_buffer
-      unsigned char* data() noexcept; // for exposition; see endian_buffer
-      unsigned char const* data() const noexcept; // for exposition; see endian_buffer
+      const char* data() const noexcept; // for exposition; see endian_buffer
 
       // arithmetic operations
       //   note that additional operations are provided by the value_type
@@ -3533,10 +3203,6 @@ namespace boost
     typedef endian_arithmetic&lt;order::big, uint_least64_t, 56&gt;     big_uint56_t;
     typedef endian_arithmetic&lt;order::big, uint_least64_t, 64&gt;     big_uint64_t;
 
-    // unaligned big endian floating point types
-    typedef endian_arithmetic&lt;order::big, float, 32&gt;              big_float32_t;
-    typedef endian_arithmetic&lt;order::big, double, 64&gt;             big_float64_t;
-
     // unaligned little endian signed integer types
     typedef endian_arithmetic&lt;order::little, int_least8_t, 8&gt;     little_int8_t;
     typedef endian_arithmetic&lt;order::little, int_least16_t, 16&gt;   little_int16_t;
@@ -3556,10 +3222,6 @@ namespace boost
     typedef endian_arithmetic&lt;order::little, uint_least64_t, 48&gt;  little_uint48_t;
     typedef endian_arithmetic&lt;order::little, uint_least64_t, 56&gt;  little_uint56_t;
     typedef endian_arithmetic&lt;order::little, uint_least64_t, 64&gt;  little_uint64_t;
-
-    // unaligned little endian floating point types
-    typedef endian_arithmetic&lt;order::little, float, 32&gt;           little_float32_t;
-    typedef endian_arithmetic&lt;order::little, double, 64&gt;          little_float64_t;
 
     // unaligned native endian signed integer types
     typedef implementation-defined_int8_t   native_int8_t;
@@ -3581,10 +3243,6 @@ namespace boost
     typedef implementation-defined_uint56_t  native_uint56_t;
     typedef implementation-defined_uint64_t  native_uint64_t;
 
-    // unaligned native endian floating point types
-    typedef implementation-defined_float32_t  native_float32_t;
-    typedef implementation-defined_float64_t  native_float64_t;
-
     // aligned big endian signed integer types
     typedef endian_arithmetic&lt;order::big, int8_t, 8, align::yes&gt;       big_int8_at;
     typedef endian_arithmetic&lt;order::big, int16_t, 16, align::yes&gt;     big_int16_at;
@@ -3597,10 +3255,6 @@ namespace boost
     typedef endian_arithmetic&lt;order::big, uint32_t, 32, align::yes&gt;    big_uint32_at;
     typedef endian_arithmetic&lt;order::big, uint64_t, 64, align::yes&gt;    big_uint64_at;
 
-    // aligned big endian floating point types
-    typedef endian_arithmetic&lt;order::big, float, 32, align::yes&gt;       big_float32_at;
-    typedef endian_arithmetic&lt;order::big, double, 64, align::yes&gt;      big_float64_at;
-
     // aligned little endian signed integer types
     typedef endian_arithmetic&lt;order::little, int8_t, 8, align::yes&gt;    little_int8_at;
     typedef endian_arithmetic&lt;order::little, int16_t, 16, align::yes&gt;  little_int16_at;
@@ -3612,10 +3266,6 @@ namespace boost
     typedef endian_arithmetic&lt;order::little, uint16_t, 16, align::yes&gt; little_uint16_at;
     typedef endian_arithmetic&lt;order::little, uint32_t, 32, align::yes&gt; little_uint32_at;
     typedef endian_arithmetic&lt;order::little, uint64_t, 64, align::yes&gt; little_uint64_at;
-
-    // aligned little endian floating point types
-    typedef endian_arithmetic&lt;order::little, float, 32, align::yes&gt;    little_float32_at;
-    typedef endian_arithmetic&lt;order::little, double, 64, align::yes&gt;   little_float64_at;
 
     // aligned native endian typedefs are not provided because
     // &lt;cstdint&gt; types are superior for that use case
@@ -4478,15 +4128,12 @@ at the front and implementation following.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-10 00:18:50 UTC
+Last updated 2019-08-14 12:02:29 UTC
 </div>
 </div>
 <style>
-
 *:not(pre)>code { background: none; color: #600000; }
-:not(pre):not([class^=L])>code { background: none; color: #600000; }
 table tr.even, table tr.alt, table tr:nth-of-type(even) { background: none; }
-
 </style>
 </body>
 </html>

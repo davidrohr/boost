@@ -4,12 +4,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/core/ignore_unused.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/core/lightweight_test_trait.hpp>
 #include <boost/histogram/axis/category.hpp>
 #include <boost/histogram/axis/ostream.hpp>
-#include <boost/histogram/axis/traits.hpp>
+#include <boost/histogram/detail/cat.hpp>
 #include <limits>
 #include <sstream>
 #include <string>
@@ -17,50 +15,17 @@
 #include "std_ostream.hpp"
 #include "throw_exception.hpp"
 #include "utility_axis.hpp"
-#include "utility_str.hpp"
+
+using namespace boost::histogram;
 
 int main() {
-  using namespace boost::histogram;
-
-  BOOST_TEST(std::is_nothrow_move_constructible<axis::category<int>>::value);
-  BOOST_TEST(std::is_nothrow_move_constructible<axis::category<std::string>>::value);
   BOOST_TEST(std::is_nothrow_move_assignable<axis::category<int>>::value);
   BOOST_TEST(std::is_nothrow_move_assignable<axis::category<std::string>>::value);
 
-  // bad ctor
+  // bad_ctors
   {
-    int x[2];
-    boost::ignore_unused(x);
-    BOOST_TEST_THROWS(axis::category<int>(x + 1, x), std::invalid_argument);
-  }
-
-  // value should return copy for arithmetic types and const reference otherwise
-  {
-    enum class Foo { foo };
-
-    BOOST_TEST_TRAIT_SAME(axis::traits::value_type<axis::category<std::string>>,
-                          std::string);
-    BOOST_TEST_TRAIT_SAME(decltype(std::declval<axis::category<std::string>>().value(0)),
-                          const std::string&);
-    BOOST_TEST_TRAIT_SAME(axis::traits::value_type<axis::category<const char*>>,
-                          const char*);
-    BOOST_TEST_TRAIT_SAME(decltype(std::declval<axis::category<const char*>>().value(0)),
-                          const char*);
-    BOOST_TEST_TRAIT_SAME(axis::traits::value_type<axis::category<Foo>>, Foo);
-    BOOST_TEST_TRAIT_SAME(decltype(std::declval<axis::category<Foo>>().value(0)), Foo);
-    BOOST_TEST_TRAIT_SAME(axis::traits::value_type<axis::category<int>>, int);
-    BOOST_TEST_TRAIT_SAME(decltype(std::declval<axis::category<int>>().value(0)), int);
-  }
-
-  // empty axis::category
-  {
-    axis::category<int> a;
-    axis::category<int> b(std::vector<int>(0));
-    BOOST_TEST_EQ(a, b);
-    BOOST_TEST_EQ(a.size(), 0);
-    BOOST_TEST_EQ(a.index(-1), 0);
-    BOOST_TEST_EQ(a.index(0), 0);
-    BOOST_TEST_EQ(a.index(1), 0);
+    auto empty = std::vector<int>(0);
+    BOOST_TEST_THROWS((axis::category<>(empty)), std::invalid_argument);
   }
 
   // axis::category
@@ -82,50 +47,20 @@ int main() {
     BOOST_TEST_EQ(a.value(2), C);
     BOOST_TEST_THROWS(a.value(3), std::out_of_range);
 
-    BOOST_TEST_EQ(str(a),
+    BOOST_TEST_EQ(detail::cat(a),
                   "category(\"A\", \"B\", \"C\", metadata=\"bar\", options=overflow)");
-  }
 
-  // category<int, axis::null_type>: copy, move
-  {
-    using C = axis::category<int, axis::null_type>;
-    C a({1, 2, 3});
-    C a2(a);
-    BOOST_TEST_EQ(a2, a);
-    C b;
+    axis::category<std::string> b;
     BOOST_TEST_NE(a, b);
     b = a;
     BOOST_TEST_EQ(a, b);
-    b = C{{2, 1, 3}};
+    b = axis::category<std::string>{{B, A, C}};
     BOOST_TEST_NE(a, b);
     b = a;
     BOOST_TEST_EQ(a, b);
-    C c = std::move(b);
+    axis::category<std::string> c = std::move(b);
     BOOST_TEST_EQ(c, a);
-    C d;
-    BOOST_TEST_NE(c, d);
-    d = std::move(c);
-    BOOST_TEST_EQ(d, a);
-  }
-
-  // category<std::string>: copy, move
-  {
-    using C = axis::category<std::string>;
-
-    C a({"A", "B", "C"}, "foo");
-    C a2(a);
-    BOOST_TEST_EQ(a2, a);
-    C b;
-    BOOST_TEST_NE(a, b);
-    b = a;
-    BOOST_TEST_EQ(a, b);
-    b = C{{"B", "A", "C"}};
-    BOOST_TEST_NE(a, b);
-    b = a;
-    BOOST_TEST_EQ(a, b);
-    C c = std::move(b);
-    BOOST_TEST_EQ(c, a);
-    C d;
+    axis::category<std::string> d;
     BOOST_TEST_NE(c, d);
     d = std::move(c);
     BOOST_TEST_EQ(d, a);
@@ -144,7 +79,7 @@ int main() {
     BOOST_TEST_EQ(a.update(10), std::make_pair(2, 0));
     BOOST_TEST_EQ(a.size(), 3);
 
-    BOOST_TEST_EQ(str(a), "category(5, 1, 10, options=growth)");
+    BOOST_TEST_EQ(detail::cat(a), "category(5, 1, 10, options=growth)");
   }
 
   // iterators

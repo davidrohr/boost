@@ -16,7 +16,6 @@
 
 #include <memory>
 #include <string>
-#include <type_traits>
 
 namespace boost { namespace gil { namespace detail {
 
@@ -118,7 +117,11 @@ public:
 };
 
 template< typename FormatTag >
-struct is_adaptable_input_device<FormatTag, LibRaw, void> : std::true_type
+struct is_adaptable_input_device< FormatTag
+                                , LibRaw
+                                , void
+                                >
+    : mpl::true_
 {
     using device_type = file_stream_device<FormatTag>;
 };

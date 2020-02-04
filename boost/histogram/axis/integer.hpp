@@ -7,13 +7,13 @@
 #ifndef BOOST_HISTOGRAM_AXIS_INTEGER_HPP
 #define BOOST_HISTOGRAM_AXIS_INTEGER_HPP
 
-#include <boost/core/nvp.hpp>
 #include <boost/histogram/axis/iterator.hpp>
-#include <boost/histogram/axis/metadata_base.hpp>
 #include <boost/histogram/axis/option.hpp>
+#include <boost/histogram/detail/compressed_pair.hpp>
 #include <boost/histogram/detail/convert_integer.hpp>
 #include <boost/histogram/detail/limits.hpp>
-#include <boost/histogram/detail/replace_type.hpp>
+#include <boost/histogram/detail/relaxed_equal.hpp>
+#include <boost/histogram/detail/replace_default.hpp>
 #include <boost/histogram/detail/static_if.hpp>
 #include <boost/histogram/fwd.hpp>
 #include <boost/throw_exception.hpp>
@@ -38,34 +38,42 @@ namespace axis {
   @tparam Options see boost::histogram::axis::option (all values allowed).
  */
 template <class Value, class MetaData, class Options>
-class integer : public iterator_mixin<integer<Value, MetaData, Options>>,
-                public metadata_base<MetaData> {
+class integer : public iterator_mixin<integer<Value, MetaData, Options>> {
   static_assert(std::is_integral<Value>::value || std::is_floating_point<Value>::value,
-                "integer axis requires floating point or integral type");
+                "integer axis requires type floating point or integral type");
 
   using value_type = Value;
   using local_index_type = std::conditional_t<std::is_integral<value_type>::value,
                                               index_type, real_index_type>;
 
-  using metadata_type = typename metadata_base<MetaData>::metadata_type;
+  using metadata_type = detail::replace_default<MetaData, std::string>;
   using options_type =
       detail::replace_default<Options, decltype(option::underflow | option::overflow)>;
 
-  static_assert(!options_type::test(option::circular | option::growth) ||
-                    (options_type::test(option::circular) ^
-                     options_type::test(option::growth)),
-                "circular and growth options are mutually exclusive");
-
-  static_assert(std::is_floating_point<value_type>::value ||
-                    (!options_type::test(option::circular) &&
-                     !options_type::test(option::growth)) ||
-                    (!options_type::test(option::overflow) &&
-                     !options_type::test(option::underflow)),
-                "circular or growing integer axis with integral type "
-                "cannot have entries in underflow or overflow bins");
+  static_assert(!options_type::test(option::circular) ||
+                    std::is_floating_point<value_type>::value ||
+                    !options_type::test(option::overflow),
+                "integer axis with integral type cannot have overflow");
 
 public:
   constexpr integer() = default;
+  integer(const integer&) = default;
+  integer& operator=(const integer&) = default;
+  integer(integer&& o) noexcept : size_meta_(std::move(o.size_meta_)), min_(o.min_) {
+    // std::string explicitly guarantees nothrow only in C++17
+    static_assert(std::is_same<metadata_type, std::string>::value ||
+                      std::is_nothrow_move_constructible<metadata_type>::value,
+                  "");
+  }
+  integer& operator=(integer&& o) noexcept {
+    // std::string explicitly guarantees nothrow only in C++17
+    static_assert(std::is_same<metadata_type, std::string>::value ||
+                      std::is_nothrow_move_assignable<metadata_type>::value,
+                  "");
+    size_meta_ = std::move(o.size_meta_);
+    min_ = o.min_;
+    return *this;
+  }
 
   /** Construct over semi-open integer interval [start, stop).
    *
@@ -74,11 +82,8 @@ public:
    * \param meta     description of the axis.
    */
   integer(value_type start, value_type stop, metadata_type meta = {})
-      : metadata_base<MetaData>(std::move(meta))
-      , size_(static_cast<index_type>(stop - start))
-      , min_(start) {
-    if (!(stop >= start))
-      BOOST_THROW_EXCEPTION(std::invalid_argument("stop >= start required"));
+      : size_meta_(static_cast<index_type>(stop - start), std::move(meta)), min_(start) {
+    if (stop <= start) BOOST_THROW_EXCEPTION(std::invalid_argument("bins > 0 required"));
   }
 
   /// Constructor used by algorithm::reduce to shrink and rebin.
@@ -103,20 +108,21 @@ public:
         const auto k = static_cast<axis::index_type>(i);
         if (k < size()) return std::make_pair(k, 0);
         const auto n = k - size() + 1;
-        size_ += n;
+        size_meta_.first() += n;
         return std::make_pair(k, -n);
       }
       const auto k = static_cast<axis::index_type>(
           detail::static_if<std::is_floating_point<value_type>>(
               [](auto x) { return std::floor(x); }, [](auto x) { return x; }, i));
       min_ += k;
-      size_ -= k;
+      size_meta_.first() -= k;
       return std::make_pair(0, -k);
     };
 
     return detail::static_if<std::is_floating_point<value_type>>(
         [this, impl](auto x) {
           if (std::isfinite(x)) return impl(static_cast<long>(std::floor(x)));
+          // this->size() is workaround for gcc-5 bug
           return std::make_pair(x < 0 ? -1 : this->size(), 0);
         },
         impl, x);
@@ -124,37 +130,33 @@ public:
 
   /// Return value for index argument.
   value_type value(local_index_type i) const noexcept {
-    if (!options_type::test(option::circular) &&
-        std::is_floating_point<value_type>::value) {
+    if (!options_type::test(option::circular)) {
       if (i < 0) return detail::lowest<value_type>();
-      if (i > size()) return detail::highest<value_type>();
+      if (i > size()) { return detail::highest<value_type>(); }
     }
     return min_ + i;
   }
 
   /// Return bin for index argument.
   decltype(auto) bin(index_type idx) const noexcept {
-    return detail::static_if<std::is_floating_point<value_type>>(
+    return detail::static_if<std::is_floating_point<local_index_type>>(
         [this](auto idx) { return interval_view<integer>(*this, idx); },
         [this](auto idx) { return this->value(idx); }, idx);
   }
 
   /// Returns the number of bins, without over- or underflow.
-  index_type size() const noexcept { return size_; }
-
+  index_type size() const noexcept { return size_meta_.first(); }
   /// Returns the options.
   static constexpr unsigned options() noexcept { return options_type::value; }
-
-  /// Whether the axis is inclusive (see axis::traits::is_inclusive).
-  static constexpr bool inclusive() noexcept {
-    return (options() & option::underflow || options() & option::overflow) ||
-           (std::is_integral<value_type>::value &&
-            (options() & (option::growth | option::circular)));
-  }
+  /// Returns reference to metadata.
+  metadata_type& metadata() noexcept { return size_meta_.second(); }
+  /// Returns reference to const metadata.
+  const metadata_type& metadata() const noexcept { return size_meta_.second(); }
 
   template <class V, class M, class O>
   bool operator==(const integer<V, M, O>& o) const noexcept {
-    return size() == o.size() && min_ == o.min_ && metadata_base<MetaData>::operator==(o);
+    return size() == o.size() && detail::relaxed_equal(metadata(), o.metadata()) &&
+           min_ == o.min_;
   }
 
   template <class V, class M, class O>
@@ -163,11 +165,7 @@ public:
   }
 
   template <class Archive>
-  void serialize(Archive& ar, unsigned /* version */) {
-    ar& make_nvp("size", size_);
-    ar& make_nvp("meta", this->metadata());
-    ar& make_nvp("min", min_);
-  }
+  void serialize(Archive&, unsigned);
 
 private:
   index_type index_impl(std::false_type, int x) const noexcept {
@@ -191,7 +189,7 @@ private:
     return size();
   }
 
-  index_type size_{0};
+  detail::compressed_pair<index_type, metadata_type> size_meta_{0};
   value_type min_{0};
 
   template <class V, class M, class O>
@@ -201,12 +199,13 @@ private:
 #if __cpp_deduction_guides >= 201606
 
 template <class T>
-integer(T, T)->integer<detail::convert_integer<T, index_type>, null_type>;
+integer(T, T)->integer<detail::convert_integer<T, index_type>>;
+
+template <class T>
+integer(T, T, const char*)->integer<detail::convert_integer<T, index_type>>;
 
 template <class T, class M>
-integer(T, T, M)
-    ->integer<detail::convert_integer<T, index_type>,
-              detail::replace_type<std::decay_t<M>, const char*, std::string>>;
+integer(T, T, M)->integer<detail::convert_integer<T, index_type>, M>;
 
 #endif
 

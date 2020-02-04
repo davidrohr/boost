@@ -8,16 +8,13 @@ beast/ref/boost__beast__async_base/allocator_type.html
 beast/ref/boost__beast__async_base/async_base.html
 beast/ref/boost__beast__async_base/async_base/overload1.html
 beast/ref/boost__beast__async_base/async_base/overload2.html
-beast/ref/boost__beast__async_base/async_base/overload3.html
 beast/ref/boost__beast__async_base/complete.html
 beast/ref/boost__beast__async_base/complete_now.html
 beast/ref/boost__beast__async_base/executor_type.html
 beast/ref/boost__beast__async_base/get_allocator.html
 beast/ref/boost__beast__async_base/get_executor.html
 beast/ref/boost__beast__async_base/handler.html
-beast/ref/boost__beast__async_base/operator_eq_.html
 beast/ref/boost__beast__async_base/release_handler.html
-beast/ref/boost__beast__async_base/async_base_dtor_.html
 beast/ref/boost__beast__async_detect_ssl.html
 beast/ref/boost__beast__async_teardown.html
 beast/ref/boost__beast__basic_flat_buffer.html
@@ -170,8 +167,6 @@ beast/ref/boost__beast__basic_stream__impl_type/socket.html
 beast/ref/boost__beast__basic_stream__impl_type/timer.html
 beast/ref/boost__beast__basic_stream__impl_type/waiting.html
 beast/ref/boost__beast__basic_stream__impl_type/write.html
-beast/ref/boost__beast__basic_stream__rebind_executor.html
-beast/ref/boost__beast__basic_stream__rebind_executor/other.html
 beast/ref/boost__beast__basic_stream__timeout_handler.html
 beast/ref/boost__beast__basic_string_view.html
 beast/ref/boost__beast__beast_close_socket.html

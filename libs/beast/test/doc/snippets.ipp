@@ -24,4 +24,3 @@ tcp::socket sock(ioc);
 
 ssl::context ctx(ssl::context::tlsv12);
 
-boost::ignore_unused(ec);

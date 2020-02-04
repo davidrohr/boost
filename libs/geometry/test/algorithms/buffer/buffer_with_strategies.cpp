@@ -133,9 +133,6 @@ void test_all()
 
 int test_main(int, char* [])
 {
-    BoostGeometryWriteTestConfiguration();
-
-    test_all<true, bg::model::point<default_test_type, 2, bg::cs::cartesian> >();
-
+    test_all<true, bg::model::point<double, 2, bg::cs::cartesian> >();
     return 0;
 }

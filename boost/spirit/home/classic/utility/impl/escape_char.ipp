@@ -166,7 +166,7 @@ namespace impl {
             return scan.no_match(); // overflow detected
         }
     };
-#if defined(BOOST_MSVC)
+#if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(pop)
 #endif
 

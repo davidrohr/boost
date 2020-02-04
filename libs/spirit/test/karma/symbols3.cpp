@@ -3,6 +3,9 @@
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying 
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/config/warning_disable.hpp>
+#include <boost/detail/lightweight_test.hpp>
+
 #include <boost/spirit/include/karma_auxiliary.hpp>
 #include <boost/spirit/include/karma_char.hpp>
 #include <boost/spirit/include/karma_string.hpp>
@@ -10,9 +13,6 @@
 #include <boost/spirit/include/karma_directive.hpp>
 #include <boost/spirit/include/karma_generate.hpp>
 #include <boost/spirit/include/karma_nonterminal.hpp>
-
-#include <boost/core/lightweight_test.hpp>
-#include <boost/core/lightweight_test_trait.hpp>
 
 #include "test.hpp"
 
@@ -50,9 +50,13 @@ int main()
             ('k', r1.alias())
         ;
 
-        BOOST_TEST_TRAIT_TRUE((
-            boost::spirit::traits::is_generator<
-                symbols<char, rule<output_iterator_type, char()> > >));
+        boost::mpl::true_ f = 
+            boost::mpl::bool_<boost::spirit::traits::is_generator<
+                symbols<char, rule<output_iterator_type, char()> > >::value>();
+
+        // silence stupid compiler warnings 
+        // i.e. MSVC warning C4189: 'f' : local variable is initialized but not referenced
+        BOOST_TEST((f.value));
 
         BOOST_TEST((test("J", sym, make_vector('j', 'J'))));
         BOOST_TEST((test("H", sym, make_vector('h', 'H'))));
@@ -91,9 +95,13 @@ int main()
             ("Kim")
         ;
 
-        BOOST_TEST_TRAIT_TRUE((
-            boost::spirit::traits::is_generator<
-                symbols<char, std::string> >));
+        boost::mpl::true_ f = 
+            boost::mpl::bool_<boost::spirit::traits::is_generator<
+                symbols<char, std::string> >::value>();
+
+        // silence stupid compiler warnings 
+        // i.e. MSVC warning C4189: 'f' : local variable is initialized but not referenced
+        BOOST_TEST((f.value));
 
         BOOST_TEST((test("Joel", sym, "Joel")));
         BOOST_TEST((test("Hartmut", sym, "Hartmut")));

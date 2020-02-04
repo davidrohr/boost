@@ -127,8 +127,6 @@ struct linear_linear
                              Result & result,
                              IntersectionStrategy const& intersection_strategy)
     {
-        typedef typename IntersectionStrategy::cs_tag cs_tag;
-
         // The result should be FFFFFFFFF
         relate::set<exterior, exterior, result_dimension<Geometry1>::value>(result);// FFFFFFFFd, d in [1,9] or T
         if ( BOOST_GEOMETRY_CONDITION( result.interrupt ) )
@@ -188,7 +186,7 @@ struct linear_linear
           || may_update<boundary, boundary, '0'>(result)
           || may_update<boundary, exterior, '0'>(result) )
         {
-            typedef turns::less<0, turns::less_op_linear_linear<0>, cs_tag> less;
+            typedef turns::less<0, turns::less_op_linear_linear<0> > less;
             std::sort(turns.begin(), turns.end(), less());
 
             turns_analyser<turn_type, 0> analyser;
@@ -208,7 +206,7 @@ struct linear_linear
           || may_update<boundary, boundary, '0', true>(result)
           || may_update<boundary, exterior, '0', true>(result) )
         {
-            typedef turns::less<1, turns::less_op_linear_linear<1>, cs_tag> less;
+            typedef turns::less<1, turns::less_op_linear_linear<1> > less;
             std::sort(turns.begin(), turns.end(), less());
 
             turns_analyser<turn_type, 1> analyser;

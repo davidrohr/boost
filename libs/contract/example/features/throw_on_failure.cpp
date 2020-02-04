@@ -101,7 +101,7 @@ int main() {
         }
     ))));
     boost::contract::set_except_failure(
-        [] (boost::contract::from) {
+        [] (boost::contract::from where) {
             // Already an active exception so shall not throw another...
             std::clog << "ignored exception guarantee failure" << std::endl;
         }

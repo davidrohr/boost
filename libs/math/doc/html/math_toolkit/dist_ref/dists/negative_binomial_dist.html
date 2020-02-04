@@ -4,7 +4,7 @@
 <title>Negative Binomial Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="lognormal_dist.html" title="Log Normal Distribution">
 <link rel="next" href="nc_beta_dist.html" title="Noncentral Beta Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">negative_binomial_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">negative_binomial</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">negative_binomial_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -100,26 +100,23 @@
 <p>
           It has the PDF:
         </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../equations/neg_binomial_ref.svg"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/neg_binomial_ref.svg"></span>
+        </p>
 <p>
           The following graph illustrate how the PDF varies as the success fraction
           <span class="emphasis"><em>p</em></span> changes:
         </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../graphs/negative_binomial_pdf_1.svg" align="middle"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../graphs/negative_binomial_pdf_1.svg" align="middle"></span>
+        </p>
 <p>
           Alternatively, this graph shows how the shape of the PDF varies as the
           number of successes changes:
         </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="inlinemediaobject"><img src="../../../../graphs/negative_binomial_pdf_2.svg" align="middle"></span>
-
-          </p></blockquote></div>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../graphs/negative_binomial_pdf_2.svg" align="middle"></span>
+        </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.negative_binomial_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.negative_binomial_dist.related_distributions"></a></span><a class="link" href="negative_binomial_dist.html#math_toolkit.dist_ref.dists.negative_binomial_dist.related_distributions">Related
@@ -156,7 +153,7 @@
           The Poisson distribution is a special case for large successes
         </p>
 <p>
-          poisson(&#955;) = lim <sub>r &#8594; &#8734;</sub> negative_binomial(r, r / (&#955; + r)))
+          poisson(&#955;) = lim <sub>r &#8594; &#8734;</sub>  &#160; negative_binomial(r, r / (&#955; + r)))
         </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>

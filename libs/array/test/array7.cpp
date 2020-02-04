@@ -13,7 +13,8 @@
 #include <array>
 #endif
 
-#include <boost/core/lightweight_test_trait.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 namespace {
 
@@ -22,13 +23,14 @@ namespace {
     void    RunStdTests()
     {
         typedef boost::array< T, 5 >    test_type;
+        typedef T arr[5];
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
         T &aRef = std::get<0> ( test_case );
-        BOOST_TEST ( &*test_case.begin () == &aRef );
+        BOOST_CHECK ( &*test_case.begin () == &aRef );
         
         const T &caRef = std::get<0> ( test_case );
-        BOOST_TEST ( &*test_case.cbegin () == &caRef );
+        BOOST_CHECK ( &*test_case.cbegin () == &caRef );
     }
     #endif
 
@@ -36,18 +38,19 @@ namespace {
     void    RunBoostTests()
     {
         typedef boost::array< T, 5 >    test_type;
+        typedef T arr[5];
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
         T &aRef = boost::get<0> ( test_case );
-        BOOST_TEST ( &*test_case.begin () == &aRef );
+        BOOST_CHECK ( &*test_case.begin () == &aRef );
         
         const T &caRef = boost::get<0> ( test_case );
-        BOOST_TEST ( &*test_case.cbegin () == &caRef );
+        BOOST_CHECK ( &*test_case.cbegin () == &caRef );
     }
 
 }
 
-int main()
+BOOST_AUTO_TEST_CASE( test_main )
 {
     RunBoostTests< bool >();
     RunBoostTests< void * >();
@@ -60,7 +63,5 @@ int main()
     RunStdTests< long double >();
     RunStdTests< std::string >();
 #endif
-
-    return boost::report_errors();
 }
 

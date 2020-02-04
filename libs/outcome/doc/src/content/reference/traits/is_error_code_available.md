@@ -3,8 +3,7 @@ title = "`is_error_code_available<T>`"
 description = "True if an error code can be constructed from a `T`."
 +++
 
-`::value` is true if an error code can be constructed from a `T` e.g. if there exists an ADL discovered free function `make_error_code(T)`.
-`::type` is the type that would result if `::value` is true, else `void`.
+True if an error code can be constructed from a `T` e.g. if there exists an ADL discovered free function `make_error_code(T)`.
 
 *Overridable*: By template specialisation into the `trait` namespace.
 

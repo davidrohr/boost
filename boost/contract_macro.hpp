@@ -10,7 +10,7 @@
 /** @file
 Allow to disable contracts to completely remove their compile-time and run-time
 overhead.
-This header automatically includes all header files <c>boost/contract/\*.hpp</c>
+This header also includes all headers file <c>boost/contract/\*.hpp</c> that are
 necessary to use its macros.
 
 Almost all the macros defined in this header file are variadic macros. On
@@ -96,7 +96,7 @@ Disable Contract Compilation}).
     Where:
 
     @arg    <c><b>f</b></c> is the functor called by this library to check
-            postconditions @c f() or @c f(result).
+            postconditions <c>f(...)</c>.
             Assertions within this functor are usually programmed using
             @RefMacro{BOOST_CONTRACT_ASSERT}, but any exception thrown by a call
             to this functor indicates a contract assertion failure (and will
@@ -104,10 +104,9 @@ Disable Contract Compilation}).
             @RefFunc{boost::contract::postcondition_failure}).
             This functor should capture variables by (constant) references (to
             access the values they will have at function exit).
-            This functor takes the return value (preferably by <c>const&</c>)
-            @c result as its one single parameter @c f(result) but only for
-            virtual public functions and public functions overrides, otherwise
-            it takes no parameter @c f().
+            This functor takes the return value (preferably by <c>const&</c>) as
+            its one single parameter but only for virtual public functions and
+            public functions overrides, otherwise it takes no parameter.
             (This is a variadic macro parameter so it can contain commas not
             protected by round parenthesis.)
 
@@ -198,14 +197,14 @@ Disable Contract Compilation}).
 
     @see    @RefSect{extras.disable_contract_compilation__macro_interface_,
             Disable Contract Compilation},
-            @RefSect{advanced.old_values_copied_at_body,
-            Old Values Copied at Body}
+            @RefSect{advanced.old_value_copies_at_body,
+            Old Value Copies at Body}
     */
     #define BOOST_CONTRACT_OLD(...)
 
     /**
-    Program old values that can be completely disabled at compile-time for old
-    value types that are required to be copyable.
+    Program old values that can be completely disabled at compile-time and
+    require the old value type to be copyable.
 
     This is used to program old value copies for copyable types:
 
@@ -213,12 +212,12 @@ Disable Contract Compilation}).
     class u {
     public:
         void f(...) {
-            BOOST_CONTRACT_OLD_PTR(old_type_a)(old_var_a); // Null...
-            BOOST_CONTRACT_OLD_PTR(old_type_b)(old_var_b, old_expr_b); // Set.
+            BOOST_CONTRACT_OLD_PTR(old_type_a)(old_var_a);
+            BOOST_CONTRACT_OLD_PTR(old_type_b)(old_var_b, old_expr_b);
             BOOST_CONTRACT_PUBLIC_FUNCTION(this)
                 ...
                 BOOST_CONTRACT_OLD([&] {
-                    old_var_a = BOOST_CONTRACT_OLDOF(old_expr_a); // ...set.
+                    old_var_a = BOOST_CONTRACT_OLDOF(old_expr_a);
                     ...
                 })
                 ...
@@ -228,12 +227,12 @@ Disable Contract Compilation}).
         }
 
         virtual void g(..., boost::contract::virtual_* v = 0) {
-            BOOST_CONTRACT_OLD_PTR(old_type_a)(old_var_a); // No `v`
-            BOOST_CONTRACT_OLD_PTR(old_type_b)(v, old_var_b, old_expr_b); // `v`
+            BOOST_CONTRACT_OLD_PTR(old_type_a)(old_var_a);
+            BOOST_CONTRACT_OLD_PTR(old_type_b)(v, old_var_b, old_expr_b);
             BOOST_CONTRACT_PUBLIC_FUNCTION(v, this)
                 ...
                 BOOST_CONTRACT_OLD([&] {
-                    old_var_a = BOOST_CONTRACT_OLDOF(v, old_expr_a); // `v`
+                    old_var_a = BOOST_CONTRACT_OLDOF(v, old_expr_a);
                     ...
                 })
                 ...
@@ -294,22 +293,18 @@ Disable Contract Compilation}).
             dereferenced (see @RefMacro{BOOST_CONTRACT_OLD_PTR_IF_COPYABLE}).
             (This is a variadic macro parameter so it can contain commas not
             protected by round parenthesis.)
-            (Rationale: Template parameters like this one are specified to
-            this library macro interface using their own set of parenthesis
-            <c>SOME_MACRO(template_params)(other_params)</c>.)
-    @arg    <c><b>v</b></c> is the extra training parameter of type
+    @arg    <c><b>v</b></c> is the extra parameter of type
             @RefClass{boost::contract::virtual_}<c>*</c> and default value @c 0
             from the enclosing virtual public function or public function
             override declaring the contract.
-            (This is not a variadic macro parameter but it should never contain
-            commas because it is an identifier.)
+            (This is not a variadic macro parameter.)
     @arg    <c><b>old_var</b></c> is the name of the old value pointer variable.
             (This is not a variadic macro parameter but it should never contain
             commas because it is an identifier.)
     @arg    <c><b>old_expr</b></c> is the expression to be evaluated and copied
             in the old value pointer.
             (This is not a variadic macro parameter so any comma it might
-            contain must be protected by round parenthesis and
+            contain must be protected by round parenthesis,
             <c>BOOST_CONTRACT_OLD_PTR(old_type)(v, old_var, (old_expr))</c>
             will always work.)
 
@@ -320,8 +315,8 @@ Disable Contract Compilation}).
     #define BOOST_CONTRACT_OLD_PTR(...)
 
     /**
-    Program old values that can be completely disabled at compile-time for old
-    value types that are not required to be copyable.
+    Program old values that can be completely disabled at compile-time and do
+    not require the old value type to be copyable.
     
     This is used to program old value copies for types that might or might not
     be copyable:
@@ -421,19 +416,18 @@ Disable Contract Compilation}).
             (see @RefMacro{BOOST_CONTRACT_OLD_PTR}).
             (This is a variadic macro parameter so it can contain commas not
             protected by round parenthesis.)
-    @arg    <c><b>v</b></c> is the extra trailing parameter of type
+    @arg    <c><b>v</b></c> is the extra parameter of type
             @RefClass{boost::contract::virtual_}<c>*</c> and default value @c 0
             from the enclosing virtual public function or public function
             override declaring the contract.
-            (This is not a variadic macro parameter but it should never contain
-            commas because it is an identifier.)
+            (This is not a variadic macro parameter.)
     @arg    <c><b>old_var</b></c> is the name of the old value pointer variable.
             (This is not a variadic macro parameter but it should never contain
             commas because it is an identifier.)
     @arg    <c><b>old_expr</b></c> is the expression to be evaluated and copied
             in the old value pointer.
             (This is not a variadic macro parameter so any comma it might
-            contain must be protected by round parenthesis and
+            contain must be protected by round parenthesis,
             <c>BOOST_CONTRACT_OLD_PTR_IF_COPYABLE(old_type)(v, old_var,
             (old_expr))</c> will always work.)
 
@@ -506,9 +500,7 @@ Disable Contract Compilation}).
             invariants for public functions that are not static and not volatile
             (see @RefMacro{BOOST_CONTRACT_STATIC_INVARIANT} and
             @RefMacro{BOOST_CONTRACT_INVARIANT_VOLATILE}).
-            The curly parenthesis are mandatory (rationale: this is so the
-            syntax of this macro resembles mote the syntax of the lambda
-            functions usually used to specify preconditions, etc.).
+            The curly parenthesis are mandatory.
             Assertions within this function are usually programmed using
             @RefMacro{BOOST_CONTRACT_ASSERT}, but any exception thrown by a call
             to this function indicates a contract assertion failure (and will
@@ -657,7 +649,7 @@ Disable Contract Compilation}).
                     BOOST_CONTRACT_ASSERT(...);
                     ...
                 })
-            ; // Trailing `;` is required.
+            ;
 
             ... // Constructor body.
         }
@@ -722,8 +714,8 @@ Disable Contract Compilation}).
     Constructors that do not have preconditions do not use this macro.
     When at least one of the class constructors uses this macro,
     @RefClass{boost::contract::constructor_precondition} must be the first and
-    private base of the class declaring the constructor for which preconditions
-    are programmed:
+    private base class of the class declaring the constructor for which
+    preconditions are programmed:
 
     @code
     class u
@@ -731,19 +723,15 @@ Disable Contract Compilation}).
                 public b
         : BASES
     {
-        friend class boost::contract::access;
-
-        typedef BOOST_CONTRACT_BASE_TYPES(BASES) base_types;
-        #undef BASES
-
         ...
+        #undef BASES
 
     public:
         explicit u(unsigned x) :
             BOOST_CONTRACT_CONSTRUCTOR_PRECONDITION(u)([&] {
                 BOOST_CONTRACT_ASSERT(x != 0);
             }),
-            b(1 / x)
+            b(1.0 / float(x))
         {
             ...
         }
@@ -763,7 +751,8 @@ Disable Contract Compilation}).
     // because for constructor's preconditions (not for postconditions, etc.).
     #ifndef BOOST_CONTRACT_NO_PRECONDITIONS
         boost::contract::constructor_precondition<class_type>(f)
-    #else // No-op call (likely optimized away, minimal to no overhead).
+    #else
+        // No-op call (likely optimized away, minimal to no overhead).
         boost::contract::constructor_precondition<class_type>()
     #endif
     
@@ -845,7 +834,7 @@ Disable Contract Compilation}).
                     BOOST_CONTRACT_ASSERT(...);
                     ...
                 })
-            ; // Trailing `;` is required.
+            ;
 
             ... // Destructor body.
         }
@@ -933,7 +922,7 @@ Disable Contract Compilation}).
                 BOOST_CONTRACT_ASSERT(...);
                 ...
             })
-        ; // Trailing `;` is required.
+        ;
 
         ... // Function body.
     }
@@ -1026,7 +1015,7 @@ Disable Contract Compilation}).
                     BOOST_CONTRACT_ASSERT(...);
                     ...
                 })
-            ; // Trailing `;` is required.
+            ;
 
             ... // Function body.
         }
@@ -1109,7 +1098,7 @@ Disable Contract Compilation}).
                     BOOST_CONTRACT_ASSERT(...);
                     ...
                 })
-            ; // Trailing `;` is required.
+            ;
 
             ... // Function body (use `return result = return_expr`).
         }
@@ -1124,7 +1113,7 @@ Disable Contract Compilation}).
                     ...
                 })
                 ...
-            ; // Trailing `;` is required.
+            ;
             
             ... // Function body.
         }
@@ -1144,7 +1133,7 @@ Disable Contract Compilation}).
                     ...
                 })
                 ...
-            ; // Trailing `;` is required.
+            ;
             
             ... // Function body (use `return result = return_expr`).
         }
@@ -1176,8 +1165,8 @@ Disable Contract Compilation}).
     @endcode
     
     2\. <c>BOOST_CONTRACT_PUBLIC_FUNCTION(v, obj)</c> expands to code
-        equivalent to the following (for virtual public functions that do not
-        override, returning void):
+        equivalent to the following (for virtual public functions that are
+        not static and do not override, returning void):
 
     @code
         #ifndef BOOST_CONTRACT_NO_PUBLIC_FUNCTIONS
@@ -1187,8 +1176,8 @@ Disable Contract Compilation}).
     @endcode
     
     3\. <c>BOOST_CONTRACT_PUBLIC_FUNCTION(v, r, obj)</c> expands to code
-        equivalent to the following (for virtual public functions that do not
-        override, not returning void):
+        equivalent to the following (for virtual public functions that are
+        not static and do not override, not returning void):
 
     @code
         #ifndef BOOST_CONTRACT_NO_PUBLIC_FUNCTIONS
@@ -1279,7 +1268,7 @@ Disable Contract Compilation}).
                     BOOST_CONTRACT_ASSERT(...);
                     ...
                 })
-            ; // Trailing `;` is required.
+            ;
 
             ... // Function body.
         }
@@ -1300,7 +1289,7 @@ Disable Contract Compilation}).
                     ...
                 })
                 ...
-            ; // Trailing `;` is required.
+            ;
 
             ... // Function body (use `return result = return_expr`).
         }
@@ -1365,9 +1354,8 @@ Disable Contract Compilation}).
             Volatile Public Functions}).
     @arg    <c><b>...</b></c> is a variadic macro parameter listing all the
             arguments passed to the enclosing public function override declaring
-            the contract (by reference and in the order they appear in the
-            enclosing function declaration), but excluding the trailing
-            argument @c v.
+            the contract (by reference and in order they appear in the enclosing
+            function declaration), but excluding the trailing argument @c v.
     @arg    <c><b>internal_var</b></c> is a variable name internally generated
             by this library (this name is unique but only on different line
             numbers so this macro cannot be expanded multiple times on the same

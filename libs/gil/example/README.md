@@ -1,9 +1,6 @@
 # Boost.GIL Examples
 
-This directory contains
-
-- examples of C++ programs using GIL
-- configuration files for CMake integrations in popular IDEs
+This directory contains GIL sample code.
 
 We provide Boost.Build (`Jamfile`) and CMake (`CMakeLists.txt`)
 configurations to build the examples.

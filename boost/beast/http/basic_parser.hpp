@@ -128,8 +128,6 @@ class basic_parser
     template<bool OtherIsRequest>
     friend class basic_parser;
 
-    friend class basic_parser_test;
-
 protected:
     /// Default constructor
     basic_parser() = default;

@@ -402,11 +402,6 @@ public:
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    polynomial<T> prime() const
    {
-#ifdef BOOST_MSVC
-      // Disable int->float conversion warning:
-#pragma warning(push)
-#pragma warning(disable:4244)
-#endif
       if (m_data.size() == 0)
       {
         return polynomial<T>({});
@@ -417,9 +412,6 @@ public:
           p_data[i] = m_data[i+1]*static_cast<T>(i+1);
       }
       return polynomial<T>(std::move(p_data));
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
    }
 
    polynomial<T> integrate() const
